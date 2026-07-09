@@ -53,7 +53,7 @@ export const RecommendationsPage: React.FC = () => {
               <span className="gradient-text">"{lastResults.query_summary}"</span>
             </h1>
             <p style={{ color: 'var(--color-text-secondary)', fontSize: '15px' }}>
-              {lastResults.recommendations.length} movies matched your mood
+              {lastResults.total_results} movies matched your mood
             </p>
           </motion.div>
         )}
