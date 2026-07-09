@@ -79,7 +79,7 @@ export const LiveMovieCarousel: React.FC<LiveMovieCarouselProps> = ({ title, fet
               width: '180px',
             }}
           >
-            <Link to={`/movies/${movie.id}`} style={{ textDecoration: 'none' }}>
+            <Link to={`/movie/${movie.id}`} style={{ textDecoration: 'none' }}>
               <div 
                 className="glass"
                 style={{
