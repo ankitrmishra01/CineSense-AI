@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { MovieGrid } from '../components/movie/MovieGrid';
 import { moviesApi } from '../api/movies';
-import { Movie } from '../types';
+import type { Movie } from '../types';
 
 export const SearchPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,7 +13,6 @@ export const SearchPage: React.FC = () => {
   const [results, setResults] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(!!initialQuery);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (initialQuery) {
