@@ -1,6 +1,14 @@
 # CineSense AI 🎬
 
+![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688.svg)
+![React](https://img.shields.io/badge/React-18-61DAFB.svg)
+![Tailwind](https://img.shields.io/badge/Tailwind-v4-38B2AC.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+
 > **Emotion-aware movie discovery platform** — describe your mood and get AI-powered movie recommendations with natural-language explanations.
+
+🌟 **Live Demo:** [https://cine-sense-ai.vercel.app/](https://cine-sense-ai.vercel.app/)
 
 ---
 
