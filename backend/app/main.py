@@ -9,7 +9,7 @@ from app.services import faiss_preload
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: warm up FAISS index + embedding model
-    faiss_preload()
+    # faiss_preload() # Disabled for Render Free Tier to prevent Out Of Memory during boot
     yield
     # Shutdown: nothing to clean up
 
