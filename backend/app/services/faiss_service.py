@@ -56,12 +56,13 @@ def embed_text(text: str) -> np.ndarray:
     headers = {"Authorization": f"Bearer {settings.HF_API_KEY}"}
     
     try:
-        # Use sync httpx request because faiss_service.search is called synchronously in the router.
-        with httpx.Client(timeout=30.0) as client:
-            response = client.post(url, headers=headers, json={"inputs": [text]})
-            response.raise_for_status()
-            
-            raw_data = response.json()
+        import requests
+        # Use sync requests module because faiss_service.search is called synchronously in the router.
+        # This is often more robust against DNS/IPv6 issues on Render than httpx.
+        response = requests.post(url, headers=headers, json={"inputs": [text]}, timeout=30.0)
+        response.raise_for_status()
+        
+        raw_data = response.json()
             
             # The feature-extraction pipeline can return nested arrays
             vec = np.array(raw_data, dtype=np.float32)
