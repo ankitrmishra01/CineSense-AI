@@ -64,25 +64,25 @@ def embed_text(text: str) -> np.ndarray:
         
         raw_data = response.json()
             
-            # The feature-extraction pipeline can return nested arrays
-            vec = np.array(raw_data, dtype=np.float32)
+        # The feature-extraction pipeline can return nested arrays
+        vec = np.array(raw_data, dtype=np.float32)
+        
+        # If shape is [1, seq_len, 384] or [seq_len, 384], mean pool across sequence dimension
+        if vec.ndim == 3:  # [batch, seq_len, dim]
+            vec = np.mean(vec[0], axis=0, keepdims=True)
+        elif vec.ndim == 2 and vec.shape[0] > 1:  # [seq_len, dim]
+            vec = np.mean(vec, axis=0, keepdims=True)
+        elif vec.ndim == 1:  # [dim]
+            vec = np.expand_dims(vec, axis=0)
+        elif vec.ndim == 2 and vec.shape[0] == 1: # [1, dim]
+            pass
             
-            # If shape is [1, seq_len, 384] or [seq_len, 384], mean pool across sequence dimension
-            if vec.ndim == 3:  # [batch, seq_len, dim]
-                vec = np.mean(vec[0], axis=0, keepdims=True)
-            elif vec.ndim == 2 and vec.shape[0] > 1:  # [seq_len, dim]
-                vec = np.mean(vec, axis=0, keepdims=True)
-            elif vec.ndim == 1:  # [dim]
-                vec = np.expand_dims(vec, axis=0)
-            elif vec.ndim == 2 and vec.shape[0] == 1: # [1, dim]
-                pass
-                
-            # L2 Normalize for FAISS inner product (cosine similarity)
-            norms = np.linalg.norm(vec, axis=1, keepdims=True)
-            norms = np.where(norms == 0, 1e-10, norms)
-            vec = vec / norms
-            
-            return vec
+        # L2 Normalize for FAISS inner product (cosine similarity)
+        norms = np.linalg.norm(vec, axis=1, keepdims=True)
+        norms = np.where(norms == 0, 1e-10, norms)
+        vec = vec / norms
+        
+        return vec
             
     except Exception as e:
         logger.error(f"Failed to get embeddings from Hugging Face: {e}")
