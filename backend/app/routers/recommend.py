@@ -109,8 +109,6 @@ async def recommend(
             continue
 
         filtered.append(movie)
-        if len(filtered) >= payload.top_k * 4:  # stop early if enough candidates
-            break
 
     if not filtered:
         raise HTTPException(
@@ -118,9 +116,27 @@ async def recommend(
             detail="No movies match the given filters. Try relaxing them.",
         )
 
-    # Take top_k by similarity score
+    # Sort by similarity score
     filtered.sort(key=lambda m: score_map.get(m.id, 0), reverse=True)
-    top_movies = filtered[: payload.top_k]
+
+    # Optional randomized shuffling for "Try again" functionality
+    if payload.seed is not None:
+        import random
+        random.seed(payload.seed)
+        # We only shuffle the top 200 candidates to maintain high relevance while mixing them up
+        top_n = min(len(filtered), 200)
+        top_candidates = filtered[:top_n]
+        random.shuffle(top_candidates)
+        filtered = top_candidates + filtered[top_n:]
+
+    # Pagination slicing
+    total_results = len(filtered)
+    total_pages = max(1, (total_results + payload.limit - 1) // payload.limit)
+    page = min(payload.page, total_pages)
+    
+    start_idx = (page - 1) * payload.limit
+    end_idx = start_idx + payload.limit
+    page_movies = filtered[start_idx:end_idx]
 
     # ── 5. Batched LLM call ────────────────────────────────────────────────────
     movie_contexts = [
@@ -132,7 +148,7 @@ async def recommend(
             vote_average=float(m.vote_average) if m.vote_average else None,
             release_year=m.release_date.year if m.release_date else None,
         )
-        for m in top_movies
+        for m in page_movies
     ]
     explanations = await llm_service.generate_explanations(query_text, movie_contexts)
 
@@ -143,7 +159,7 @@ async def recommend(
             similarity_score=round(score_map.get(m.id, 0.0), 4),
             explanation=explanations[i] or f"A great match for your mood.",
         )
-        for i, m in enumerate(top_movies)
+        for i, m in enumerate(page_movies)
     ]
 
     # ── 7. Persist session (authenticated users only) ─────────────────────────
@@ -154,7 +170,7 @@ async def recommend(
             mood_text=payload.mood_text,
             emotion_tags=payload.emotion_tags,
             filters=payload.filters.model_dump() if payload.filters else None,
-            result_movie_ids=[m.id for m in top_movies],
+            result_movie_ids=[m.id for m in page_movies],
         )
         db.add(session)
         await db.flush()
@@ -163,5 +179,8 @@ async def recommend(
     return RecommendResponse(
         session_id=session_id,
         query_summary=_summarize_query(payload.mood_text, payload.emotion_tags),
+        total_results=total_results,
+        total_pages=total_pages,
+        current_page=page,
         recommendations=recommendations,
     )

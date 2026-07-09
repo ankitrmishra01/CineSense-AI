@@ -74,6 +74,7 @@ export const Navbar: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {[
             { to: '/', label: '🎭 Discover' },
+            { to: '/search', label: '🔍 Search' },
             ...(isAuthenticated ? [{ to: '/watchlist', label: '📌 Watchlist' }] : []),
           ].map(({ to, label }) => (
             <Link

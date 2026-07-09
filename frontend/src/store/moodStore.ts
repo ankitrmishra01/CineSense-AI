@@ -7,10 +7,14 @@ interface MoodState {
   selectedEmojis: string[];
   filters: RecommendFilters;
   lastResults: RecommendResponse | null;
+  seed: number | null;
+  currentPage: number;
   setMoodText: (text: string) => void;
   toggleEmoji: (emoji: string) => void;
   setFilters: (filters: RecommendFilters) => void;
   setResults: (results: RecommendResponse) => void;
+  setSeed: (seed: number | null) => void;
+  setCurrentPage: (page: number) => void;
   reset: () => void;
 }
 
@@ -23,6 +27,8 @@ export const useMoodStore = create<MoodState>()(
       selectedEmojis: [],
       filters: defaultFilters,
       lastResults: null,
+      seed: null,
+      currentPage: 1,
 
       setMoodText: (text) => set({ moodText: text }),
 
@@ -37,8 +43,12 @@ export const useMoodStore = create<MoodState>()(
 
       setResults: (results) => set({ lastResults: results }),
 
+      setSeed: (seed) => set({ seed }),
+      
+      setCurrentPage: (page) => set({ currentPage: page }),
+
       reset: () =>
-        set({ moodText: '', selectedEmojis: [], filters: defaultFilters, lastResults: null }),
+        set({ moodText: '', selectedEmojis: [], filters: defaultFilters, lastResults: null, seed: null, currentPage: 1 }),
     }),
     {
       name: 'cinesense-mood-storage', // unique name

@@ -65,22 +65,45 @@ export const RecommendationsPage: React.FC = () => {
       ) : lastResults ? (
         <>
           <MovieGrid items={lastResults.recommendations} />
+          {/* Pagination controls */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', marginTop: '40px', marginBottom: '20px' }}>
+            <button 
+              className="btn-ghost" 
+              disabled={lastResults.current_page <= 1}
+              onClick={() => fetchRecommendations({ page: lastResults.current_page - 1 })}
+              style={{ padding: '8px 16px' }}
+            >
+              ← Prev
+            </button>
+            <span style={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}>
+              Page {lastResults.current_page} of {lastResults.total_pages}
+            </span>
+            <button 
+              className="btn-ghost" 
+              disabled={lastResults.current_page >= lastResults.total_pages}
+              onClick={() => fetchRecommendations({ page: lastResults.current_page + 1 })}
+              style={{ padding: '8px 16px' }}
+            >
+              Next →
+            </button>
+          </div>
+
           {/* Re-search button */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            style={{ textAlign: 'center', marginTop: '48px' }}
+            style={{ textAlign: 'center', marginTop: '32px' }}
           >
             <p style={{ color: 'var(--color-text-muted)', marginBottom: '16px', fontSize: '14px' }}>
-              Not quite right?
+              Not quite right? Let's shuffle and try again!
             </p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <button className="btn-ghost" onClick={() => navigate('/')}>
                 ✏️ Change mood
               </button>
-              <button className="btn-primary" onClick={() => fetchRecommendations()}>
-                🔄 Try again
+              <button className="btn-primary" onClick={() => fetchRecommendations(undefined, true)}>
+                🔄 Try again (Shuffle)
               </button>
             </div>
           </motion.div>

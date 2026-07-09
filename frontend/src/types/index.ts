@@ -63,7 +63,9 @@ export interface RecommendRequest {
   mood_text?: string;
   emotion_tags?: string[];
   filters?: RecommendFilters;
-  top_k?: number;
+  page?: number;
+  limit?: number;
+  seed?: number;
 }
 
 export interface RecommendationItem {
@@ -75,6 +77,9 @@ export interface RecommendationItem {
 export interface RecommendResponse {
   session_id: string | null;
   query_summary: string;
+  total_results: number;
+  total_pages: number;
+  current_page: number;
   recommendations: RecommendationItem[];
 }
 
