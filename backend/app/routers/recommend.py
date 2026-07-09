@@ -64,7 +64,7 @@ async def recommend(
 
     # ── 2. FAISS k-NN search (overfetch) ──────────────────────────────────────
     try:
-        candidates = faiss_service.search(query_text, top_k=100)
+        candidates = faiss_service.search(query_text, top_k=300)
     except RuntimeError as e:
         raise HTTPException(status_code=503, detail=str(e))
 
@@ -104,8 +104,12 @@ async def recommend(
             if movie.release_date and movie.release_date.year < filters.min_year:
                 continue
 
+        # Filter out unreleased movies
+        if movie.release_date and movie.release_date > date.today():
+            continue
+
         filtered.append(movie)
-        if len(filtered) >= payload.top_k * 3:  # stop early if enough candidates
+        if len(filtered) >= payload.top_k * 4:  # stop early if enough candidates
             break
 
     if not filtered:

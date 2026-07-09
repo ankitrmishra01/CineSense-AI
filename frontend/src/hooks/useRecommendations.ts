@@ -15,7 +15,7 @@ export const useRecommendations = () => {
       mood_text: moodText || undefined,
       emotion_tags: selectedEmojis.length > 0 ? selectedEmojis : undefined,
       filters: Object.keys(filters).length > 0 ? filters : undefined,
-      top_k: 8,
+      top_k: 30,
       ...overrides,
     };
 
