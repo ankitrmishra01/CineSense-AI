@@ -31,7 +31,7 @@ export const Navbar: React.FC = () => {
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        background: 'rgba(10, 10, 15, 0.85)',
+        background: 'var(--color-bg-card)',
         backdropFilter: 'blur(20px)',
         borderBottom: '1px solid var(--color-border)',
         padding: '0 24px',
