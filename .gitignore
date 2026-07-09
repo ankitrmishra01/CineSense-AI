@@ -1,0 +1,21 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Node
+node_modules/
+dist/
+
+# Env files
+backend/.env
+frontend/.env
+
+# FAISS index (large, regenerated via script)
+backend/faiss_index/
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
