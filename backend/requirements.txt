@@ -1,3 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 fastapi==0.115.6
 uvicorn[standard]==0.32.1
 sqlalchemy[asyncio]==2.0.36
@@ -10,6 +11,7 @@ python-jose[cryptography]==3.3.0
 python-multipart==0.0.17
 httpx==0.28.1
 faiss-cpu==1.14.3
+sentence-transformers==3.3.1
 groq==0.13.0
 psycopg2-binary==2.9.10
 requests==2.32.3
