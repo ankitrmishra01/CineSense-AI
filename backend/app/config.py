@@ -13,14 +13,13 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
 
-    # TMDB
-    TMDB_API_KEY: str = ""
+    # External APIs
+    TMDB_API_KEY: str = Field(..., env="TMDB_API_KEY")
     TMDB_BASE_URL: str = "https://api.themoviedb.org/3"
     TMDB_IMAGE_BASE_URL: str = "https://image.tmdb.org/t/p"
-
-    # Groq
-    GROQ_API_KEY: str = ""
-    GROQ_MODEL: str = "llama-3.1-8b-instant"  # fast, low-latency for short explanations
+    GROQ_API_KEY: str = Field(..., env="GROQ_API_KEY")
+    GROQ_MODEL: str = "llama-3.1-8b-instant"
+    HF_API_KEY: str = Field(..., env="HF_API_KEY")
 
     # FAISS
     FAISS_INDEX_PATH: str = "faiss_index/movies.index"
