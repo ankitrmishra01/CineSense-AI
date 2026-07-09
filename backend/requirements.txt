@@ -16,3 +16,5 @@ psycopg2-binary==2.9.10
 requests==2.32.3
 tqdm==4.67.1
 python-dotenv==1.0.1
+email-validator==2.2.0
+bcrypt==4.0.1
