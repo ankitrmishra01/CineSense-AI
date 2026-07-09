@@ -160,18 +160,40 @@ async def main_async():
     async with httpx.AsyncClient(limits=limits) as client:
 
         # Phase 1: Discover movie IDs (all pages concurrently)
-        sort_strategies = ["popularity.desc", "vote_average.desc"]
+        # 1. Global Popular (100 pages)
+        # 2. Global Top Rated (50 pages)
+        # 3. Global Latest (50 pages)
+        # 4. Hindi Popular (50 pages)
+        # 5. Hindi Top Rated (30 pages)
+        # 6. Hindi Latest (20 pages)
+        strategies = [
+            ({"sort_by": "popularity.desc"}, 100),
+            ({"sort_by": "vote_average.desc", "vote_count.gte": 200}, 50),
+            ({"sort_by": "primary_release_date.desc", "vote_count.gte": 50}, 50),
+            ({"with_original_language": "hi", "sort_by": "popularity.desc"}, 50),
+            ({"with_original_language": "hi", "sort_by": "vote_average.desc", "vote_count.gte": 50}, 30),
+            ({"with_original_language": "hi", "sort_by": "primary_release_date.desc", "vote_count.gte": 10}, 20),
+        ]
+        
         movie_ids_seen: set[int] = set()
         all_ids: list[int] = []
 
-        for sort_by in sort_strategies:
-            print(f"\nDiscovering: {sort_by} ({DISCOVER_PAGES} pages)...")
-            tasks = [
-                fetch_discover_page_async(client, semaphore, page, sort_by)
-                for page in range(1, DISCOVER_PAGES + 1)
-            ]
-            pages = await asyncio.gather(*tasks)
-            for results in pages:
+        for params, pages in strategies:
+            desc = f"{params.get('with_original_language', 'Global')} - {params.get('sort_by')}"
+            print(f"\nDiscovering: {desc} ({pages} pages)...")
+            
+            async def fetch_page(p):
+                return await tmdb_get_async(client, semaphore, "/discover/movie", {
+                    **params,
+                    "include_adult": "false",
+                    "page": p,
+                })
+                
+            tasks = [fetch_page(page) for page in range(1, pages + 1)]
+            results_list = await asyncio.gather(*tasks)
+            
+            for data in results_list:
+                results = data.get("results", []) if data else []
                 for r in results:
                     mid = r["id"]
                     if mid not in movie_ids_seen:
