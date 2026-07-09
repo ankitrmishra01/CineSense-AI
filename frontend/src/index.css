@@ -60,9 +60,14 @@
     rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
 }
 
-  #social .button-icon {
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) #social .button-icon {
     filter: invert(1) brightness(2);
   }
+}
+
+:root[data-theme="dark"] #social .button-icon {
+  filter: invert(1) brightness(2);
 }
 
 #root {
