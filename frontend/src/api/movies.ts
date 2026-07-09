@@ -7,4 +7,10 @@ export const moviesApi = {
 
   search: (q: string, limit = 10) =>
     apiClient.get<MovieSearchResult>('/movies/search', { params: { q, limit } }),
+
+  getLiveTrending: () =>
+    apiClient.get<Movie[]>('/movies/live/trending'),
+
+  getLiveNowPlaying: () =>
+    apiClient.get<Movie[]>('/movies/live/now-playing'),
 };

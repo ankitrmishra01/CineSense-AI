@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { RecommendFilters, RecommendResponse } from '../types';
 
 interface MoodState {
@@ -15,25 +16,32 @@ interface MoodState {
 
 const defaultFilters: RecommendFilters = {};
 
-export const useMoodStore = create<MoodState>((set) => ({
-  moodText: '',
-  selectedEmojis: [],
-  filters: defaultFilters,
-  lastResults: null,
+export const useMoodStore = create<MoodState>()(
+  persist(
+    (set) => ({
+      moodText: '',
+      selectedEmojis: [],
+      filters: defaultFilters,
+      lastResults: null,
 
-  setMoodText: (text) => set({ moodText: text }),
+      setMoodText: (text) => set({ moodText: text }),
 
-  toggleEmoji: (emoji) =>
-    set((state) => ({
-      selectedEmojis: state.selectedEmojis.includes(emoji)
-        ? state.selectedEmojis.filter((e) => e !== emoji)
-        : [...state.selectedEmojis, emoji],
-    })),
+      toggleEmoji: (emoji) =>
+        set((state) => ({
+          selectedEmojis: state.selectedEmojis.includes(emoji)
+            ? state.selectedEmojis.filter((e) => e !== emoji)
+            : [...state.selectedEmojis, emoji],
+        })),
 
-  setFilters: (filters) => set({ filters }),
+      setFilters: (filters) => set({ filters }),
 
-  setResults: (results) => set({ lastResults: results }),
+      setResults: (results) => set({ lastResults: results }),
 
-  reset: () =>
-    set({ moodText: '', selectedEmojis: [], filters: defaultFilters, lastResults: null }),
-}));
+      reset: () =>
+        set({ moodText: '', selectedEmojis: [], filters: defaultFilters, lastResults: null }),
+    }),
+    {
+      name: 'cinesense-mood-storage', // unique name
+    }
+  )
+);

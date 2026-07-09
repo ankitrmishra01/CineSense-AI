@@ -7,6 +7,7 @@ import { GenreFilter } from '../components/filters/GenreFilter';
 import { RatingFilter, RuntimeFilter } from '../components/filters/RatingFilter';
 import { useRecommendations } from '../hooks/useRecommendations';
 import { Spinner } from '../components/ui/Spinner';
+import { LiveMovieCarousel } from '../components/movies/LiveMovieCarousel';
 
 export const HomePage: React.FC = () => {
   const { loading, error, fetchRecommendations, surpriseMe } = useRecommendations();
@@ -123,7 +124,7 @@ export const HomePage: React.FC = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
-        style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}
+        style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '48px' }}
       >
         <button
           id="find-movies-btn"
@@ -143,6 +144,25 @@ export const HomePage: React.FC = () => {
         >
           🎲 Surprise Me
         </button>
+      </motion.div>
+
+      {/* Live Data Carousels */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        style={{ textAlign: 'left' }}
+      >
+        <LiveMovieCarousel 
+          title="Trending Today" 
+          emoji="🔥"
+          fetchFn={() => import('../api/movies').then(m => m.moviesApi.getLiveTrending())} 
+        />
+        <LiveMovieCarousel 
+          title="In Theaters Now" 
+          emoji="🍿"
+          fetchFn={() => import('../api/movies').then(m => m.moviesApi.getLiveNowPlaying())} 
+        />
       </motion.div>
 
       {/* Decorative background orbs */}

@@ -7,6 +7,18 @@ export const Navbar: React.FC = () => {
   const { user, isAuthenticated, handleLogout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [theme, setTheme] = React.useState(
+    () => localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+  );
+
+  React.useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    const handleThemeChange = () => {
+      setTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+    };
+    window.addEventListener('themechange', handleThemeChange);
+    return () => window.removeEventListener('themechange', handleThemeChange);
+  }, [theme]);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -83,8 +95,30 @@ export const Navbar: React.FC = () => {
           ))}
         </div>
 
-        {/* Auth section */}
+        {/* Auth section & Theme Toggle */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          
+          <button 
+            onClick={() => {
+              const newTheme = theme === 'light' ? 'dark' : 'light';
+              document.documentElement.setAttribute('data-theme', newTheme);
+              localStorage.setItem('theme', newTheme);
+              window.dispatchEvent(new Event('themechange'));
+            }}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '20px',
+              padding: '4px',
+              opacity: 0.8,
+              transition: 'opacity 0.2s',
+            }}
+            title="Toggle Dark/Light Mode"
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+
           {isAuthenticated ? (
             <>
               <span style={{ fontSize: '14px', color: 'var(--color-text-secondary)' }}>

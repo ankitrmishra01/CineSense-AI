@@ -66,3 +66,24 @@ def build_poster_url(poster_path: Optional[str], size: str = "w500") -> Optional
     if not poster_path:
         return None
     return f"{settings.TMDB_IMAGE_BASE_URL}/{size}{poster_path}"
+
+
+from cachetools import TTLCache
+
+_live_cache = TTLCache(maxsize=10, ttl=600)
+
+async def get_trending_movies_async() -> list[dict]:
+    if "trending" in _live_cache:
+        return _live_cache["trending"]
+    data = await _tmdb_get_async("/trending/movie/day")
+    results = data.get("results", []) if data else []
+    _live_cache["trending"] = results
+    return results
+
+async def get_now_playing_movies_async() -> list[dict]:
+    if "now_playing" in _live_cache:
+        return _live_cache["now_playing"]
+    data = await _tmdb_get_async("/movie/now_playing")
+    results = data.get("results", []) if data else []
+    _live_cache["now_playing"] = results
+    return results
