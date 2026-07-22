@@ -24,7 +24,13 @@ export const AuthPage: React.FC = () => {
       }
     } catch (err: any) {
       const detail = err?.response?.data?.detail;
-      setError(typeof detail === 'string' ? detail : 'Something went wrong. Try again.');
+      if (typeof detail === 'string') {
+        setError(detail);
+      } else if (Array.isArray(detail) && detail.length > 0 && detail[0].msg) {
+        setError(detail[0].msg);
+      } else {
+        setError('Something went wrong. Try again.');
+      }
     } finally {
       setLoading(false);
     }
