@@ -51,7 +51,8 @@ export const Navbar: React.FC = () => {
             <div style={{
               width: '32px',
               height: '32px',
-              background: 'var(--gradient-primary)',
+              background: 'var(--color-text-primary)',
+              color: 'var(--color-bg-primary)',
               borderRadius: '8px',
               display: 'flex',
               alignItems: 'center',
@@ -62,10 +63,7 @@ export const Navbar: React.FC = () => {
               fontFamily: 'var(--font-primary)',
               fontWeight: 800,
               fontSize: '18px',
-              background: 'var(--gradient-primary)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              color: 'var(--color-text-primary)',
             }}>CineSense AI</span>
           </div>
         </Link>
@@ -87,7 +85,7 @@ export const Navbar: React.FC = () => {
                 fontSize: '14px',
                 fontWeight: 500,
                 color: isActive(to) ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
-                background: isActive(to) ? 'rgba(124, 58, 237, 0.15)' : 'transparent',
+                background: isActive(to) ? 'var(--color-bg-card-hover)' : 'transparent',
                 transition: 'all 0.2s',
               }}
             >

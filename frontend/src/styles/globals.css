@@ -190,13 +190,13 @@ body {
 /* ─── Input Base ───────────────────────────────────────────────────────────── */
 .input-base {
   width: 100%;
-  padding: 14px 18px;
+  padding: 16px 20px;
   background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-pill);
+  border-radius: var(--border-radius-lg);
   color: var(--color-text-primary);
   font-family: var(--font-secondary);
-  font-size: 14px;
+  font-size: 15px;
   outline: none;
   transition: border-color 0.2s ease;
 }

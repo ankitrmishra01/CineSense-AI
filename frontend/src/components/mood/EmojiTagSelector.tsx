@@ -34,16 +34,16 @@ export const EmojiTagSelector: React.FC = () => {
                 gap: '6px',
                 padding: '8px 14px',
                 borderRadius: '999px',
-                border: `1px solid ${selected ? 'rgba(124,58,237,0.6)' : 'var(--color-border)'}`,
+                border: `1px solid ${selected ? 'var(--color-text-primary)' : 'var(--color-border)'}`,
                 background: selected
-                  ? 'rgba(124, 58, 237, 0.2)'
-                  : 'rgba(255, 255, 255, 0.04)',
-                color: selected ? 'var(--color-accent-secondary)' : 'var(--color-text-secondary)',
+                  ? 'var(--color-bg-card-hover)'
+                  : 'var(--color-bg-card)',
+                color: selected ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
                 cursor: 'pointer',
                 fontSize: '14px',
                 fontWeight: selected ? 600 : 400,
                 transition: 'all 0.15s ease',
-                boxShadow: selected ? '0 0 12px rgba(124,58,237,0.25)' : 'none',
+                boxShadow: 'none',
               }}
             >
               <span style={{ fontSize: '18px' }}>{tag.emoji}</span>
