@@ -26,10 +26,13 @@ export const AuthPage: React.FC = () => {
       const detail = err?.response?.data?.detail;
       if (typeof detail === 'string') {
         setError(detail);
-      } else if (Array.isArray(detail) && detail.length > 0 && detail[0].msg) {
-        setError(detail[0].msg);
+      } else if (Array.isArray(detail) && detail.length > 0) {
+        // If it's a Pydantic validation array, extract the first message
+        setError(detail[0].msg || JSON.stringify(detail[0]));
+      } else if (detail) {
+        setError(JSON.stringify(detail));
       } else {
-        setError('Something went wrong. Try again.');
+        setError(err?.message || 'Something went wrong. Try again.');
       }
     } finally {
       setLoading(false);

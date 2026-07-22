@@ -209,6 +209,23 @@ export const MovieDetailPage: React.FC = () => {
             return null;
           }
 
+          const getProviderLink = (providerName: string, title: string) => {
+            const q = encodeURIComponent(title);
+            const name = providerName.toLowerCase();
+            
+            if (name.includes('netflix')) return `https://www.netflix.com/search?q=${q}`;
+            if (name.includes('amazon') || name.includes('prime')) return `https://www.amazon.com/s?k=${q}+movie`;
+            if (name.includes('apple') || name.includes('itunes')) return `https://tv.apple.com/search?q=${q}`;
+            if (name.includes('google') || name.includes('youtube')) return `https://www.youtube.com/results?search_query=${q}+movie`;
+            if (name.includes('hotstar') || name.includes('disney')) return `https://www.hotstar.com/in/explore?searchQuery=${q}`;
+            if (name.includes('zee5')) return `https://www.zee5.com/search?q=${q}`;
+            if (name.includes('jio')) return `https://www.jiocinema.com/search?q=${q}`;
+            if (name.includes('sony')) return `https://www.sonyliv.com/search?q=${q}`;
+            
+            // Default to Google search
+            return `https://www.google.com/search?q=watch+${q}+on+${encodeURIComponent(providerName)}`;
+          };
+
           return (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -221,11 +238,6 @@ export const MovieDetailPage: React.FC = () => {
                 <h2 style={{ fontFamily: 'var(--font-primary)', fontWeight: 700, fontSize: '20px', margin: 0 }}>
                   📺 Where to Watch ({regionCode})
                 </h2>
-                {regionData.link && (
-                  <a href={regionData.link} target="_blank" rel="noreferrer" className="badge" style={{ textDecoration: 'none' }}>
-                    View all options →
-                  </a>
-                )}
               </div>
               
               {regionData.flatrate && regionData.flatrate.length > 0 && (
@@ -235,7 +247,13 @@ export const MovieDetailPage: React.FC = () => {
                   </p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
                     {regionData.flatrate.map((p: any) => (
-                      <div key={p.provider_name} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+                      <a 
+                        key={p.provider_name}
+                        href={getProviderLink(p.provider_name, movie.title)}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-text-secondary)', textDecoration: 'none' }}
+                      >
                         {p.logo_path && (
                           <img
                             src={`https://image.tmdb.org/t/p/w45${p.logo_path}`}
@@ -244,7 +262,7 @@ export const MovieDetailPage: React.FC = () => {
                           />
                         )}
                         {p.provider_name}
-                      </div>
+                      </a>
                     ))}
                   </div>
                 </div>
@@ -256,7 +274,13 @@ export const MovieDetailPage: React.FC = () => {
                   </p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
                     {regionData.rent.map((p: any) => (
-                      <div key={p.provider_name} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+                      <a 
+                        key={p.provider_name}
+                        href={getProviderLink(p.provider_name, movie.title)}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-text-secondary)', textDecoration: 'none' }}
+                      >
                         {p.logo_path && (
                           <img
                             src={`https://image.tmdb.org/t/p/w45${p.logo_path}`}
@@ -265,7 +289,7 @@ export const MovieDetailPage: React.FC = () => {
                           />
                         )}
                         {p.provider_name}
-                      </div>
+                      </a>
                     ))}
                   </div>
                 </div>
