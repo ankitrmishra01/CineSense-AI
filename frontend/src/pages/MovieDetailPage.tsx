@@ -187,61 +187,92 @@ export const MovieDetailPage: React.FC = () => {
         )}
 
         {/* Watch providers */}
-        {usRegion && (usRegion.flatrate?.length || usRegion.rent?.length) ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="glass"
-            style={{ padding: '24px' }}
-          >
-            <h2 style={{ fontFamily: 'var(--font-primary)', fontWeight: 700, fontSize: '20px', marginBottom: '20px' }}>
-              📺 Where to Watch (US)
-            </h2>
-            {usRegion.flatrate && usRegion.flatrate.length > 0 && (
-              <div style={{ marginBottom: '16px' }}>
-                <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
-                  Stream
-                </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-                  {usRegion.flatrate.map((p: any) => (
-                    <div key={p.provider_name} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-text-secondary)' }}>
-                      {p.logo_path && (
-                        <img
-                          src={`https://image.tmdb.org/t/p/w45${p.logo_path}`}
-                          alt={p.provider_name}
-                          style={{ width: '32px', height: '32px', borderRadius: '8px' }}
-                        />
-                      )}
-                      {p.provider_name}
-                    </div>
-                  ))}
-                </div>
+        {(() => {
+          const providers = movie.watch_providers || {};
+          let regionCode = 'IN';
+          let regionData = providers[regionCode];
+
+          if (!regionData) {
+            if (providers['US']) {
+              regionCode = 'US';
+              regionData = providers['US'];
+            } else {
+              const firstAvailable = Object.keys(providers)[0];
+              if (firstAvailable) {
+                regionCode = firstAvailable;
+                regionData = providers[firstAvailable];
+              }
+            }
+          }
+
+          if (!regionData || (!regionData.flatrate?.length && !regionData.rent?.length)) {
+            return null;
+          }
+
+          return (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="glass"
+              style={{ padding: '24px' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+                <h2 style={{ fontFamily: 'var(--font-primary)', fontWeight: 700, fontSize: '20px', margin: 0 }}>
+                  📺 Where to Watch ({regionCode})
+                </h2>
+                {regionData.link && (
+                  <a href={regionData.link} target="_blank" rel="noreferrer" className="badge" style={{ textDecoration: 'none' }}>
+                    View all options →
+                  </a>
+                )}
               </div>
-            )}
-            {usRegion.rent && usRegion.rent.length > 0 && (
-              <div>
-                <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
-                  Rent / Buy
-                </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-                  {usRegion.rent.map((p: any) => (
-                    <div key={p.provider_name} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-text-secondary)' }}>
-                      {p.logo_path && (
-                        <img
-                          src={`https://image.tmdb.org/t/p/w45${p.logo_path}`}
-                          alt={p.provider_name}
-                          style={{ width: '32px', height: '32px', borderRadius: '8px' }}
-                        />
-                      )}
-                      {p.provider_name}
-                    </div>
-                  ))}
+              
+              {regionData.flatrate && regionData.flatrate.length > 0 && (
+                <div style={{ marginBottom: '16px' }}>
+                  <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+                    Stream
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+                    {regionData.flatrate.map((p: any) => (
+                      <div key={p.provider_name} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+                        {p.logo_path && (
+                          <img
+                            src={`https://image.tmdb.org/t/p/w45${p.logo_path}`}
+                            alt={p.provider_name}
+                            style={{ width: '32px', height: '32px', borderRadius: '8px' }}
+                          />
+                        )}
+                        {p.provider_name}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </motion.div>
-        ) : null}
+              )}
+              {regionData.rent && regionData.rent.length > 0 && (
+                <div>
+                  <p style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+                    Rent / Buy
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+                    {regionData.rent.map((p: any) => (
+                      <div key={p.provider_name} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+                        {p.logo_path && (
+                          <img
+                            src={`https://image.tmdb.org/t/p/w45${p.logo_path}`}
+                            alt={p.provider_name}
+                            style={{ width: '32px', height: '32px', borderRadius: '8px' }}
+                          />
+                        )}
+                        {p.provider_name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          );
+        })()}
       </PageWrapper>
     </>
   );

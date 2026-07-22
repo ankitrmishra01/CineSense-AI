@@ -153,14 +153,24 @@ async def recommend(
     explanations = await llm_service.generate_explanations(query_text, movie_contexts)
 
     # ── 6. Build response ─────────────────────────────────────────────────────
-    recommendations = [
-        RecommendationItem(
-            movie=MovieOut.model_validate(m),
-            similarity_score=round(score_map.get(m.id, 0.0), 4),
-            explanation=explanations[i] or f"A great match for your mood.",
+    recommendations = []
+    for i, m in enumerate(page_movies):
+        exp = explanations[i] if i < len(explanations) else ""
+        if not exp:
+            genre_names = [g["name"] for g in (m.genres or [])][:2]
+            if genre_names:
+                genre_str = " and ".join(genre_names)
+                exp = f"This {genre_str} film aligns with the mood you are looking for."
+            else:
+                exp = "A strong match for your current mood based on its emotional tone."
+                
+        recommendations.append(
+            RecommendationItem(
+                movie=MovieOut.model_validate(m),
+                similarity_score=round(score_map.get(m.id, 0.0), 4),
+                explanation=exp,
+            )
         )
-        for i, m in enumerate(page_movies)
-    ]
 
     # ── 7. Persist session (authenticated users only) ─────────────────────────
     session_id = None

@@ -166,9 +166,10 @@ export const AuthPage: React.FC = () => {
             type="submit"
             disabled={loading}
             className="btn-primary"
-            style={{ marginTop: '8px', width: '100%' }}
+            style={{ marginTop: '8px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
           >
-            {loading ? <Spinner size={18} color="#fff" /> : (tab === 'login' ? 'Sign In' : 'Create Account')}
+            {loading && <Spinner size={18} color="#fff" />}
+            <span>{tab === 'login' ? (loading ? 'Signing In...' : 'Sign In') : (loading ? 'Creating Account...' : 'Create Account')}</span>
           </button>
         </form>
 
