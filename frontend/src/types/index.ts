@@ -30,6 +30,7 @@ export interface WatchProviderEntry {
 }
 
 export interface WatchProvidersRegion {
+  link?: string;
   flatrate?: WatchProviderEntry[];
   rent?: WatchProviderEntry[];
   buy?: WatchProviderEntry[];

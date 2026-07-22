@@ -63,7 +63,7 @@ export const MovieDetailPage: React.FC = () => {
     }
   };
 
-  const usRegion = movie.watch_providers?.['US'];
+
 
   return (
     <>
