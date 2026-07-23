@@ -59,24 +59,79 @@ async def recommend(
     db: AsyncSession = Depends(get_db),
     current_user: Optional[User] = Depends(get_optional_user),
 ):
-    # ── 1. Build query text ────────────────────────────────────────────────────
+    # ── 1. Build query text & Check Intent ────────────────────────────────────
     query_text = _build_query_text(payload.mood_text, payload.emotion_tags)
 
-    # ── 2. FAISS k-NN search (overfetch) ──────────────────────────────────────
-    try:
-        candidates = faiss_service.search(query_text, top_k=300)
-    except RuntimeError as e:
-        raise HTTPException(status_code=503, detail=str(e))
+    intent_movie = None
+    if payload.mood_text:
+        intent_movie = await llm_service.parse_intent(payload.mood_text)
+        if intent_movie:
+            logger.info("Parsed 'similar movie' intent for: %s", intent_movie)
 
-    if not candidates:
-        raise HTTPException(status_code=404, detail="No candidates found. Is the FAISS index built?")
+    candidates_from_tmdb = []
+    movies_in_db = {}
+    candidate_ids = []
+    score_map = {}
 
-    candidate_ids = [movie_id for movie_id, _ in candidates]
-    score_map = {movie_id: score for movie_id, score in candidates}
+    if intent_movie:
+        # User wants movies similar to a specific movie
+        from app.services.tmdb_service import _tmdb_get_async, build_poster_url
+        from datetime import datetime
+        
+        # 1. Find the reference movie
+        search_data = await _tmdb_get_async("/search/movie", {"query": intent_movie})
+        if search_data and search_data.get("results"):
+            ref_movie = search_data["results"][0]
+            ref_id = ref_movie["id"]
+            
+            # 2. Get similar movies
+            similar_data = await _tmdb_get_async(f"/movie/{ref_id}/similar")
+            if similar_data and similar_data.get("results"):
+                for idx, m in enumerate(similar_data["results"][:50]):
+                    m_id = m["id"]
+                    candidate_ids.append(m_id)
+                    # Assign a fake score so they stay in order
+                    score_map[m_id] = 100.0 - idx 
+                    
+                    # Create an unpersisted Movie object for the pipeline
+                    release_date = None
+                    if m.get("release_date"):
+                        try:
+                            release_date = datetime.strptime(m["release_date"], "%Y-%m-%d").date()
+                        except ValueError:
+                            pass
+                            
+                    fake_movie = Movie(
+                        id=m_id,
+                        title=m.get("title", "Unknown"),
+                        overview=m.get("overview", ""),
+                        tagline="",
+                        genres=[{"id": gid, "name": "Genre"} for gid in m.get("genre_ids", [])],
+                        poster_path=build_poster_url(m.get("poster_path")),
+                        backdrop_path=build_poster_url(m.get("backdrop_path"), "w1280"),
+                        vote_average=m.get("vote_average", 0.0),
+                        runtime=120, # dummy runtime
+                        release_date=release_date
+                    )
+                    movies_in_db[m_id] = fake_movie
+                    candidates_from_tmdb.append(fake_movie)
+                    
+    if not candidates_from_tmdb:
+        # ── 2. FAISS k-NN search (overfetch) ──────────────────────────────────────
+        try:
+            candidates = faiss_service.search(query_text, top_k=300)
+        except RuntimeError as e:
+            raise HTTPException(status_code=503, detail=str(e))
 
-    # ── 3. Fetch candidate movies from DB ─────────────────────────────────────
-    result = await db.execute(select(Movie).where(Movie.id.in_(candidate_ids)))
-    movies_in_db = {m.id: m for m in result.scalars().all()}
+        if not candidates:
+            raise HTTPException(status_code=404, detail="No candidates found. Is the FAISS index built?")
+
+        candidate_ids = [movie_id for movie_id, _ in candidates]
+        score_map = {movie_id: score for movie_id, score in candidates}
+
+        # ── 3. Fetch candidate movies from DB ─────────────────────────────────────
+        result = await db.execute(select(Movie).where(Movie.id.in_(candidate_ids)))
+        movies_in_db = {m.id: m for m in result.scalars().all()}
 
     # ── 4. Apply filters ───────────────────────────────────────────────────────
     filters = payload.filters or {}

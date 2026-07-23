@@ -41,14 +41,21 @@ async def search_movies(
     limit: int = Query(10, ge=1, le=50),
     db: AsyncSession = Depends(get_db),
 ):
-    result = await db.execute(
-        select(Movie)
-        .where(Movie.title.ilike(f"%{q}%"))
-        .order_by(Movie.vote_average.desc().nulls_last())
-        .limit(limit)
-    )
-    movies = result.scalars().all()
-    return MovieSearchResult(results=[MovieOut.model_validate(m) for m in movies], total=len(movies))
+    from app.services.tmdb_service import _tmdb_get_async
+    
+    data = await _tmdb_get_async("/search/movie", {"query": q, "include_adult": "false"})
+    results = data.get("results", []) if data else []
+    
+    movies_out = []
+    for m in results:
+        # Only return movies with posters to keep UI clean
+        if not m.get("poster_path"):
+            continue
+        movies_out.append(_map_tmdb_to_movieout(m))
+        if len(movies_out) >= limit:
+            break
+            
+    return MovieSearchResult(results=movies_out, total=len(movies_out))
 
 
 @router.get("/{movie_id}", response_model=MovieOut)

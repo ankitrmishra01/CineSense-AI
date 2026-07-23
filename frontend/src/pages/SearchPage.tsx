@@ -15,10 +15,17 @@ export const SearchPage: React.FC = () => {
   const [hasSearched, setHasSearched] = useState(!!initialQuery);
 
   useEffect(() => {
-    if (initialQuery) {
-      handleSearch(initialQuery);
-    }
-  }, [initialQuery]);
+    const timer = setTimeout(() => {
+      if (query.trim()) {
+        handleSearch(query);
+      } else {
+        setResults([]);
+        setHasSearched(false);
+        setSearchParams({});
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [query, setSearchParams]);
 
   const handleSearch = async (searchQuery: string) => {
     if (!searchQuery.trim()) return;
@@ -39,7 +46,7 @@ export const SearchPage: React.FC = () => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleSearch(query);
+    if (query.trim()) handleSearch(query);
   };
 
   return (

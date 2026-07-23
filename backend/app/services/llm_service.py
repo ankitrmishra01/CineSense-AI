@@ -146,3 +146,38 @@ async def generate_explanations(mood_text: str, movies: list[MovieContext]) -> l
     """Public API used by the recommendation router."""
     provider = get_llm_provider()
     return await provider.generate_explanations(mood_text, movies)
+
+async def parse_intent(mood_text: str) -> Optional[str]:
+    """
+    Public API to check if the user is asking for movies similar to a specific movie.
+    Returns the movie title if found, or None if it's just a general mood.
+    """
+    provider = get_llm_provider()
+    system_prompt = (
+        "You are an intent parser. Analyze the user's input.\n"
+        "If the user is explicitly asking for movies similar to a specific movie "
+        "(e.g., 'give movies like inception', 'similar to the matrix'), "
+        "output ONLY the exact title of that reference movie, nothing else.\n"
+        "If the user is just describing a mood or genres without a specific reference movie, "
+        "output EXACTLY the word 'MOOD'."
+    )
+    user_prompt = f"User input: '{mood_text}'"
+    
+    try:
+        response = await provider._client.chat.completions.create(
+            model=provider._model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=0.0,
+            max_tokens=20,
+        )
+        result = response.choices[0].message.content.strip()
+        if result.upper() == "MOOD":
+            return None
+        # Clean up quotes if the model wrapped the title in them
+        return result.strip("'\"")
+    except Exception as e:
+        logger.error("Groq Intent API error: %s", e)
+        return None
