@@ -218,7 +218,7 @@ export const MovieDetailPage: React.FC = () => {
             if (name.includes('apple') || name.includes('itunes')) return `https://tv.apple.com/search?q=${q}`;
             if (name.includes('google play') || name.includes('google')) return `https://play.google.com/store/search?q=${q}&c=movies`;
             if (name.includes('youtube')) return `https://www.youtube.com/results?search_query=${q}+movie`;
-            if (name.includes('hotstar') || name.includes('disney')) return `https://www.hotstar.com/in/explore?searchQuery=${q}`;
+            if (name.includes('hotstar') || name.includes('disney')) return `https://www.hotstar.com/in/search?q=${q}`;
             if (name.includes('zee5')) return `https://www.zee5.com/search?q=${q}`;
             if (name.includes('jio')) return `https://www.jiocinema.com/search?q=${q}`;
             if (name.includes('sony')) return `https://www.sonyliv.com/search?q=${q}`;
