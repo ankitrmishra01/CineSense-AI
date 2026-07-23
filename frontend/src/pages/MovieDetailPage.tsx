@@ -214,16 +214,20 @@ export const MovieDetailPage: React.FC = () => {
             const name = providerName.toLowerCase();
             
             if (name.includes('netflix')) return `https://www.netflix.com/search?q=${q}`;
-            if (name.includes('amazon') || name.includes('prime')) return `https://www.amazon.com/s?k=${q}+movie`;
+            if (name.includes('amazon') || name.includes('prime')) return `https://www.primevideo.com/search/?phrase=${q}`;
             if (name.includes('apple') || name.includes('itunes')) return `https://tv.apple.com/search?q=${q}`;
-            if (name.includes('google') || name.includes('youtube')) return `https://www.youtube.com/results?search_query=${q}+movie`;
+            if (name.includes('google play') || name.includes('google')) return `https://play.google.com/store/search?q=${q}&c=movies`;
+            if (name.includes('youtube')) return `https://www.youtube.com/results?search_query=${q}+movie`;
             if (name.includes('hotstar') || name.includes('disney')) return `https://www.hotstar.com/in/explore?searchQuery=${q}`;
             if (name.includes('zee5')) return `https://www.zee5.com/search?q=${q}`;
             if (name.includes('jio')) return `https://www.jiocinema.com/search?q=${q}`;
             if (name.includes('sony')) return `https://www.sonyliv.com/search?q=${q}`;
+            if (name.includes('hulu')) return `https://www.hulu.com/search?q=${q}`;
+            if (name.includes('peacock')) return `https://www.peacocktv.com/watch/search?q=${q}`;
+            if (name.includes('hbo') || name.includes('max')) return `https://play.max.com/search?q=${q}`;
             
-            // Default to Google search
-            return `https://www.google.com/search?q=watch+${q}+on+${encodeURIComponent(providerName)}`;
+            // Fallback to TMDB official provider page if all else fails
+            return regionData.link || `https://www.google.com/search?q=watch+${q}+on+${encodeURIComponent(providerName)}`;
           };
 
           return (
