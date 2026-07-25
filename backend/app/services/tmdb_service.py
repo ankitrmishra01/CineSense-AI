@@ -83,7 +83,7 @@ async def get_trending_movies_async() -> list[dict]:
 async def get_now_playing_movies_async() -> list[dict]:
     if "now_playing" in _live_cache:
         return _live_cache["now_playing"]
-    data = await _tmdb_get_async("/movie/now_playing")
+    data = await _tmdb_get_async("/movie/now_playing", {"region": "IN"})
     results = data.get("results", []) if data else []
     _live_cache["now_playing"] = results
     return results
