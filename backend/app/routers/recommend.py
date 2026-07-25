@@ -62,19 +62,19 @@ async def recommend(
     # ── 1. Build query text & Check Intent ────────────────────────────────────
     query_text = _build_query_text(payload.mood_text, payload.emotion_tags)
 
-    intent_movie = None
+    intent_type, intent_movie = None, None
     if payload.mood_text:
-        intent_movie = await llm_service.parse_intent(payload.mood_text)
-        if intent_movie:
-            logger.info("Parsed 'similar movie' intent for: %s", intent_movie)
+        intent_type, intent_movie = await llm_service.parse_intent(payload.mood_text)
+        if intent_type:
+            logger.info("Parsed %s intent for: %s", intent_type, intent_movie)
 
     candidates_from_tmdb = []
     movies_in_db = {}
     candidate_ids = []
     score_map = {}
 
-    if intent_movie:
-        # User wants movies similar to a specific movie
+    if intent_type in ["SIMILAR", "FRANCHISE"] and intent_movie:
+        # User wants movies similar to a specific movie, or a franchise
         from app.services.tmdb_service import _tmdb_get_async, build_poster_url
         from datetime import datetime
         
@@ -84,10 +84,35 @@ async def recommend(
             ref_movie = search_data["results"][0]
             ref_id = ref_movie["id"]
             
+            raw_movies = []
+            
+            if intent_type == "FRANCHISE":
+                # Get movie details to check for collection
+                details = await _tmdb_get_async(f"/movie/{ref_id}")
+                if details and details.get("belongs_to_collection"):
+                    collection_id = details["belongs_to_collection"]["id"]
+                    collection_data = await _tmdb_get_async(f"/collection/{collection_id}")
+                    if collection_data and collection_data.get("parts"):
+                        raw_movies.extend(collection_data["parts"])
+            
             # 2. Get similar movies
             similar_data = await _tmdb_get_async(f"/movie/{ref_id}/similar")
             if similar_data and similar_data.get("results"):
-                for idx, m in enumerate(similar_data["results"][:50]):
+                # Avoid duplicates if collection already added them
+                existing_ids = {m["id"] for m in raw_movies}
+                for m in similar_data["results"]:
+                    if m["id"] not in existing_ids:
+                        raw_movies.append(m)
+            
+            # If it's a franchise request but no collection was found, ensure the ref_movie is at least included
+            if intent_type == "FRANCHISE" and not any(m["id"] == ref_id for m in raw_movies):
+                raw_movies.insert(0, ref_movie)
+                
+            # Limit to top 50
+            raw_movies = raw_movies[:50]
+                
+            if raw_movies:
+                for idx, m in enumerate(raw_movies):
                     m_id = m["id"]
                     candidate_ids.append(m_id)
                     # Assign a fake score so they stay in order

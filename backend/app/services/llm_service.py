@@ -147,17 +147,22 @@ async def generate_explanations(mood_text: str, movies: list[MovieContext]) -> l
     provider = get_llm_provider()
     return await provider.generate_explanations(mood_text, movies)
 
-async def parse_intent(mood_text: str) -> Optional[str]:
+async def parse_intent(mood_text: str) -> tuple[Optional[str], Optional[str]]:
     """
-    Public API to check if the user is asking for movies similar to a specific movie.
-    Returns the movie title if found, or None if it's just a general mood.
+    Public API to check the user's intent.
+    Returns a tuple: (IntentType, MovieTitle).
+    IntentType can be 'FRANCHISE', 'SIMILAR', or None (for MOOD).
+    MovieTitle is the reference movie or franchise name.
     """
     provider = get_llm_provider()
     system_prompt = (
         "You are an intent parser. Analyze the user's input.\n"
-        "If the user is explicitly asking for movies similar to a specific movie "
+        "If the user is explicitly asking for ALL movies in a franchise or series "
+        "(e.g., 'the lord of the rings all movies', 'every harry potter film', 'marvel movies'), "
+        "output exactly 'FRANCHISE: [Franchise Name]'.\n"
+        "If the user is asking for movies similar to a specific movie "
         "(e.g., 'give movies like inception', 'similar to the matrix'), "
-        "output ONLY the exact title of that reference movie, nothing else.\n"
+        "output exactly 'SIMILAR: [Movie Title]'.\n"
         "If the user is just describing a mood or genres without a specific reference movie, "
         "output EXACTLY the word 'MOOD'."
     )
@@ -171,13 +176,23 @@ async def parse_intent(mood_text: str) -> Optional[str]:
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.0,
-            max_tokens=20,
+            max_tokens=30,
         )
         result = response.choices[0].message.content.strip()
+        
         if result.upper() == "MOOD":
-            return None
-        # Clean up quotes if the model wrapped the title in them
-        return result.strip("'\"")
+            return None, None
+            
+        if result.upper().startswith("FRANCHISE:"):
+            title = result[10:].strip().strip("'\"")
+            return "FRANCHISE", title
+            
+        if result.upper().startswith("SIMILAR:"):
+            title = result[8:].strip().strip("'\"")
+            return "SIMILAR", title
+            
+        # Fallback if the model didn't follow formatting but didn't say MOOD
+        return "SIMILAR", result.strip("'\"")
     except Exception as e:
         logger.error("Groq Intent API error: %s", e)
-        return None
+        return None, None
