@@ -68,11 +68,6 @@ async def recommend(
     entities = intent_resp.entities
     logger.info(f"Intent classified: {intent_type} | Entities: {entities}")
 
-    if intent_type == "ACTOR_DIRECTOR":
-        raise HTTPException(
-            status_code=400,
-            detail="Actor/director search is coming soon. Please try searching by mood, genre, franchise, or similar movies."
-        )
 
     candidates_from_tmdb = []
     movies_in_db = {}
@@ -91,6 +86,38 @@ async def recommend(
             .limit(100)
         )
         for m in result.scalars().all():
+            candidate_ids.append(m.id)
+            score_map[m.id] = float(m.vote_average or 0.0)
+            movies_in_db[m.id] = m
+
+    elif intent_type == "ACTOR_DIRECTOR":
+        person_name = entities.get("person_name", payload.mood_text)
+        role = entities.get("role", "unspecified")
+        
+        from sqlalchemy import and_
+        conditions = []
+        # We include a Movie.cast_crew.cast(String).ilike to hit the GIN trigram index for fast filtering,
+        # and then further restrict it to the specific 'cast' or 'crew' array.
+        fast_idx_cond = Movie.cast_crew.cast(String).ilike(f"%{person_name}%")
+        
+        if role in ["actor", "unspecified"]:
+            conditions.append(and_(fast_idx_cond, Movie.cast_crew["cast"].astext.ilike(f"%{person_name}%")))
+        if role in ["director", "unspecified"]:
+            conditions.append(and_(fast_idx_cond, Movie.cast_crew["crew"].astext.ilike(f"%{person_name}%")))
+            
+        result = await db.execute(
+            select(Movie)
+            .where(or_(*conditions))
+            .order_by(Movie.vote_average.desc().nullslast())
+            .limit(50)
+        )
+        movies = result.scalars().all()
+        if not movies:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No movies found for {person_name} in our current catalog."
+            )
+        for m in movies:
             candidate_ids.append(m.id)
             score_map[m.id] = float(m.vote_average or 0.0)
             movies_in_db[m.id] = m

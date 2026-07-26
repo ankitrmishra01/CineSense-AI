@@ -24,6 +24,7 @@ class Movie(Base):
     trailer_key: Mapped[Optional[str]] = mapped_column(String(100))
     watch_providers: Mapped[Optional[dict]] = mapped_column(JSONB)  # {"US": {...}}
     belongs_to_collection: Mapped[Optional[dict]] = mapped_column(JSONB) # {"id": 123, "name": "..."}
+    cast_crew: Mapped[Optional[dict]] = mapped_column(JSONB) # {"cast": [...], "crew": [...]}
     embedding_id: Mapped[Optional[int]] = mapped_column(Integer)    # FAISS index position
     fetched_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

@@ -6,7 +6,7 @@ from pathlib import Path
 # Add backend to path so we can import app
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from app.database import async_session_maker
+from app.database import AsyncSessionLocal
 from app.models.movie import Movie
 from app.services.tmdb_service import _tmdb_get_async
 from sqlalchemy import select
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 async def backfill_collections():
     logger.info("Starting collection backfill...")
-    async with async_session_maker() as session:
+    async with AsyncSessionLocal() as session:
         # Get all movies that don't have belongs_to_collection set yet
         result = await session.execute(
             select(Movie).where(Movie.belongs_to_collection.is_(None))

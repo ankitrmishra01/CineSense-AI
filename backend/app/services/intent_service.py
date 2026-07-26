@@ -35,7 +35,11 @@ async def classify_intent(query_text: str) -> IntentResponse:
         "Input: 'action movies from the 90s'\n"
         "Output: { \"intent\": \"GENRE_FILTER\", \"entities\": { \"genre\": \"Action\", \"year_range\": \"1990-1999\" } }\n\n"
         "Input: 'movies directed by Christopher Nolan'\n"
-        "Output: { \"intent\": \"ACTOR_DIRECTOR\", \"entities\": { \"person_name\": \"Christopher Nolan\", \"role\": \"director\" } }\n"
+        "Output: { \"intent\": \"ACTOR_DIRECTOR\", \"entities\": { \"person_name\": \"Christopher Nolan\", \"role\": \"director\" } }\n\n"
+        "Input: 'movies with Tom Hanks'\n"
+        "Output: { \"intent\": \"ACTOR_DIRECTOR\", \"entities\": { \"person_name\": \"Tom Hanks\", \"role\": \"actor\" } }\n\n"
+        "Input: 'Leonardo DiCaprio movies'\n"
+        "Output: { \"intent\": \"ACTOR_DIRECTOR\", \"entities\": { \"person_name\": \"Leonardo DiCaprio\", \"role\": \"unspecified\" } }\n"
     )
     
     user_prompt = f"Input: '{query_text}'\nOutput:"
