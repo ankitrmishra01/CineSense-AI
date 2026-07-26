@@ -80,6 +80,30 @@ def search(query_text: str, top_k: int = 100) -> list[tuple[int, float]]:
     return results  # already sorted descending by FAISS inner product
 
 
+def search_by_vector(query_vec: np.ndarray, top_k: int = 100) -> list[tuple[int, float]]:
+    """Perform k-NN search directly with a vector."""
+    _ensure_loaded()
+    distances, indices = _faiss_index.search(query_vec, top_k)
+    results = []
+    for dist, idx in zip(distances[0], indices[0]):
+        if idx == -1:
+            continue
+        movie_id = _id_map[idx]
+        results.append((movie_id, float(dist)))
+    return results
+
+def get_movie_vector(embedding_id: int) -> Optional[np.ndarray]:
+    """Retrieve the original vector for a given embedding_id from FAISS."""
+    _ensure_loaded()
+    try:
+        vec = _faiss_index.reconstruct(embedding_id)
+        # Ensure it's shaped as (1, dim) for the search function
+        return np.array([vec], dtype=np.float32)
+    except Exception as e:
+        logger.error(f"Failed to reconstruct vector for embedding_id {embedding_id}: {e}")
+        return None
+
+
 def preload() -> None:
     """Call at app startup to warm up the model and index."""
     try:

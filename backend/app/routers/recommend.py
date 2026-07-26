@@ -4,7 +4,7 @@ from datetime import date
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_
+from sqlalchemy import select, or_, String
 from app.database import get_db
 from app.models.user import User
 from app.models.movie import Movie
@@ -59,90 +59,98 @@ async def recommend(
     db: AsyncSession = Depends(get_db),
     current_user: Optional[User] = Depends(get_optional_user),
 ):
-    # ── 1. Build query text & Check Intent ────────────────────────────────────
+    # ── 1. Check Intent ───────────────────────────────────────────────────────
     query_text = _build_query_text(payload.mood_text, payload.emotion_tags)
+    
+    from app.services.intent_service import classify_intent
+    intent_resp = await classify_intent(query_text)
+    intent_type = intent_resp.intent
+    entities = intent_resp.entities
+    logger.info(f"Intent classified: {intent_type} | Entities: {entities}")
 
-    intent_type, intent_movie = None, None
-    if payload.mood_text:
-        intent_type, intent_movie = await llm_service.parse_intent(payload.mood_text)
-        if intent_type:
-            logger.info("Parsed %s intent for: %s", intent_type, intent_movie)
+    if intent_type == "ACTOR_DIRECTOR":
+        raise HTTPException(
+            status_code=400,
+            detail="Actor/director search is coming soon. Please try searching by mood, genre, franchise, or similar movies."
+        )
 
     candidates_from_tmdb = []
     movies_in_db = {}
     candidate_ids = []
     score_map = {}
 
-    if intent_type in ["SIMILAR", "FRANCHISE"] and intent_movie:
-        # User wants movies similar to a specific movie, or a franchise
-        from app.services.tmdb_service import _tmdb_get_async, build_poster_url
-        from datetime import datetime
+    # ── 2. Retrieval Strategies ────────────────────────────────────────────────
+    if intent_type == "GENRE_FILTER":
+        # Strategy: Direct SQL filtering on genres
+        genre = entities.get("genre", "")
+        # Very basic case-insensitive genre match in the JSONB array using text cast
+        result = await db.execute(
+            select(Movie)
+            .where(Movie.genres.cast(String).ilike(f"%{genre}%"))
+            .order_by(Movie.vote_average.desc().nullslast())
+            .limit(100)
+        )
+        for m in result.scalars().all():
+            candidate_ids.append(m.id)
+            score_map[m.id] = float(m.vote_average or 0.0)
+            movies_in_db[m.id] = m
+
+    elif intent_type == "FRANCHISE":
+        # Strategy: Fuzzy match against collection name in DB
+        franchise_name = entities.get("franchise_name", payload.mood_text)
+        result = await db.execute(
+            select(Movie)
+            .where(Movie.belongs_to_collection['name'].astext.ilike(f"%{franchise_name}%"))
+            .order_by(Movie.release_date.asc().nullsfirst())
+            .limit(50)
+        )
+        movies = result.scalars().all()
+        for idx, m in enumerate(movies):
+            candidate_ids.append(m.id)
+            score_map[m.id] = 100.0 - idx  # Maintain chronological order
+            movies_in_db[m.id] = m
+            
+        # If DB didn't have it, fallback to TMDB search would go here, 
+        # but for brevity we rely on the backfilled DB
+
+    elif intent_type == "SIMILAR_TO_MOVIE":
+        # Strategy: Find reference movie in DB, get its embedding, do k-NN
+        ref_title = entities.get("movie_title", payload.mood_text)
         
-        # 1. Find the reference movie
-        search_data = await _tmdb_get_async("/search/movie", {"query": intent_movie})
-        if search_data and search_data.get("results"):
-            ref_movie = search_data["results"][0]
-            ref_id = ref_movie["id"]
-            
-            raw_movies = []
-            
-            if intent_type == "FRANCHISE":
-                # Get movie details to check for collection
-                details = await _tmdb_get_async(f"/movie/{ref_id}")
-                if details and details.get("belongs_to_collection"):
-                    collection_id = details["belongs_to_collection"]["id"]
-                    collection_data = await _tmdb_get_async(f"/collection/{collection_id}")
-                    if collection_data and collection_data.get("parts"):
-                        raw_movies.extend(collection_data["parts"])
-            
-            # 2. Get similar movies
-            similar_data = await _tmdb_get_async(f"/movie/{ref_id}/similar")
-            if similar_data and similar_data.get("results"):
-                # Avoid duplicates if collection already added them
-                existing_ids = {m["id"] for m in raw_movies}
-                for m in similar_data["results"]:
-                    if m["id"] not in existing_ids:
-                        raw_movies.append(m)
-            
-            # If it's a franchise request but no collection was found, ensure the ref_movie is at least included
-            if intent_type == "FRANCHISE" and not any(m["id"] == ref_id for m in raw_movies):
-                raw_movies.insert(0, ref_movie)
-                
-            # Limit to top 50
-            raw_movies = raw_movies[:50]
-                
-            if raw_movies:
-                for idx, m in enumerate(raw_movies):
-                    m_id = m["id"]
-                    candidate_ids.append(m_id)
-                    # Assign a fake score so they stay in order
-                    score_map[m_id] = 100.0 - idx 
-                    
-                    # Create an unpersisted Movie object for the pipeline
-                    release_date = None
-                    if m.get("release_date"):
-                        try:
-                            release_date = datetime.strptime(m["release_date"], "%Y-%m-%d").date()
-                        except ValueError:
-                            pass
-                            
-                    fake_movie = Movie(
-                        id=m_id,
-                        title=m.get("title", "Unknown"),
-                        overview=m.get("overview", ""),
-                        tagline="",
-                        genres=[{"id": gid, "name": "Genre"} for gid in m.get("genre_ids", [])],
-                        poster_path=build_poster_url(m.get("poster_path")),
-                        backdrop_path=build_poster_url(m.get("backdrop_path"), "w1280"),
-                        vote_average=m.get("vote_average", 0.0),
-                        runtime=120, # dummy runtime
-                        release_date=release_date
-                    )
-                    movies_in_db[m_id] = fake_movie
-                    candidates_from_tmdb.append(fake_movie)
-                    
-    if not candidates_from_tmdb:
-        # ── 2. FAISS k-NN search (overfetch) ──────────────────────────────────────
+        # 1. Fuzzy match DB
+        result = await db.execute(
+            select(Movie).where(Movie.title.ilike(f"%{ref_title}%")).limit(1)
+        )
+        ref_movie = result.scalars().first()
+        
+        candidates = []
+        if ref_movie and ref_movie.embedding_id is not None:
+            # 2a. Found in DB: search FAISS using its exact vector
+            logger.info(f"SIMILAR_TO_MOVIE: Found '{ref_movie.title}' in DB. Doing FAISS vector search.")
+            ref_vec = faiss_service.get_movie_vector(ref_movie.embedding_id)
+            if ref_vec is not None:
+                candidates = faiss_service.search_by_vector(ref_vec, top_k=50)
+        else:
+            # 2b. Not in DB: Fetch TMDB live, embed overview, search FAISS
+            logger.info(f"SIMILAR_TO_MOVIE: '{ref_title}' not in DB. Falling back to TMDB live + on-the-fly embedding.")
+            from app.services.tmdb_service import _tmdb_get_async
+            search_data = await _tmdb_get_async("/search/movie", {"query": ref_title})
+            if search_data and search_data.get("results"):
+                tmdb_ref = search_data["results"][0]
+                overview = tmdb_ref.get("overview", "")
+                if overview:
+                    ref_vec = faiss_service.embed_text(overview)
+                    candidates = faiss_service.search_by_vector(ref_vec, top_k=50)
+        
+        if candidates:
+            candidate_ids = [movie_id for movie_id, _ in candidates]
+            score_map = {movie_id: score for movie_id, score in candidates}
+            db_result = await db.execute(select(Movie).where(Movie.id.in_(candidate_ids)))
+            movies_in_db = {m.id: m for m in db_result.scalars().all()}
+
+    # Fallback to standard MOOD if strategy yielded nothing or it was MOOD
+    if not candidate_ids:
+        # Strategy: Standard semantic search
         try:
             candidates = faiss_service.search(query_text, top_k=300)
         except RuntimeError as e:
@@ -154,7 +162,7 @@ async def recommend(
         candidate_ids = [movie_id for movie_id, _ in candidates]
         score_map = {movie_id: score for movie_id, score in candidates}
 
-        # ── 3. Fetch candidate movies from DB ─────────────────────────────────────
+        # Fetch candidate movies from DB
         result = await db.execute(select(Movie).where(Movie.id.in_(candidate_ids)))
         movies_in_db = {m.id: m for m in result.scalars().all()}
 
