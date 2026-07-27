@@ -88,7 +88,7 @@ async def fetch_movie_details_async(client, semaphore, movie_id):
     return await tmdb_get_async(
         client, semaphore,
         f"/movie/{movie_id}",
-        {"append_to_response": "keywords,videos,watch/providers"},
+        {"append_to_response": "keywords,videos,watch/providers,credits"},
     )
 
 
@@ -110,6 +110,40 @@ def extract_keywords(details):
 
 def extract_watch_providers(details):
     return (details.get("watch/providers") or {}).get("results", {})
+
+
+def extract_cast_crew(details):
+    credits_data = details.get("credits") or {}
+    cast = []
+    for c in credits_data.get("cast", [])[:10]:
+        cast.append({
+            "id": c.get("id"),
+            "name": c.get("name"),
+            "character": c.get("character"),
+            "order": c.get("order")
+        })
+    crew = []
+    for c in credits_data.get("crew", []):
+        if c.get("job") in ["Director", "Writer"]:
+            crew.append({
+                "id": c.get("id"),
+                "name": c.get("name"),
+                "job": c.get("job")
+            })
+    return {"cast": cast, "crew": crew}
+
+
+def extract_belongs_to_collection(details):
+    # Extract only the minimal fields we care about
+    coll = details.get("belongs_to_collection")
+    if not coll:
+        return None
+    return {
+        "id": coll.get("id"),
+        "name": coll.get("name"),
+        "poster_path": coll.get("poster_path"),
+        "backdrop_path": coll.get("backdrop_path")
+    }
 
 
 def parse_release_date(date_str):
@@ -138,6 +172,8 @@ def upsert_movie(session, details):
         release_date   = parse_release_date(details.get("release_date")),
         trailer_key    = extract_trailer_key(details),
         watch_providers= extract_watch_providers(details),
+        cast_crew      = extract_cast_crew(details),
+        belongs_to_collection = extract_belongs_to_collection(details),
     )
     if existing:
         for k, v in fields.items():
