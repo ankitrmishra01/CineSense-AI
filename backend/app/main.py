@@ -21,6 +21,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+@app.get("/health", tags=["Health"])
+async def health():
+    return {"status": "ok", "service": "cinesense-backend"}
+
 add_middleware(app)
 
 app.include_router(auth_router)
@@ -28,7 +32,3 @@ app.include_router(recommend_router)
 app.include_router(movies_router)
 app.include_router(watchlist_router)
 
-
-@app.get("/health", tags=["Health"])
-async def health():
-    return {"status": "ok", "app": settings.APP_NAME}
