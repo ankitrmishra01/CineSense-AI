@@ -254,18 +254,10 @@ async def recommend(
     page_movies = filtered[start_idx:end_idx]
 
     # ── 5. Batched LLM call ────────────────────────────────────────────────────
-    movie_contexts = [
-        llm_service.MovieContext(
-            title=m.title,
-            overview=m.overview,
-            tagline=m.tagline,
-            genres=[g["name"] for g in (m.genres or [])],
-            vote_average=float(m.vote_average) if m.vote_average else None,
-            release_year=m.release_date.year if m.release_date else None,
-        )
-        for m in page_movies
-    ]
-    explanations = await llm_service.generate_explanations(query_text, movie_contexts)
+    # ── 5. Batched LLM call (Disabled for speed optimization) ─────────────────
+    # We bypass the synchronous LLM call to drastically improve response time.
+    # The frontend will receive the generic fallback explanations instantly.
+    explanations = []
 
     # ── 6. Build response ─────────────────────────────────────────────────────
     recommendations = []
