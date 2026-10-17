@@ -2,12 +2,14 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { recommendApi } from '../api/recommend';
 import { useMoodStore } from '../store/moodStore';
+import { useHistoryStore } from '../store/historyStore';
 import type { RecommendRequest } from '../types';
 
 export const useRecommendations = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { moodText, selectedEmojis, filters, lastResults, setResults, seed, currentPage, setSeed, setCurrentPage } = useMoodStore();
+  const { addEntry } = useHistoryStore();
   const navigate = useNavigate();
 
   const fetchRecommendations = useCallback(async (overrides?: Partial<RecommendRequest>, isTryAgain: boolean = false) => {
@@ -46,6 +48,23 @@ export const useRecommendations = () => {
     try {
       const { data } = await recommendApi.recommend(payload);
       setResults(data);
+
+      // Save to 35mm film-strip journal
+      if (data.recommendations && data.recommendations.length > 0) {
+        addEntry({
+          moodText: moodText || '',
+          emojis: selectedEmojis || [],
+          querySummary: data.query_summary || moodText || 'Custom Mood',
+          movieCount: data.total_results || data.recommendations.length,
+          movies: data.recommendations.slice(0, 5).map((r) => ({
+            id: r.movie.id,
+            title: r.movie.title,
+            poster_path: r.movie.poster_path,
+            vote_average: r.movie.vote_average,
+          })),
+        });
+      }
+
       navigate('/recommendations');
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { detail?: unknown } } };
@@ -54,7 +73,8 @@ export const useRecommendations = () => {
     } finally {
       setLoading(false);
     }
-  }, [moodText, selectedEmojis, filters, setResults, navigate, seed, currentPage, setSeed, setCurrentPage]);
+  }, [moodText, selectedEmojis, filters, setResults, navigate, seed, currentPage, setSeed, setCurrentPage, addEntry]);
+
 
   const surpriseMe = useCallback(async () => {
     const surprisePrompts = [

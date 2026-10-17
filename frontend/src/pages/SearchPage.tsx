@@ -1,19 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { MovieGrid } from '../components/movie/MovieGrid';
 import { moviesApi } from '../api/movies';
+import { Spinner } from '../components/ui/Spinner';
 import type { Movie } from '../types';
 
 export const SearchPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialQuery = searchParams.get('q') || '';
-  
+
   const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(!!initialQuery);
-  const abortControllerRef = React.useRef<AbortController | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  const handleSearch = React.useCallback(async (searchQuery: string) => {
+    if (!searchQuery.trim()) return;
+
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    setLoading(true);
+    setHasSearched(true);
+    setSearchParams({ q: searchQuery });
+
+    try {
+      const { data } = await moviesApi.search(searchQuery, 24, controller.signal);
+      setResults(data.results);
+      setLoading(false);
+    } catch (err: any) {
+      if (err?.name === 'CanceledError' || err?.code === 'ERR_CANCELED') {
+        return;
+      }
+      setLoading(false);
+    }
+  }, [setSearchParams]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -29,35 +55,8 @@ export const SearchPage: React.FC = () => {
       }
     }, 400);
     return () => clearTimeout(timer);
-  }, [query, setSearchParams]);
+  }, [query, setSearchParams, handleSearch]);
 
-  const handleSearch = async (searchQuery: string) => {
-    if (!searchQuery.trim()) return;
-
-    // Cancel any previous in-flight request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    setLoading(true);
-    setHasSearched(true);
-    setSearchParams({ q: searchQuery });
-
-    try {
-      const { data } = await moviesApi.search(searchQuery, 20, controller.signal);
-      setResults(data.results);
-      setLoading(false);
-    } catch (err: any) {
-      if (err?.name === 'CanceledError' || err?.code === 'ERR_CANCELED') {
-        // Ignored: request was intentionally cancelled for a newer search
-        return;
-      }
-      console.error('Search failed', err);
-      setLoading(false);
-    }
-  };
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,61 +65,115 @@ export const SearchPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center', paddingTop: '40px' }}>
-        <h1 style={{ fontFamily: 'var(--font-primary)', fontSize: '32px', fontWeight: 800, marginBottom: '24px' }}>
-          Search Movies
+      <div style={{ maxWidth: '780px', margin: '0 auto', textAlign: 'center', paddingTop: '28px' }}>
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            backgroundColor: 'var(--color-accent-subtle)',
+            border: '1px solid var(--color-accent-border)',
+            borderRadius: 'var(--radius-pill)',
+            padding: '3px 12px',
+            fontSize: '11px',
+            color: 'var(--color-accent-primary)',
+            fontFamily: 'var(--font-sans)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            marginBottom: '12px',
+          }}
+        >
+          <span>🔍</span>
+          <span>Archival Index</span>
+        </div>
+
+        <h1
+          style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: 'clamp(28px, 4vw, 42px)',
+            fontWeight: 700,
+            marginBottom: '20px',
+            color: 'var(--color-text-primary)',
+          }}
+        >
+          Direct Title & Franchise Search
         </h1>
-        
-        <form onSubmit={onSubmit} style={{ display: 'flex', gap: '12px', marginBottom: '48px' }}>
+
+        <form onSubmit={onSubmit} style={{ display: 'flex', gap: '10px', marginBottom: '44px' }}>
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type a movie name (e.g., Inception, The Matrix)..."
+            placeholder="Search by title, director, or franchise (e.g., Blade Runner, Nolan, Dune)..."
             style={{
               flex: 1,
-              padding: '16px 24px',
-              borderRadius: 'var(--border-radius)',
-              border: '1px solid var(--border)',
-              background: 'var(--bg)',
-              color: 'var(--text)',
-              fontSize: '16px',
+              padding: '14px 20px',
+              borderRadius: 'var(--radius-pill)',
+              border: '1px solid var(--color-border)',
+              backgroundColor: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-primary)',
+              fontFamily: 'var(--font-sans)',
+              fontSize: '15px',
               outline: 'none',
-              boxShadow: 'var(--shadow-sm)',
+              transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-accent-border)';
+              e.currentTarget.style.boxShadow = '0 0 0 2px var(--color-accent-subtle)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-border)';
+              e.currentTarget.style.boxShadow = 'none';
             }}
             autoFocus
           />
-          <button 
-            type="submit" 
-            className="btn-primary" 
+          <button
+            type="submit"
+            className="btn-cinema"
             disabled={!query.trim() || loading}
-            style={{ padding: '0 32px' }}
+            style={{ padding: '0 28px' }}
           >
-            {loading ? 'Searching...' : 'Search'}
+            {loading ? <Spinner size={16} color="#0c0b0a" /> : 'Search'}
           </button>
         </form>
       </div>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '40px' }}>
-          <div className="spinner" style={{ width: '40px', height: '40px', border: '4px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--accent)', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto' }} />
-          <style>
-            {`
-              @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-            `}
-          </style>
+        <div style={{ textAlign: 'center', padding: '60px 0' }}>
+          <Spinner size={32} color="var(--color-accent-primary)" />
+          <p style={{ marginTop: '16px', color: 'var(--color-text-muted)', fontSize: '13px' }}>
+            Searching archival film catalog...
+          </p>
         </div>
       ) : hasSearched && results.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--color-text-secondary)' }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>🤷‍♂️</div>
-          <p>No movies found for "{initialQuery}". Try another search!</p>
+          <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎞️</div>
+          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', marginBottom: '8px' }}>
+            No titles found
+          </h3>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '14px' }}>
+            No films matched "{query}". Try checking the spelling or searching by a key actor/director.
+          </p>
         </div>
       ) : results.length > 0 ? (
         <>
-          <p style={{ color: 'var(--color-text-secondary)', marginBottom: '20px' }}>
-            Found {results.length} results
+          <p
+            style={{
+              color: 'var(--color-text-muted)',
+              marginBottom: '20px',
+              fontSize: '13px',
+              fontFamily: 'var(--font-sans)',
+            }}
+          >
+            Found {results.length} film prints
           </p>
-          <MovieGrid items={results.map(m => ({ movie: m, explanation: '', similarity_score: 0 }))} />
+          <MovieGrid
+            items={results.map((m) => ({
+              movie: m,
+              explanation: '',
+              similarity_score: 1.0,
+            }))}
+          />
         </>
       ) : null}
     </PageWrapper>

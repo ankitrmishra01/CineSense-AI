@@ -8,15 +8,18 @@ export const EmojiTagSelector: React.FC = () => {
 
   return (
     <div>
-      <p style={{
-        fontSize: '13px',
-        color: 'var(--color-text-muted)',
-        marginBottom: '12px',
-        textTransform: 'uppercase',
-        letterSpacing: '0.08em',
-        fontWeight: 600,
-      }}>
-        Quick mood tags
+      <p
+        style={{
+          fontSize: '11px',
+          color: 'var(--color-text-muted)',
+          marginBottom: '12px',
+          textTransform: 'uppercase',
+          letterSpacing: '0.1em',
+          fontWeight: 600,
+          fontFamily: 'var(--font-sans)',
+        }}
+      >
+        Emotional Atmosphere
       </p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
         {EMOTION_TAGS.map((tag) => {
@@ -26,28 +29,27 @@ export const EmojiTagSelector: React.FC = () => {
               key={tag.emoji}
               id={`emoji-tag-${tag.label.toLowerCase()}`}
               onClick={() => toggleEmoji(tag.emoji)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                padding: '8px 14px',
-                borderRadius: '999px',
-                border: `1px solid ${selected ? 'var(--color-text-primary)' : 'var(--color-border)'}`,
-                background: selected
-                  ? 'var(--color-bg-card-hover)'
+                padding: '7px 14px',
+                borderRadius: 'var(--radius-pill)',
+                border: `1px solid ${selected ? 'var(--color-accent-border)' : 'var(--color-border)'}`,
+                backgroundColor: selected
+                  ? 'var(--color-accent-subtle)'
                   : 'var(--color-bg-card)',
-                color: selected ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+                color: selected ? 'var(--color-accent-primary)' : 'var(--color-text-secondary)',
                 cursor: 'pointer',
-                fontSize: '14px',
+                fontSize: '13px',
                 fontWeight: selected ? 600 : 400,
                 transition: 'all 0.15s ease',
-                boxShadow: 'none',
               }}
             >
-              <span style={{ fontSize: '18px' }}>{tag.emoji}</span>
-              {tag.label}
+              <span style={{ fontSize: '16px' }}>{tag.emoji}</span>
+              <span>{tag.label}</span>
             </motion.button>
           );
         })}

@@ -4,7 +4,11 @@ from sqlalchemy import select, or_
 from app.database import get_db
 from app.models.movie import Movie
 from app.schemas.movie import MovieOut, MovieSearchResult
-from app.services.tmdb_service import get_trending_movies_async, get_now_playing_movies_async
+from app.services.tmdb_service import (
+    get_trending_movies_async,
+    get_now_playing_movies_async,
+    get_similar_movies_async,
+)
 
 router = APIRouter(prefix="/movies", tags=["Movies"])
 
@@ -84,3 +88,10 @@ async def get_movie(movie_id: int, db: AsyncSession = Depends(get_db)):
         runtime=tmdb_movie.get("runtime"),
         release_date=tmdb_movie.get("release_date") or None,
     )
+
+
+@router.get("/{movie_id}/similar", response_model=list[MovieOut])
+async def get_similar_movies(movie_id: int):
+    results = await get_similar_movies_async(movie_id)
+    return [_map_tmdb_to_movieout(m) for m in results if m.get("poster_path")][:10]
+

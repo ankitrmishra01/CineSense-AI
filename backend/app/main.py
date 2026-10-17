@@ -25,6 +25,32 @@ app = FastAPI(
 async def health():
     return {"status": "ok", "service": "cinesense-backend"}
 
+
+@app.get("/health/detailed", tags=["Health"])
+async def detailed_health():
+    from app.services.faiss_service import get_faiss_stats
+    from app.database import engine
+    from sqlalchemy import text
+
+    faiss_info = get_faiss_stats()
+
+    db_status = "unknown"
+    try:
+        async with engine.connect() as conn:
+            await conn.execute(text("SELECT 1"))
+        db_status = "connected"
+    except Exception as e:
+        db_status = f"error: {str(e)}"
+
+    return {
+        "status": "ok" if db_status == "connected" else "degraded",
+        "service": "cinesense-backend",
+        "database": db_status,
+        "faiss": faiss_info,
+    }
+
+
+
 add_middleware(app)
 
 app.include_router(auth_router)

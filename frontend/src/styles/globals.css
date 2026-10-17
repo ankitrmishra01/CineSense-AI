@@ -1,59 +1,76 @@
-/* ─── Google Fonts ─────────────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 @import "tailwindcss";
 
-/* ─── Design Tokens ────────────────────────────────────────────────────────── */
+/* ─── Cinema Design Tokens ─────────────────────────────────────────────────── */
 :root {
-  --color-bg-primary: #000000;
-  --color-bg-secondary: #050505;
-  --color-bg-card: #0a0a0a;
-  --color-bg-card-hover: #111111;
-  --color-border: #222222;
-  --color-border-hover: #333333;
+  /* Dark Theme (Default) — Classic warm near-black cinema lounge */
+  --color-bg-primary: #0c0b0a;
+  --color-bg-secondary: #141210;
+  --color-bg-card: #181614;
+  --color-bg-card-hover: #211e1a;
+  --color-border: #292521;
+  --color-border-hover: #3d3731;
 
-  --color-accent-primary: #ffffff;
-  --color-accent-secondary: #aaaaaa;
-  --color-accent-glow: rgba(255, 255, 255, 0.1);
+  /* Typography */
+  --color-text-primary: #f4efe6;
+  --color-text-secondary: #a8a296;
+  --color-text-muted: #6e685e;
 
-  --color-gold: #f59e0b;
-  --color-gold-light: #fbbf24;
+  /* Antique Brass / Gold Accents */
+  --color-accent-primary: #d4af37;
+  --color-accent-hover: #c49f27;
+  --color-accent-subtle: rgba(212, 175, 55, 0.12);
+  --color-accent-border: rgba(212, 175, 55, 0.35);
 
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #888888;
-  --color-text-muted: #555555;
+  /* States */
+  --color-ruby: #dc2626;
+  --color-ruby-subtle: rgba(220, 38, 38, 0.12);
+  --color-emerald: #10b981;
+  --color-emerald-subtle: rgba(16, 185, 129, 0.12);
 
-  --gradient-primary: #ffffff;
-  --gradient-card: #0a0a0a;
-  --gradient-bg: none;
+  /* Mood Reactive Ambient Tint (Modified dynamically via data-mood) */
+  --color-mood-ambient: rgba(212, 175, 55, 0.04);
 
-  --shadow-glow: none;
-  --shadow-card: none;
-  --shadow-card-hover: none;
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 9999px;
 
-  --border-radius: 8px;
-  --border-radius-sm: 4px;
-  --border-radius-lg: 16px;
-  --border-radius-pill: 9999px;
+  /* Fonts */
+  --font-display: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
-  --font-primary: 'Inter', system-ui, sans-serif;
-  --font-secondary: 'Inter', system-ui, sans-serif;
+  /* Shadows */
+  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.6);
+  --shadow-gold: 0 0 25px rgba(212, 175, 55, 0.15);
 }
 
 :root[data-theme="light"] {
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f9f9f9;
-  --color-bg-card: #f5f5f5;
-  --color-bg-card-hover: #eaeaea;
-  --color-border: #dddddd;
-  --color-border-hover: #cccccc;
+  /* Light Theme — Archival parchment & vintage paper program */
+  --color-bg-primary: #f8f5ee;
+  --color-bg-secondary: #eee9dc;
+  --color-bg-card: #ffffff;
+  --color-bg-card-hover: #f3eee3;
+  --color-border: #dcd5c5;
+  --color-border-hover: #c8beab;
 
-  --color-text-primary: #000000;
-  --color-text-secondary: #666666;
-  --color-text-muted: #999999;
+  --color-text-primary: #1c1917;
+  --color-text-secondary: #57534e;
+  --color-text-muted: #8c827a;
+
+  --color-accent-primary: #9b7922;
+  --color-accent-hover: #846618;
+  --color-accent-subtle: rgba(155, 121, 34, 0.1);
+  --color-accent-border: rgba(155, 121, 34, 0.3);
+
+  --color-mood-ambient: rgba(155, 121, 34, 0.04);
+  --shadow-subtle: 0 4px 16px rgba(40, 35, 25, 0.06);
+  --shadow-card: 0 8px 24px rgba(40, 35, 25, 0.08);
 }
 
-/* ─── Base Reset ───────────────────────────────────────────────────────────── */
+/* ─── Base Reset & Cinema Feel ────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -62,70 +79,209 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--color-bg-primary);
 }
 
 body {
-  font-family: var(--font-secondary);
-  background: var(--color-bg-primary);
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   letter-spacing: -0.01em;
+  position: relative;
 }
 
-#root {
-  min-height: 100vh;
+/* Subtle 35mm Film Grain Texture Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track { background: var(--color-bg-secondary); }
-::-webkit-scrollbar-thumb {
-  background: var(--color-border-hover);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
-
-/* ─── Glassmorphism Utilities (Repurposed to Minimal Cards) ──────────────── */
-.glass {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
+/* Accessible focus rings */
+:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 3px;
 }
 
-.glass-hover {
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-.glass-hover:hover {
-  background: var(--color-bg-card-hover);
-  border-color: var(--color-border-hover);
+/* ─── Typography Utility Classes ───────────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display);
 }
 
-/* ─── Gradient Text (Removed for Minimal Design) ─────────────────────────── */
-.gradient-text {
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Headings */
+h1, h2, h3, h4 {
   color: var(--color-text-primary);
+  letter-spacing: -0.02em;
 }
 
-/* ─── Glow Effects (Removed) ─────────────────────────────────────────────── */
-.glow {
-  box-shadow: none;
+/* ─── Custom Scrollbar ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
 }
-.glow-text {
-  text-shadow: none;
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-hover);
 }
 
-/* ─── Shimmer Skeleton ─────────────────────────────────────────────────────── */
-@keyframes shimmer {
+/* ─── Cinema Glass & Cards ─────────────────────────────────────────────────── */
+.cinema-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-subtle);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.25s ease;
+}
+
+.cinema-card:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-card);
+}
+
+/* ─── Buttons & Controls ───────────────────────────────────────────────────── */
+.btn-cinema {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  background-color: var(--color-accent-primary);
+  color: #0c0b0a;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease, opacity 0.2s;
+  text-decoration: none;
+}
+
+.btn-cinema:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn-cinema:active {
+  transform: translateY(1px);
+}
+
+.btn-cinema:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 13px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  background-color: var(--color-bg-card-hover);
+  border-color: var(--color-accent-border);
+  color: var(--color-accent-primary);
+}
+
+/* ─── Ticket-Stub Aesthetic (Signature Feature) ───────────────────────────── */
+.ticket-stub {
+  position: relative;
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ticket-stub::before,
+.ticket-stub::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  background-color: var(--color-bg-primary);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  border: 1px solid var(--color-border);
+}
+
+.ticket-stub::before {
+  left: -8px;
+}
+.ticket-stub::after {
+  right: -8px;
+}
+
+/* ─── Vintage Theatre Marquee ──────────────────────────────────────────────── */
+.marquee-ribbon {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: 2rem;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 10px 0;
+  background-color: var(--color-bg-secondary);
+}
+
+.marquee-content {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  min-width: 100%;
+  gap: 2rem;
+  animation: scrollMarquee 40s linear infinite;
+}
+
+@keyframes scrollMarquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+/* ─── Shimmer Loading Skeleton ─────────────────────────────────────────────── */
+@keyframes cinemaShimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
-.skeleton {
+.cinema-skeleton {
   background: linear-gradient(
     90deg,
     var(--color-bg-card) 25%,
@@ -133,107 +289,19 @@ body {
     var(--color-bg-card) 75%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: var(--border-radius-sm);
+  animation: cinemaShimmer 1.8s infinite;
+  border-radius: var(--radius-sm);
 }
 
-/* ─── Button Base ──────────────────────────────────────────────────────────── */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 28px;
-  background: var(--color-text-primary);
-  color: var(--color-bg-primary);
-  font-family: var(--font-primary);
-  font-weight: 600;
-  font-size: 14px;
-  border: none;
-  border-radius: var(--border-radius-pill);
-  cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.1s ease;
-  text-decoration: none;
-}
-.btn-primary:hover {
-  opacity: 0.85;
-}
-.btn-primary:active { transform: scale(0.98); }
-.btn-primary:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: transparent;
-  color: var(--color-text-secondary);
-  font-family: var(--font-primary);
-  font-weight: 500;
-  font-size: 13px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-pill);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.btn-ghost:hover {
-  background: var(--color-bg-card-hover);
-  color: var(--color-text-primary);
-  border-color: var(--color-text-primary);
-}
-
-/* ─── Input Base ───────────────────────────────────────────────────────────── */
-.input-base {
-  width: 100%;
-  padding: 16px 20px;
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-lg);
-  color: var(--color-text-primary);
-  font-family: var(--font-secondary);
-  font-size: 15px;
-  outline: none;
-  transition: border-color 0.2s ease;
-}
-.input-base::placeholder { color: var(--color-text-muted); }
-.input-base:focus {
-  border-color: var(--color-text-primary);
-}
-
-/* ─── Badge ────────────────────────────────────────────────────────────────── */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 14px;
-  background: var(--color-bg-card);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-pill);
-  font-size: 11px;
-  font-weight: 600;
-  white-space: nowrap;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-.badge:hover {
-  background: var(--color-bg-card-hover);
-  border-color: var(--color-text-primary);
-  color: var(--color-text-primary);
-  transition: all 0.2s ease;
-}
-
-/* ─── Page Transitions ─────────────────────────────────────────────────────── */
-.page-enter {
-  opacity: 0;
-  transform: translateY(8px);
-}
-.page-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+/* ─── Reduced Motion Overrides ────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  body::before {
+    display: none;
+  }
 }

@@ -9,20 +9,20 @@ interface GenreChipProps {
 }
 
 const GENRE_COLORS: Record<number, string> = {
-  28: '#ef4444',   // Action - red
-  12: '#f97316',   // Adventure - orange
-  16: '#eab308',   // Animation - yellow
-  35: '#22c55e',   // Comedy - green
-  80: '#6366f1',   // Crime - indigo
-  18: '#3b82f6',   // Drama - blue
-  27: '#7c3aed',   // Horror - purple
-  10749: '#ec4899', // Romance - pink
-  878: '#06b6d4',  // Sci-Fi - cyan
-  53: '#f59e0b',   // Thriller - amber
+  28: '#e06c75',    // Action - muted vermilion
+  12: '#d19a66',    // Adventure - ochre
+  16: '#e5c07b',    // Animation - warm amber
+  35: '#98c379',    // Comedy - olive green
+  80: '#61afef',    // Crime - steel blue
+  18: '#56b6c2',    // Drama - cyan gray
+  27: '#c678dd',    // Horror - twilight
+  10749: '#e06c75', // Romance - rose
+  878: '#61afef',   // Sci-Fi - deep sky
+  53: '#d19a66',    // Thriller - cognac
 };
 
 export const GenreChip: React.FC<GenreChipProps> = ({ genre, selected, onClick, small }) => {
-  const baseColor = GENRE_COLORS[genre.id] || '#a855f7';
+  const baseColor = GENRE_COLORS[genre.id] || 'var(--color-accent-primary)';
   return (
     <button
       onClick={onClick}
@@ -30,16 +30,17 @@ export const GenreChip: React.FC<GenreChipProps> = ({ genre, selected, onClick, 
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        padding: small ? '3px 10px' : '5px 12px',
-        borderRadius: '999px',
+        padding: small ? '2px 8px' : '4px 12px',
+        borderRadius: 'var(--radius-pill)',
         border: `1px solid ${selected ? baseColor : 'var(--color-border)'}`,
-        background: selected ? `${baseColor}22` : 'rgba(255,255,255,0.04)',
+        backgroundColor: selected ? 'var(--color-accent-subtle)' : 'var(--color-bg-secondary)',
         color: selected ? baseColor : 'var(--color-text-secondary)',
         fontSize: small ? '11px' : '12px',
         fontWeight: selected ? 600 : 400,
         cursor: onClick ? 'pointer' : 'default',
         transition: 'all 0.15s ease',
         whiteSpace: 'nowrap',
+        fontFamily: 'var(--font-sans)',
       }}
     >
       {genre.name}

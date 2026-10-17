@@ -87,3 +87,16 @@ async def get_now_playing_movies_async() -> list[dict]:
     results = data.get("results", []) if data else []
     _live_cache["now_playing"] = results
     return results
+
+
+async def get_similar_movies_async(movie_id: int) -> list[dict]:
+    cache_key = f"similar_{movie_id}"
+    if cache_key in _live_cache:
+        return _live_cache[cache_key]
+    data = await _tmdb_get_async(f"/movie/{movie_id}/recommendations")
+    if not data or not data.get("results"):
+        data = await _tmdb_get_async(f"/movie/{movie_id}/similar")
+    results = data.get("results", []) if data else []
+    _live_cache[cache_key] = results
+    return results
+

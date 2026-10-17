@@ -100,7 +100,18 @@ export interface RecommendRequest {
 export interface RecommendationItem {
   movie: Movie;
   similarity_score: number;
+  match_percentage?: number;
   explanation: string;
+}
+
+export interface JournalEntry {
+  id: string;
+  timestamp: string;
+  moodText: string;
+  emojis: string[];
+  querySummary: string;
+  movieCount: number;
+  movies: Array<{ id: number; title: string; poster_path: string | null; vote_average: number | null }>;
 }
 
 export interface RecommendResponse {

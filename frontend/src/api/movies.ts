@@ -14,4 +14,8 @@ export const moviesApi = {
 
   getLiveNowPlaying: () =>
     apiClient.get<Movie[]>('/movies/live/now-playing'),
+
+  getSimilar: (id: number) =>
+    apiClient.get<Movie[]>(`/movies/${id}/similar`),
 };
+

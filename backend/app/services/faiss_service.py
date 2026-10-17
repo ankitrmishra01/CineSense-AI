@@ -110,3 +110,13 @@ def preload() -> None:
         _ensure_loaded()
     except RuntimeError as e:
         logger.warning("FAISS preload skipped: %s", e)
+
+
+def get_faiss_stats() -> dict:
+    """Return status dictionary of the FAISS index."""
+    global _faiss_index
+    if _faiss_index is not None:
+        return {"loaded": True, "vectors": int(_faiss_index.ntotal)}
+    index_path, _ = _get_index_paths()
+    return {"loaded": False, "exists_on_disk": Path(index_path).exists()}
+
