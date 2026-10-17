@@ -8,29 +8,40 @@ from sqlalchemy import select, or_, String
 from app.database import get_db
 from app.models.user import User
 from app.models.movie import Movie
+from app.models.watchlist import Watchlist
 from app.models.recommendation_session import RecommendationSession
-from app.schemas.recommend import RecommendRequest, RecommendResponse, RecommendationItem
+from app.schemas.recommend import (
+    RecommendRequest, RecommendResponse, RecommendationItem,
+    ExplainRequest, ExplainResponse,
+)
 from app.schemas.movie import MovieOut
 from app.dependencies import get_optional_user
 from app.services import faiss_service, llm_service
+from app.services.ranking_service import (
+    calculate_match_percentage,
+    compute_hybrid_score,
+    extract_natural_constraints,
+)
+from app.services.explanation_service import generate_grounded_explanation
 
 logger = logging.getLogger(__name__)
 
-# Emotion tag → descriptive text expansion
+# Emotion tag → rich psychological and atmospheric descriptive text expansion
 EMOTION_TAG_MAP = {
-    "😢": "sad, heartbroken, grieving",
-    "😂": "happy, funny, laughing, comedy",
-    "😰": "anxious, stressed, tense, suspenseful",
-    "🤗": "warm, comforting, cozy, heartwarming",
-    "😮": "surprised, mind-blowing, plot twist, shocking",
-    "🤔": "thought-provoking, intellectual, philosophical",
-    "😍": "romantic, love story, passionate",
-    "😎": "cool, action-packed, thrilling, stylish",
-    "😴": "relaxing, slow-paced, gentle, calm",
-    "🔥": "intense, exciting, adrenaline, epic",
-    "👻": "scary, horror, supernatural, eerie",
-    "🌙": "dreamy, atmospheric, mysterious, melancholic",
+    "😢": "melancholy, deeply moving, poignant grief, sorrow, cathartic tears, emotional heartbreak, sadness, loss",
+    "😂": "hilarious, witty humor, laugh-out-loud comedy, lighthearted fun, uplifting satire, cheerful banter, comedy",
+    "😰": "tense edge-of-your-seat suspense, psychological thriller, intense anxiety, high stakes, panic, dread, paranoia",
+    "🤗": "cozy, wholesome comfort, heartwarming family bond, gentle optimism, sweet friendship, feel-good solace, heartwarming",
+    "😮": "jaw-dropping plot twist, surreal mind-bending revelation, unexpected shock, mystery, labyrinthine enigma, shocking",
+    "🤔": "philosophical meditation, intellectual depth, existential dilemma, thought-provoking moral ambiguity, deep meaning",
+    "😍": "passionate romance, intimate chemistry, sweeping love affair, tender longing, heartfelt devotion, true love",
+    "😎": "stylish adrenaline action, high-octane spectacle, slick heist, cool swagger, unstoppable energy, exciting thrills",
+    "😴": "gentle slow-burn tranquility, serene escapism, peaceful ambient stillness, meditative calm, relaxing gentle",
+    "🔥": "relentless explosive intensity, epic heroic triumph, visceral warfare, raw adrenaline, chaotic power, epic",
+    "👻": "chilling supernatural horror, eerie gothic dread, terrifying dark haunted nightmare, occult macabre, scary",
+    "🌙": "dreamy poetic noir, ethereal atmospheric mood, shadowy midnight mystery, nostalgic reverie, atmospheric",
 }
+
 
 router = APIRouter(tags=["Recommendations"])
 
@@ -200,30 +211,59 @@ async def recommend(
         result = await db.execute(select(Movie).where(Movie.id.in_(candidate_ids)))
         movies_in_db = {m.id: m for m in result.scalars().all()}
 
-    # ── 4. Apply filters ───────────────────────────────────────────────────────
+    # ── 4. Apply filters & Natural Language Constraints ────────────────────────
     filters = payload.filters or {}
+    natural_constraints = extract_natural_constraints(query_text)
+    
+    # Watchlist exclusion for authenticated users
+    user_saved_movie_ids = set()
+    if current_user:
+        wl_result = await db.execute(select(Watchlist.movie_id).where(Watchlist.user_id == current_user.id))
+        user_saved_movie_ids = set(wl_result.scalars().all())
+
     filtered: list[Movie] = []
 
     for movie_id in candidate_ids:
+        # Exclude saved movies if logged in
+        if movie_id in user_saved_movie_ids:
+            continue
+
         movie = movies_in_db.get(movie_id)
         if not movie:
             continue
 
+        movie_genre_ids = [g["id"] for g in (movie.genres or []) if isinstance(g, dict)]
+
+        # Explicit user genre filters
         if hasattr(filters, 'genre_ids') and filters.genre_ids:
-            movie_genre_ids = [g["id"] for g in (movie.genres or [])]
             if not any(gid in movie_genre_ids for gid in filters.genre_ids):
                 continue
 
+        # Natural language negative genre filters ("no horror", etc.)
+        if natural_constraints["exclude_genre_ids"]:
+            if any(gid in movie_genre_ids for gid in natural_constraints["exclude_genre_ids"]):
+                continue
+
+        # Rating filter
         if hasattr(filters, 'min_rating') and filters.min_rating is not None:
             if not movie.vote_average or float(movie.vote_average) < filters.min_rating:
                 continue
 
-        if hasattr(filters, 'max_runtime') and filters.max_runtime is not None:
-            if movie.runtime and movie.runtime > filters.max_runtime:
+        # Runtime filter (explicit or natural)
+        effective_max_runtime = getattr(filters, 'max_runtime', None) or natural_constraints["max_runtime"]
+        if effective_max_runtime is not None:
+            if movie.runtime and movie.runtime > effective_max_runtime:
                 continue
 
-        if hasattr(filters, 'min_year') and filters.min_year is not None:
-            if movie.release_date and movie.release_date.year < filters.min_year:
+        # Year filter (explicit or natural)
+        min_year = getattr(filters, 'min_year', None) or natural_constraints["min_year"]
+        if min_year is not None:
+            if movie.release_date and movie.release_date.year < min_year:
+                continue
+
+        max_year = natural_constraints["max_year"]
+        if max_year is not None:
+            if movie.release_date and movie.release_date.year > max_year:
                 continue
 
         # Filter out unreleased movies
@@ -233,19 +273,30 @@ async def recommend(
         filtered.append(movie)
 
     if not filtered:
-        raise HTTPException(
-            status_code=404,
-            detail="No movies match the given filters. Try relaxing them.",
-        )
+        # Fallback: if user excluded watchlist items and hit 0, relax watchlist exclusion
+        if user_saved_movie_ids:
+            filtered = [m for m in movies_in_db.values() if m.release_date and m.release_date <= date.today()]
+        if not filtered:
+            raise HTTPException(
+                status_code=404,
+                detail="No movies match the given filters. Try relaxing them.",
+            )
 
-    # Sort by similarity score
-    filtered.sort(key=lambda m: score_map.get(m.id, 0), reverse=True)
+    # ── 5. Hybrid Re-ranking ──────────────────────────────────────────────────
+    filtered.sort(
+        key=lambda m: compute_hybrid_score(
+            similarity_score=score_map.get(m.id, 0.0),
+            vote_average=float(m.vote_average) if m.vote_average else None,
+            vote_count=m.vote_count,
+            release_year=m.release_date.year if m.release_date else None,
+        ),
+        reverse=True
+    )
 
     # Optional randomized shuffling for "Try again" functionality
     if payload.seed is not None:
         import random
         random.seed(payload.seed)
-        # We only shuffle the top 200 candidates to maintain high relevance while mixing them up
         top_n = min(len(filtered), 200)
         top_candidates = filtered[:top_n]
         random.shuffle(top_candidates)
@@ -254,35 +305,29 @@ async def recommend(
     # Pagination slicing
     total_results = len(filtered)
     total_pages = max(1, (total_results + payload.limit - 1) // payload.limit)
-    page = min(payload.page, total_pages)
+    page = max(1, min(payload.page, total_pages))
     
     start_idx = (page - 1) * payload.limit
     end_idx = start_idx + payload.limit
     page_movies = filtered[start_idx:end_idx]
 
-    # ── 5. Batched LLM call ────────────────────────────────────────────────────
-    # ── 5. Batched LLM call (Disabled for speed optimization) ─────────────────
-    # We bypass the synchronous LLM call to drastically improve response time.
-    # The frontend will receive the generic fallback explanations instantly.
-    explanations = []
-
-    # ── 6. Build response ─────────────────────────────────────────────────────
+    # ── 6. Build response with Grounded Explanations & Match % ─────────────────
     recommendations = []
-    for i, m in enumerate(page_movies):
-        exp = explanations[i] if i < len(explanations) else ""
-        if not exp:
-            genre_names = [g["name"] for g in (m.genres or [])][:2]
-            if genre_names:
-                genre_str = " and ".join(genre_names)
-                exp = f"This {genre_str} film aligns with the mood you are looking for."
-            else:
-                exp = "A strong match for your current mood based on its emotional tone."
-                
+    for m in page_movies:
+        raw_score = score_map.get(m.id, 0.0)
+        match_pct = calculate_match_percentage(raw_score)
+        grounded_exp = generate_grounded_explanation(
+            movie=m,
+            query_text=query_text,
+            similarity_score=raw_score,
+            intent_type=intent_type,
+        )
         recommendations.append(
             RecommendationItem(
                 movie=MovieOut.model_validate(m),
-                similarity_score=round(score_map.get(m.id, 0.0), 4),
-                explanation=exp,
+                similarity_score=round(raw_score, 4),
+                match_percentage=match_pct,
+                explanation=grounded_exp,
             )
         )
 
@@ -308,3 +353,34 @@ async def recommend(
         current_page=page,
         recommendations=recommendations,
     )
+
+
+@router.post("/recommend/explain", response_model=ExplainResponse)
+async def explain_recommendation(payload: ExplainRequest, db: AsyncSession = Depends(get_db)):
+    """
+    On-demand rich explanation endpoint called lazily when user clicks 'Why this?'.
+    Never blocks primary recommendations response.
+    """
+    result = await db.execute(select(Movie).where(Movie.id == payload.movie_id))
+    movie = result.scalar_one_or_none()
+    if not movie:
+        raise HTTPException(status_code=404, detail="Movie not found")
+
+    genres = [g["name"] for g in (movie.genres or []) if isinstance(g, dict)]
+    context = llm_service.MovieContext(
+        title=movie.title,
+        overview=movie.overview,
+        tagline=movie.tagline,
+        genres=genres,
+        vote_average=float(movie.vote_average) if movie.vote_average else None,
+        release_year=movie.release_date.year if movie.release_date else None,
+    )
+
+    try:
+        exps = await llm_service.generate_explanations(payload.query_text, [context])
+        rich_exp = exps[0] if exps and exps[0] else generate_grounded_explanation(movie, payload.query_text)
+    except Exception:
+        rich_exp = generate_grounded_explanation(movie, payload.query_text)
+
+    return ExplainResponse(movie_id=payload.movie_id, explanation=rich_exp)
+

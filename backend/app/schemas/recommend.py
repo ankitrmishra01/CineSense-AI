@@ -33,6 +33,7 @@ class RecommendRequest(BaseModel):
 class RecommendationItem(BaseModel):
     movie: MovieOut
     similarity_score: float
+    match_percentage: int
     explanation: str
 
 
@@ -43,3 +44,14 @@ class RecommendResponse(BaseModel):
     total_pages: int
     current_page: int
     recommendations: list[RecommendationItem]
+
+
+class ExplainRequest(BaseModel):
+    movie_id: int
+    query_text: str
+
+
+class ExplainResponse(BaseModel):
+    movie_id: int
+    explanation: str
+
