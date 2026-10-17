@@ -34,6 +34,8 @@ class MovieOut(BaseModel):
     release_date: Optional[date] = None
     trailer_key: Optional[str] = None
     watch_providers: Optional[dict] = None
+    cast_crew: Optional[dict] = None
+    belongs_to_collection: Optional[dict] = None
 
     class Config:
         from_attributes = True

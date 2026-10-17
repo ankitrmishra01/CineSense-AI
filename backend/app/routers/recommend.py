@@ -177,11 +177,18 @@ async def recommend(
 
     # Fallback to standard MOOD if strategy yielded nothing or it was MOOD
     if not candidate_ids:
-        # Strategy: Standard semantic search
         try:
-            candidates = faiss_service.search(query_text, top_k=300)
+            has_filters = payload.filters and any([
+                getattr(payload.filters, 'genre_ids', None),
+                getattr(payload.filters, 'min_rating', None) is not None,
+                getattr(payload.filters, 'max_runtime', None) is not None,
+                getattr(payload.filters, 'min_year', None) is not None,
+            ])
+            search_k = 800 if has_filters else 300
+            candidates = faiss_service.search(query_text, top_k=search_k)
         except RuntimeError as e:
             raise HTTPException(status_code=503, detail=str(e))
+
 
         if not candidates:
             raise HTTPException(status_code=404, detail="No candidates found. Is the FAISS index built?")

@@ -1,61 +1,69 @@
-import { useState, useEffect, useCallback } from 'react';
-import { watchlistApi } from '../api/watchlist';
-import type { WatchlistItem } from '../types';
+import { useEffect, useCallback } from 'react';
+import { useWatchlistStore } from '../store/watchlistStore';
 import { useAuthStore } from '../store/authStore';
+import type { Movie } from '../types';
 
 export const useWatchlist = () => {
-  const [items, setItems] = useState<WatchlistItem[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    items,
+    loading,
+    error,
+    fetchWatchlist,
+    addToWatchlistOptimistic,
+    removeFromWatchlistOptimistic,
+    isInWatchlist,
+    getWatchlistItemId,
+  } = useWatchlistStore();
   const { isAuthenticated } = useAuthStore();
 
-  const fetchWatchlist = useCallback(async () => {
-    if (!isAuthenticated) return;
-    setLoading(true);
-    try {
-      const { data } = await watchlistApi.getAll();
-      setItems(data.items);
-    } catch {
-      setError('Failed to load watchlist.');
-    } finally {
-      setLoading(false);
-    }
-  }, [isAuthenticated]);
-
-  const addToWatchlist = useCallback(async (movieId: number) => {
-    try {
-      await watchlistApi.add(movieId);
-      await fetchWatchlist();
-      return true;
-    } catch (err: unknown) {
-      const axiosErr = err as { response?: { data?: { detail?: string } } };
-      if (axiosErr?.response?.data?.detail === 'Movie already in watchlist') return true;
-      throw err;
-    }
-  }, [fetchWatchlist]);
-
-  const removeFromWatchlist = useCallback(async (itemId: string) => {
-    try {
-      await watchlistApi.remove(itemId);
-      setItems((prev) => prev.filter((i) => i.id !== itemId));
-    } catch {
-      setError('Failed to remove from watchlist.');
-    }
-  }, []);
-
-  const isInWatchlist = useCallback(
-    (movieId: number) => items.some((i) => i.movie.id === movieId),
-    [items]
-  );
-
-  const getWatchlistItemId = useCallback(
-    (movieId: number) => items.find((i) => i.movie.id === movieId)?.id,
-    [items]
-  );
-
   useEffect(() => {
-    fetchWatchlist();
-  }, [fetchWatchlist]);
+    if (isAuthenticated) {
+      fetchWatchlist();
+    }
+  }, [isAuthenticated, fetchWatchlist]);
 
-  return { items, loading, error, fetchWatchlist, addToWatchlist, removeFromWatchlist, isInWatchlist, getWatchlistItemId };
+  const addToWatchlist = useCallback(
+    async (movieOrId: number | Movie) => {
+      if (typeof movieOrId === 'number') {
+        const dummyMovie: Movie = {
+          id: movieOrId,
+          title: 'Movie',
+          overview: null,
+          tagline: null,
+          genres: null,
+          keywords: null,
+          poster_path: null,
+          backdrop_path: null,
+          runtime: null,
+          vote_average: null,
+          vote_count: null,
+          release_date: null,
+          trailer_key: null,
+          watch_providers: null,
+        };
+        return await addToWatchlistOptimistic(dummyMovie);
+      }
+      return await addToWatchlistOptimistic(movieOrId);
+    },
+    [addToWatchlistOptimistic]
+  );
+
+  const removeFromWatchlist = useCallback(
+    async (itemId: string, movieId?: number) => {
+      return await removeFromWatchlistOptimistic(itemId, movieId);
+    },
+    [removeFromWatchlistOptimistic]
+  );
+
+  return {
+    items,
+    loading,
+    error,
+    fetchWatchlist,
+    addToWatchlist,
+    removeFromWatchlist,
+    isInWatchlist,
+    getWatchlistItemId,
+  };
 };
+

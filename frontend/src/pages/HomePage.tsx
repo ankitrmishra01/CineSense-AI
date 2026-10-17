@@ -8,6 +8,7 @@ import { RatingFilter, RuntimeFilter } from '../components/filters/RatingFilter'
 import { useRecommendations } from '../hooks/useRecommendations';
 import { Spinner } from '../components/ui/Spinner';
 import { LiveMovieCarousel } from '../components/movies/LiveMovieCarousel';
+import { moviesApi } from '../api/movies';
 
 export const HomePage: React.FC = () => {
   const { loading, error, fetchRecommendations, surpriseMe } = useRecommendations();
@@ -156,12 +157,12 @@ export const HomePage: React.FC = () => {
         <LiveMovieCarousel 
           title="Trending Today" 
           emoji="🔥"
-          fetchFn={() => import('../api/movies').then(m => m.moviesApi.getLiveTrending())} 
+          fetchFn={moviesApi.getLiveTrending} 
         />
         <LiveMovieCarousel 
           title="In Theaters Now" 
           emoji="🍿"
-          fetchFn={() => import('../api/movies').then(m => m.moviesApi.getLiveNowPlaying())} 
+          fetchFn={moviesApi.getLiveNowPlaying} 
         />
       </motion.div>
 

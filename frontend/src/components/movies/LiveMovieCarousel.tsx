@@ -13,10 +13,12 @@ interface LiveMovieCarouselProps {
 export const LiveMovieCarousel: React.FC<LiveMovieCarouselProps> = ({ title, fetchFn, emoji }) => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
+  const fetchRef = React.useRef(fetchFn);
+  fetchRef.current = fetchFn;
 
   useEffect(() => {
     let mounted = true;
-    fetchFn()
+    fetchRef.current()
       .then(res => {
         if (mounted) {
           setMovies(res.data);
@@ -28,7 +30,7 @@ export const LiveMovieCarousel: React.FC<LiveMovieCarouselProps> = ({ title, fet
         if (mounted) setLoading(false);
       });
     return () => { mounted = false; };
-  }, [fetchFn]);
+  }, [title]);
 
   if (loading) {
     return (

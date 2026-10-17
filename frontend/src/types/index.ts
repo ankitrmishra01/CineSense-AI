@@ -9,6 +9,7 @@ export interface User {
 
 export interface TokenRefreshResponse {
   access_token: string;
+  refresh_token: string;
   token_type: string;
 }
 
@@ -22,6 +23,31 @@ export interface AuthResponse {
 export interface Genre {
   id: number;
   name: string;
+}
+
+export interface CastMember {
+  id: number;
+  name: string;
+  character?: string;
+  order?: number;
+}
+
+export interface CrewMember {
+  id: number;
+  name: string;
+  job?: string;
+}
+
+export interface CastCrewData {
+  cast?: CastMember[];
+  crew?: CrewMember[];
+}
+
+export interface CollectionData {
+  id: number;
+  name: string;
+  poster_path?: string | null;
+  backdrop_path?: string | null;
 }
 
 export interface WatchProviderEntry {
@@ -51,6 +77,8 @@ export interface Movie {
   release_date: string | null;
   trailer_key: string | null;
   watch_providers: Record<string, WatchProvidersRegion> | null;
+  cast_crew?: CastCrewData | null;
+  belongs_to_collection?: CollectionData | null;
 }
 
 export interface RecommendFilters {

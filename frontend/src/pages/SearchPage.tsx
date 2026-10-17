@@ -13,33 +13,48 @@ export const SearchPage: React.FC = () => {
   const [results, setResults] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(!!initialQuery);
+  const abortControllerRef = React.useRef<AbortController | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (query.trim()) {
         handleSearch(query);
       } else {
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort();
+        }
         setResults([]);
         setHasSearched(false);
         setSearchParams({});
       }
-    }, 500);
+    }, 400);
     return () => clearTimeout(timer);
   }, [query, setSearchParams]);
 
   const handleSearch = async (searchQuery: string) => {
     if (!searchQuery.trim()) return;
-    
+
+    // Cancel any previous in-flight request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setLoading(true);
     setHasSearched(true);
     setSearchParams({ q: searchQuery });
-    
+
     try {
-      const { data } = await moviesApi.search(searchQuery);
+      const { data } = await moviesApi.search(searchQuery, 20, controller.signal);
       setResults(data.results);
-    } catch (err) {
+      setLoading(false);
+    } catch (err: any) {
+      if (err?.name === 'CanceledError' || err?.code === 'ERR_CANCELED') {
+        // Ignored: request was intentionally cancelled for a newer search
+        return;
+      }
       console.error('Search failed', err);
-    } finally {
       setLoading(false);
     }
   };

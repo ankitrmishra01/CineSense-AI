@@ -100,3 +100,33 @@ async def revoke_refresh_token(db: AsyncSession, token: str) -> None:
     rt = await validate_refresh_token(db, token)
     if rt:
         await db.delete(rt)
+
+
+async def rotate_refresh_token(db: AsyncSession, old_token: str) -> Optional[tuple[User, str]]:
+    """
+    Validate the incoming refresh token, delete it, and issue a fresh new token.
+    Implements Refresh Token Rotation (RTR).
+    """
+    rt = await validate_refresh_token(db, old_token)
+    if not rt:
+        return None
+
+    user = await get_user_by_id(db, rt.user_id)
+    if not user:
+        await db.delete(rt)
+        return None
+
+    # Invalidate the consumed refresh token
+    await db.delete(rt)
+
+    # Issue and persist new refresh token
+    new_token = create_refresh_token()
+    await store_refresh_token(db, user.id, new_token)
+
+    return user, new_token
+
+
+async def revoke_all_user_tokens(db: AsyncSession, user_id: uuid.UUID) -> None:
+    from sqlalchemy import delete
+    await db.execute(delete(RefreshToken).where(RefreshToken.user_id == user_id))
+

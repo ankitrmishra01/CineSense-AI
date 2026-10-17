@@ -28,8 +28,12 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401 && !original._retry) {
       const refreshToken = localStorage.getItem('refresh_token');
       if (!refreshToken) {
-        localStorage.clear();
-        window.location.href = '/auth';
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        // Only redirect if on a protected route like /watchlist
+        if (window.location.pathname.startsWith('/watchlist')) {
+          window.location.href = '/auth';
+        }
         return Promise.reject(error);
       }
 
@@ -50,15 +54,20 @@ apiClient.interceptors.response.use(
           refresh_token: refreshToken,
         });
         const newToken = data.access_token;
+        const newRefreshToken = data.refresh_token || refreshToken;
         localStorage.setItem('access_token', newToken);
+        localStorage.setItem('refresh_token', newRefreshToken);
         apiClient.defaults.headers.common.Authorization = `Bearer ${newToken}`;
         pendingRequests.forEach((cb) => cb(newToken));
         pendingRequests = [];
         original.headers.Authorization = `Bearer ${newToken}`;
         return apiClient(original);
       } catch {
-        localStorage.clear();
-        window.location.href = '/auth';
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        if (window.location.pathname.startsWith('/watchlist')) {
+          window.location.href = '/auth';
+        }
         return Promise.reject(error);
       } finally {
         isRefreshing = false;

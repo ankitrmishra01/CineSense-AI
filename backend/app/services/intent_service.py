@@ -1,5 +1,6 @@
 import logging
 import json
+import re
 from pydantic import BaseModel, Field
 from typing import Optional
 
@@ -7,9 +8,49 @@ logger = logging.getLogger(__name__)
 
 class IntentResponse(BaseModel):
     intent: str
-    entities: dict
+    entities: dict = Field(default_factory=dict)
+
+
+def _quick_rule_classify(query: str) -> Optional[IntentResponse]:
+    """Fast regex-based intent classification for obvious patterns."""
+    q = query.strip()
+    q_lower = q.lower()
+
+    # Similar to movie patterns
+    similar_match = re.match(r"^(?:movies?\s+(?:like|similar\s+to)|films?\s+(?:like|similar\s+to)|recommend\s+(?:movies?|films?)\s+like)\s+['\"]?([^'\"]+)['\"]?$", q, re.IGNORECASE)
+    if similar_match:
+        return IntentResponse(intent="SIMILAR_TO_MOVIE", entities={"movie_title": similar_match.group(1).strip()})
+
+    # Director patterns
+    director_match = re.match(r"^(?:movies?\s+(?:directed\s+by|by\s+director)|films?\s+directed\s+by|directed\s+by)\s+['\"]?([^'\"]+)['\"]?$", q, re.IGNORECASE)
+    if director_match:
+        return IntentResponse(intent="ACTOR_DIRECTOR", entities={"person_name": director_match.group(1).strip(), "role": "director"})
+
+    # Actor patterns
+    actor_match = re.match(r"^(?:movies?\s+(?:with|starring)|films?\s+(?:with|starring))\s+['\"]?([^'\"]+)['\"]?$", q, re.IGNORECASE)
+    if actor_match:
+        return IntentResponse(intent="ACTOR_DIRECTOR", entities={"person_name": actor_match.group(1).strip(), "role": "actor"})
+
+    # Franchise patterns
+    franchise_match = re.match(r"^(?:all\s+['\"]?([^'\"]+)['\"]?\s+(?:movies|films)|(?:every|all\s+the)\s+['\"]?([^'\"]+)['\"]?\s+(?:movies?|films?)|['\"]?([^'\"]+)['\"]?\s+(?:all\s+movies|franchise|collection))$", q, re.IGNORECASE)
+    if franchise_match:
+        name = franchise_match.group(1) or franchise_match.group(2) or franchise_match.group(3)
+        return IntentResponse(intent="FRANCHISE", entities={"franchise_name": name.strip()})
+
+    # Pure emoji / emotion tag pattern
+    if any(tag in q for tag in ["sad, heartbroken", "happy, funny", "anxious, stressed", "warm, comforting", "surprised, mind-blowing", "thought-provoking", "romantic, love", "cool, action", "relaxing, slow", "intense, exciting", "scary, horror", "dreamy, atmospheric"]):
+        return IntentResponse(intent="MOOD", entities={"mood_description": q})
+
+    return None
 
 async def classify_intent(query_text: str) -> IntentResponse:
+    # 1. Fast deterministic rule match
+    rule_match = _quick_rule_classify(query_text)
+    if rule_match:
+        logger.info(f"Intent resolved by rule: {rule_match.intent} -> {rule_match.entities}")
+        return rule_match
+
+    # 2. LLM classification via Groq
     from app.services.llm_service import get_llm_provider
     provider = get_llm_provider()
     
@@ -44,21 +85,29 @@ async def classify_intent(query_text: str) -> IntentResponse:
     
     user_prompt = f"Input: '{query_text}'\nOutput:"
     
-    try:
-        response = await provider._client.chat.completions.create(
-            model=provider._model,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            temperature=0.0,
-            response_format={"type": "json_object"},
-            max_tokens=150,
-        )
-        raw_json = response.choices[0].message.content.strip()
-        data = json.loads(raw_json)
-        return IntentResponse(intent=data.get("intent", "MOOD"), entities=data.get("entities", {}))
-    except Exception as e:
-        logger.error(f"Intent classification failed: {e}")
-        # Safe fallback
-        return IntentResponse(intent="MOOD", entities={"mood_description": query_text})
+    for attempt in range(2):
+        try:
+            response = await provider._client.chat.completions.create(
+                model=provider._model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                temperature=0.0,
+                response_format={"type": "json_object"},
+                max_tokens=150,
+            )
+            raw_json = response.choices[0].message.content.strip()
+            data = json.loads(raw_json)
+            intent = data.get("intent", "MOOD")
+            if intent not in ["MOOD", "SIMILAR_TO_MOVIE", "FRANCHISE", "GENRE_FILTER", "ACTOR_DIRECTOR"]:
+                intent = "MOOD"
+            return IntentResponse(intent=intent, entities=data.get("entities", {}))
+        except Exception as e:
+            logger.warning(f"Intent classification attempt {attempt+1} failed: {e}")
+            if attempt == 1:
+                break
+
+    # Safe fallback
+    return IntentResponse(intent="MOOD", entities={"mood_description": query_text})
+
