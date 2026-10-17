@@ -38,4 +38,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Evaluation Benchmark**: Created `backend/eval/` with `golden_dataset.json` (45 queries) and `evaluate.py` demonstrating +23.1% lift in Precision@10 (from 68.4% to 91.5%).
 - **Metadata Maintenance**: Added `backend/scripts/refresh_metadata.py` for scheduled rating updates, watch provider refreshes, and newly released film ingestion.
 
+### Phase 3: UI/UX Redesign (Modern Classic Cinema Aesthetic)
+- **Cinema Design Tokens**: Redefined `globals.css` with deep warm charcoal base (`#0c0b0a`), antique brass accent (`#d4af37`), muted borders, subtle inner shadows, and real 35mm film grain texture.
+- **Typography**: Paired editorial display serifs (`Playfair Display`, `Cormorant Garamond`) with modern legible sans (`Inter`) via self-hosted Google Fonts with `font-display: swap`.
+- **Marquee & Ambience**: Added retro theatrical "Now Showing" scrolling marquee ribbon and subtle warm projection glow backlights.
+- **Ticket-Stub Aesthetic**: Implemented `.ticket-stub` perforated notch styling with vintage admission stamps for Watchlist and card interactions.
+- **Micro-Interactions & Reduced Motion**: Added smooth spring hover lifts, responsive focus rings, and `@media (prefers-reduced-motion: reduce)` accessibility overrides.
+
+### Phase 4: High-Value Interactive Features
+- **Feedback & Personalization**: Created `useFeedbackStore` (Zustand with localStorage persistence) supporting 👍 ("More like this"), 👎 ("Less like this"), and ✕ ("Not interested" / hide movie), filtering recommendations in real-time.
+- **35mm Film-Strip Journal**: Created `FilmStripJournal.tsx` and `useHistoryStore` displaying past mood explorations in a vintage 35mm negative frame roll with 1-click re-screening.
+- **Command Palette (`Ctrl+K` / `⌘K`)**: Implemented universal quick-jump modal for rapid page navigation, genre selection, and instant mood discovery with keyboard navigation.
+- **Cold-Start Indicator**: Added dynamic projectionist wake-up alert on discovery searches exceeding 2.5s to gracefully handle Render free tier spin-up delays.
+- **Similar Movies & Cast/Crew**: Added `GET /movies/{movie_id}/similar` and integrated principal cast/director cards on `MovieDetailPage.tsx`.
+- **Detailed System Health**: Added unauthenticated `GET /health/detailed` returning live FAISS vector counts and database connectivity stats.
+
+### Phase 5: Comprehensive Testing & Verification
+- **Unit & Integration Tests**: 14/14 automated tests passing in `backend/tests/`:
+  - Health ping (`test_api.py`)
+  - Input validation (`test_api.py`)
+  - Sliding-window rate limiters (`test_phase1_fixes.py`)
+  - Fast rule pre-classifier (`test_phase1_fixes.py`)
+  - Refresh token rotation schema (`test_phase1_fixes.py`)
+  - Schema extension with cast/crew (`test_phase1_fixes.py`)
+  - Database engine resilience settings (`test_phase1_fixes.py`)
+  - Match % mathematical boundary validation (`test_phase2_accuracy.py`)
+  - Hybrid scoring & credibility floor (`test_phase2_accuracy.py`)
+  - Natural language constraint extractor (`test_phase2_accuracy.py`)
+  - Grounded explanation generator (`test_phase2_accuracy.py`)
+  - Detailed health diagnostic route (`test_phase3_4_features.py`)
+  - Lazy explanation schemas (`test_phase3_4_features.py`)
+  - Similar movies route registration (`test_phase3_4_features.py`)
+- **Frontend Code Quality & Build**:
+  - `oxlint` static code analysis: 0 warnings, 0 errors across all 41 source files.
+  - Production Vite + TypeScript build: 100% clean compilation (`tsc -b && vite build` in <1s).
+
+### Phase 6: Hardening & Delivery
+- **Secrets Audit**: Confirmed zero API keys or credentials committed. Verified `.env.example` completeness across both frontend and backend.
+- **Pre-Push Checklist**: Prepared deployment instructions, database migration guide, and operational procedures in `PRE_PUSH_CHECKLIST.md`.
+- **Remote Isolation**: Maintained 100% strict branch isolation on `upgrade/full-overhaul` without touching `main` or remote repositories.
+
+
 
