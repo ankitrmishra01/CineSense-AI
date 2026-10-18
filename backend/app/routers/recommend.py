@@ -1,8 +1,9 @@
 import uuid
 import logging
 from datetime import date
+import time
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_, String
 from app.database import get_db
@@ -67,9 +68,24 @@ def _summarize_query(mood_text: Optional[str], emotion_tags: Optional[list[str]]
 @router.post("/recommend", response_model=RecommendResponse)
 async def recommend(
     payload: RecommendRequest,
+    response: Response,
     db: AsyncSession = Depends(get_db),
     current_user: Optional[User] = Depends(get_optional_user),
 ):
+    t_start = time.perf_counter()
+
+    # Fast check: ensure FAISS and embedding model are warmed up
+    if not faiss_service.is_loaded():
+        try:
+            faiss_service.preload()
+        except Exception as e:
+            logger.warning("FAISS engine warm-up pending: %s", e)
+            raise HTTPException(
+                status_code=503,
+                detail="Recommendation engine is warming up. Please retry in a few seconds.",
+                headers={"Retry-After": "5"},
+            )
+
     # ── 1. Check Intent ───────────────────────────────────────────────────────
     query_text = _build_query_text(payload.mood_text, payload.emotion_tags)
     
@@ -77,7 +93,8 @@ async def recommend(
     intent_resp = await classify_intent(query_text)
     intent_type = intent_resp.intent
     entities = intent_resp.entities
-    logger.info(f"Intent classified: {intent_type} | Entities: {entities}")
+    t_intent_done = time.perf_counter()
+    logger.info(f"Intent classified: {intent_type} | Entities: {entities} in {(t_intent_done - t_start)*1000:.1f}ms")
 
 
     candidates_from_tmdb = []
@@ -198,8 +215,11 @@ async def recommend(
             search_k = 800 if has_filters else 300
             candidates = faiss_service.search(query_text, top_k=search_k)
         except RuntimeError as e:
-            raise HTTPException(status_code=503, detail=str(e))
-
+            raise HTTPException(
+                status_code=503,
+                detail=str(e),
+                headers={"Retry-After": "5"},
+            )
 
         if not candidates:
             raise HTTPException(status_code=404, detail="No candidates found. Is the FAISS index built?")
@@ -210,6 +230,8 @@ async def recommend(
         # Fetch candidate movies from DB
         result = await db.execute(select(Movie).where(Movie.id.in_(candidate_ids)))
         movies_in_db = {m.id: m for m in result.scalars().all()}
+
+    t_retrieval_done = time.perf_counter()
 
     # ── 4. Apply filters & Natural Language Constraints ────────────────────────
     filters = payload.filters or {}
@@ -344,6 +366,23 @@ async def recommend(
         db.add(session)
         await db.flush()
         session_id = session.id
+
+    t_end = time.perf_counter()
+    intent_dur = (t_intent_done - t_start) * 1000
+    retrieval_dur = (t_retrieval_done - t_intent_done) * 1000
+    rank_dur = (t_end - t_retrieval_done) * 1000
+    total_dur = (t_end - t_start) * 1000
+
+    response.headers["Server-Timing"] = (
+        f"intent;dur={intent_dur:.1f}, "
+        f"retrieval;dur={retrieval_dur:.1f}, "
+        f"rank;dur={rank_dur:.1f}, "
+        f"total;dur={total_dur:.1f}"
+    )
+    logger.info(
+        "PERF recommend: total=%.1fms (intent=%.1fms, retrieval=%.1fms, rank=%.1fms)",
+        total_dur, intent_dur, retrieval_dur, rank_dur,
+    )
 
     return RecommendResponse(
         session_id=session_id,

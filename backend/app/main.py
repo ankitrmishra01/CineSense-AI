@@ -8,10 +8,15 @@ from app.services import faiss_preload
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: warm up FAISS index + embedding model
-    # faiss_preload() # Disabled for Render Free Tier to prevent Out Of Memory during boot
+    # Startup: warm up FAISS index + FastEmbed ONNX model once
+    faiss_preload()
     yield
-    # Shutdown: nothing to clean up
+    # Shutdown: clean up DB connections
+    try:
+        from app.database import engine
+        await engine.dispose()
+    except Exception:
+        pass
 
 
 app = FastAPI(
