@@ -25,15 +25,17 @@ apiClient.interceptors.response.use(
   async (error: AxiosError) => {
     const original = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-    if (error.response?.status === 401 && !original._retry) {
+    const isAuthEndpoint = original?.url?.includes('/auth/login') ||
+                           original?.url?.includes('/auth/signup') ||
+                           original?.url?.includes('/auth/refresh');
+
+    if (error.response?.status === 401 && !original._retry && !isAuthEndpoint) {
       const refreshToken = localStorage.getItem('refresh_token');
       if (!refreshToken) {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
-        // Only redirect if on a protected route like /watchlist
-        if (window.location.pathname.startsWith('/watchlist')) {
-          window.location.href = '/auth';
-        }
+        // Notify app auth state has expired without hard page reload
+        window.dispatchEvent(new CustomEvent('auth:session-expired'));
         return Promise.reject(error);
       }
 
@@ -65,9 +67,7 @@ apiClient.interceptors.response.use(
       } catch {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
-        if (window.location.pathname.startsWith('/watchlist')) {
-          window.location.href = '/auth';
-        }
+        window.dispatchEvent(new CustomEvent('auth:session-expired'));
         return Promise.reject(error);
       } finally {
         isRefreshing = false;

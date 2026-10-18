@@ -36,6 +36,13 @@ export const Navbar: React.FC = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    window.dispatchEvent(new Event('themechange'));
+  };
+
   return (
     <>
       <motion.nav
@@ -63,22 +70,31 @@ export const Navbar: React.FC = () => {
             gap: '16px',
           }}
         >
-          {/* Logo */}
+          {/* Logo with Film Reel Icon */}
           <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div
               style={{
-                width: '34px',
-                height: '34px',
+                width: '36px',
+                height: '36px',
                 backgroundColor: 'var(--color-accent-subtle)',
                 border: '1px solid var(--color-accent-border)',
-                borderRadius: 'var(--radius-sm)',
+                borderRadius: '8px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '18px',
+                color: 'var(--color-accent-primary)',
               }}
             >
-              🎬
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+                <line x1="7" y1="2" x2="7" y2="22" />
+                <line x1="17" y1="2" x2="17" y2="22" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <line x1="2" y1="7" x2="7" y2="7" />
+                <line x1="2" y1="17" x2="7" y2="17" />
+                <line x1="17" y1="17" x2="22" y2="17" />
+                <line x1="17" y1="7" x2="22" y2="7" />
+              </svg>
             </div>
             <div>
               <span
@@ -108,31 +124,83 @@ export const Navbar: React.FC = () => {
             </div>
           </Link>
 
-          {/* Center: Nav links & Command Search Trigger */}
+          {/* Center: Nav links with Clean SVG Icons & Command Search */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {[
-              { to: '/', label: '🎭 Discover' },
-              { to: '/search', label: '🔍 Search' },
-              ...(isAuthenticated ? [{ to: '/watchlist', label: '🎟️ Watchlist' }] : []),
-            ].map(({ to, label }) => (
+            {/* Discover Link */}
+            <Link
+              to="/"
+              style={{
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 14px',
+                borderRadius: 'var(--radius-pill)',
+                fontSize: '13px',
+                fontWeight: 500,
+                color: isActive('/') ? 'var(--color-accent-primary)' : 'var(--color-text-secondary)',
+                backgroundColor: isActive('/') ? 'var(--color-bg-card-hover)' : 'transparent',
+                border: isActive('/') ? '1px solid var(--color-border-hover)' : '1px solid transparent',
+                transition: 'all 0.2s',
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+              </svg>
+              <span>Discover</span>
+            </Link>
+
+            {/* Search Link */}
+            <Link
+              to="/search"
+              style={{
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 14px',
+                borderRadius: 'var(--radius-pill)',
+                fontSize: '13px',
+                fontWeight: 500,
+                color: isActive('/search') ? 'var(--color-accent-primary)' : 'var(--color-text-secondary)',
+                backgroundColor: isActive('/search') ? 'var(--color-bg-card-hover)' : 'transparent',
+                border: isActive('/search') ? '1px solid var(--color-border-hover)' : '1px solid transparent',
+                transition: 'all 0.2s',
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <span>Search</span>
+            </Link>
+
+            {/* Watchlist Link (Authenticated only) */}
+            {isAuthenticated && (
               <Link
-                key={to}
-                to={to}
+                to="/watchlist"
                 style={{
                   textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
                   padding: '6px 14px',
                   borderRadius: 'var(--radius-pill)',
                   fontSize: '13px',
                   fontWeight: 500,
-                  color: isActive(to) ? 'var(--color-accent-primary)' : 'var(--color-text-secondary)',
-                  backgroundColor: isActive(to) ? 'var(--color-bg-card-hover)' : 'transparent',
-                  border: isActive(to) ? '1px solid var(--color-border-hover)' : '1px solid transparent',
+                  color: isActive('/watchlist') ? 'var(--color-accent-primary)' : 'var(--color-text-secondary)',
+                  backgroundColor: isActive('/watchlist') ? 'var(--color-bg-card-hover)' : 'transparent',
+                  border: isActive('/watchlist') ? '1px solid var(--color-border-hover)' : '1px solid transparent',
                   transition: 'all 0.2s',
                 }}
               >
-                {label}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                </svg>
+                <span>Watchlist</span>
               </Link>
-            ))}
+            )}
 
             {/* Quick Command Palette Button */}
             <button
@@ -169,31 +237,51 @@ export const Navbar: React.FC = () => {
 
           {/* Auth Section & Theme */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {/* Theme Toggle Button with Crisp SVG Icons */}
             <button
-              onClick={() => {
-                const newTheme = theme === 'light' ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                window.dispatchEvent(new Event('themechange'));
-              }}
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
               style={{
-                background: 'transparent',
-                border: 'none',
+                background: 'var(--color-bg-secondary)',
+                border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-pill)',
                 cursor: 'pointer',
-                fontSize: '18px',
-                padding: '6px',
-                opacity: 0.8,
-                transition: 'opacity 0.2s',
+                padding: '7px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'var(--color-text-secondary)',
+                transition: 'all 0.2s ease',
               }}
-              title="Toggle Dark/Light Mode"
+              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
             >
-              {theme === 'light' ? '🌙' : '☀️'}
+              {theme === 'light' ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="5" />
+                  <line x1="12" y1="1" x2="12" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="23" />
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                  <line x1="1" y1="12" x2="3" y2="12" />
+                  <line x1="21" y1="12" x2="23" y2="12" />
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </svg>
+              )}
             </button>
 
             {isAuthenticated ? (
               <>
-                <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)', fontWeight: 500 }}>
-                  👤 {user?.username}
+                <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                  <span>{user?.username}</span>
                 </span>
                 <button
                   className="btn-outline"
@@ -203,7 +291,7 @@ export const Navbar: React.FC = () => {
                   Sign out
                 </button>
               </>
-            ) : (
+            ) : location.pathname !== '/auth' ? (
               <button
                 className="btn-cinema"
                 onClick={() => navigate('/auth')}
@@ -211,7 +299,7 @@ export const Navbar: React.FC = () => {
               >
                 Sign in
               </button>
-            )}
+            ) : null}
           </div>
         </div>
       </motion.nav>
