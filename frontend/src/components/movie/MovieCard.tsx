@@ -168,7 +168,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ item, index = 0, queryText
                 onClick={handleWatchlistClick}
                 style={{
                   backgroundColor: inWatchlist ? 'var(--color-accent-primary)' : 'rgba(12, 11, 10, 0.82)',
-                  color: inWatchlist ? '#0c0b0a' : 'var(--color-text-primary)',
+                  color: inWatchlist ? 'var(--color-btn-primary-text)' : 'var(--color-text-primary)',
                   backdropFilter: 'blur(8px)',
                   border: '1px solid var(--color-border)',
                   borderRadius: 'var(--radius-pill)',

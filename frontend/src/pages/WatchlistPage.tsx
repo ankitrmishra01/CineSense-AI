@@ -17,7 +17,25 @@ export const WatchlistPage: React.FC = () => {
     return (
       <PageWrapper>
         <div style={{ textAlign: 'center', padding: '80px 0' }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎟️</div>
+          <div
+            style={{
+              width: '56px',
+              height: '56px',
+              margin: '0 auto 20px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--color-accent-subtle)',
+              border: '1px solid var(--color-accent-border)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--color-accent-primary)',
+            }}
+          >
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="M7 15h0.01M17 15h0.01M7 9h10" />
+            </svg>
+          </div>
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
@@ -60,7 +78,10 @@ export const WatchlistPage: React.FC = () => {
             marginBottom: '12px',
           }}
         >
-          <span>🎟️</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M7 15h0.01M17 15h0.01M7 9h10" />
+          </svg>
           <span>Personal Ticket Collection</span>
         </div>
 
@@ -92,7 +113,25 @@ export const WatchlistPage: React.FC = () => {
           animate={{ opacity: 1 }}
           style={{ textAlign: 'center', padding: '80px 0' }}
         >
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎟️</div>
+          <div
+            style={{
+              width: '56px',
+              height: '56px',
+              margin: '0 auto 20px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--color-accent-subtle)',
+              border: '1px solid var(--color-accent-border)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--color-accent-primary)',
+            }}
+          >
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <path d="M7 15h0.01M17 15h0.01M7 9h10" />
+            </svg>
+          </div>
           <h3
             style={{
               fontFamily: 'var(--font-serif)',

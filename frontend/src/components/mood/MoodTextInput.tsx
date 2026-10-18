@@ -33,10 +33,10 @@ export const MoodTextInput: React.FC<MoodTextInputProps> = ({ onSubmit }) => {
   };
 
   const samplePrompts = [
-    { label: '🌧️ Melancholy & Comfort', text: 'Melancholic rainy night comfort with deep poetic emotions' },
-    { label: '🚀 Mind-Bending Sci-Fi', text: 'Mind-bending philosophical sci-fi with incredible concepts' },
-    { label: '🕯️ Slow-Burn Mystery', text: 'Atmospheric slow-burn noir thriller with unexpected revelations' },
-    { label: '😂 Unapologetic Joy', text: 'Lighthearted hilarious feel-good comedy to lift my spirits' },
+    { label: 'Melancholy & Comfort', text: 'Melancholic rainy night comfort with deep poetic emotions' },
+    { label: 'Mind-Bending Sci-Fi', text: 'Mind-bending philosophical sci-fi with incredible concepts' },
+    { label: 'Slow-Burn Mystery', text: 'Atmospheric slow-burn noir thriller with unexpected revelations' },
+    { label: 'Unapologetic Joy', text: 'Lighthearted hilarious feel-good comedy to lift my spirits' },
   ];
 
   return (
@@ -52,7 +52,7 @@ export const MoodTextInput: React.FC<MoodTextInputProps> = ({ onSubmit }) => {
           style={{
             width: '100%',
             padding: '16px 48px 16px 18px',
-            backgroundColor: 'var(--color-bg-secondary)',
+            backgroundColor: 'var(--color-bg-input)',
             border: '1px solid var(--color-border)',
             borderRadius: 'var(--radius-md)',
             color: 'var(--color-text-primary)',
@@ -95,36 +95,22 @@ export const MoodTextInput: React.FC<MoodTextInputProps> = ({ onSubmit }) => {
       </div>
 
       {/* Quick inspiration chips */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '10px' }}>
-        <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', alignSelf: 'center', marginRight: '4px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
+        <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginRight: '2px' }}>
           Try:
         </span>
-        {samplePrompts.map((p) => (
-          <button
-            key={p.label}
-            onClick={() => setMoodText(p.text)}
-            style={{
-              background: 'var(--color-bg-card)',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--radius-pill)',
-              color: 'var(--color-text-secondary)',
-              fontSize: '11px',
-              padding: '3px 10px',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--color-accent-border)';
-              e.currentTarget.style.color = 'var(--color-accent-primary)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--color-border)';
-              e.currentTarget.style.color = 'var(--color-text-secondary)';
-            }}
-          >
-            {p.label}
-          </button>
-        ))}
+        {samplePrompts.map((p) => {
+          const isSelected = moodText === p.text;
+          return (
+            <button
+              key={p.label}
+              onClick={() => setMoodText(p.text)}
+              className={`mood-chip ${isSelected ? 'active' : ''}`}
+            >
+              {p.label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

@@ -1,34 +1,46 @@
 @import "tailwindcss";
 
-/* ─── Cinema Design Tokens ─────────────────────────────────────────────────── */
+/* ─── Cinema Design Tokens (Single Source of Truth) ────────────────────────── */
 :root {
-  /* Dark Theme (Default) — Classic warm near-black cinema lounge */
-  --color-bg-primary: #0c0b0a;
-  --color-bg-secondary: #141210;
-  --color-bg-card: #181614;
-  --color-bg-card-hover: #211e1a;
-  --color-border: #292521;
-  --color-border-hover: #3d3731;
+  /* Dark Theme (Default) — 4 Distinct Visible Surface Elevation Tiers */
+  --color-bg-primary: #0e0d0c;       /* Tier 1: Deep cinematic lounge page */
+  --color-bg-secondary: #161412;     /* Tier 2: Recessed / secondary container */
+  --color-bg-card: #1d1b18;          /* Tier 3: Distinct raised card */
+  --color-bg-card-hover: #26231f;    /* Tier 3b: Hover card elevation */
+  --color-bg-input: #121110;         /* Tier 4: Recessed clean input surface */
+
+  --color-border: #302b25;           /* Soft, visible border */
+  --color-border-hover: #484037;     /* Hover border state */
+  --color-header-bg: rgba(14, 13, 12, 0.88);
+  --color-header-border: #28241f;
 
   /* Typography */
-  --color-text-primary: #f4efe6;
-  --color-text-secondary: #a8a296;
-  --color-text-muted: #6e685e;
+  --color-text-primary: #f5f1e8;     /* Warm ivory / cinema subtitle */
+  --color-text-secondary: #aba396;   /* Legible muted tone */
+  --color-text-muted: #787063;       /* Subtle archival tone */
 
   /* Antique Brass / Gold Accents */
   --color-accent-primary: #d4af37;
-  --color-accent-hover: #c49f27;
+  --color-accent-hover: #e0be48;
   --color-accent-subtle: rgba(212, 175, 55, 0.12);
   --color-accent-border: rgba(212, 175, 55, 0.35);
+  --color-btn-primary-text: #0e0d0c;
 
-  /* States */
+  /* Chips & Tags */
+  --color-chip-bg: #181614;
+  --color-chip-border: #302b25;
+  --color-chip-active-bg: rgba(212, 175, 55, 0.14);
+  --color-chip-active-border: #d4af37;
+  --color-chip-active-text: #f5f1e8;
+
+  /* Calm Status & Messages (Muted gold / amber, not harsh red) */
+  --color-calm-banner-bg: rgba(212, 175, 55, 0.08);
+  --color-calm-banner-border: rgba(212, 175, 55, 0.28);
+  --color-calm-banner-text: #e0be48;
+
   --color-ruby: #dc2626;
-  --color-ruby-subtle: rgba(220, 38, 38, 0.12);
   --color-emerald: #10b981;
   --color-emerald-subtle: rgba(16, 185, 129, 0.12);
-
-  /* Mood Reactive Ambient Tint (Modified dynamically via data-mood) */
-  --color-mood-ambient: rgba(212, 175, 55, 0.04);
 
   /* Radii */
   --radius-sm: 4px;
@@ -38,39 +50,62 @@
   --radius-pill: 9999px;
 
   /* Fonts */
-  --font-display: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Shadows */
-  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.5);
-  --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.6);
-  --shadow-gold: 0 0 25px rgba(212, 175, 55, 0.15);
+  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.55);
+  --shadow-gold: 0 0 20px rgba(212, 175, 55, 0.15);
 }
 
 :root[data-theme="light"] {
-  /* Light Theme — Archival parchment & vintage paper program */
-  --color-bg-primary: #f8f5ee;
-  --color-bg-secondary: #eee9dc;
-  --color-bg-card: #ffffff;
-  --color-bg-card-hover: #f3eee3;
-  --color-border: #dcd5c5;
-  --color-border-hover: #c8beab;
+  /* Light Theme — Warm Parchment & White Raised Cards */
+  --color-bg-primary: #fbf9f4;       /* Tier 1: Warm paper background */
+  --color-bg-secondary: #f2ece0;     /* Tier 2: Recessed container */
+  --color-bg-card: #ffffff;          /* Tier 3: Pure white raised card */
+  --color-bg-card-hover: #faf6ee;    /* Tier 3b: Hover card elevation */
+  --color-bg-input: #ffffff;         /* Tier 4: Clean crisp white input */
 
-  --color-text-primary: #1c1917;
-  --color-text-secondary: #57534e;
-  --color-text-muted: #8c827a;
+  --color-border: #ded6c6;           /* Clear warm border */
+  --color-border-hover: #c4b9a3;     /* Darker hover border */
+  --color-header-bg: rgba(251, 249, 244, 0.92);  /* Matches light theme */
+  --color-header-border: #e8e0d0;
 
-  --color-accent-primary: #9b7922;
-  --color-accent-hover: #846618;
-  --color-accent-subtle: rgba(155, 121, 34, 0.1);
-  --color-accent-border: rgba(155, 121, 34, 0.3);
+  /* Typography — Ink on paper, high contrast */
+  --color-text-primary: #1c1917;     /* Deep ink black */
+  --color-text-secondary: #4a453e;   /* Deep charcoal (WCAG AA compliant) */
+  --color-text-muted: #736c62;
 
-  --color-mood-ambient: rgba(155, 121, 34, 0.04);
-  --shadow-subtle: 0 4px 16px rgba(40, 35, 25, 0.06);
+  /* Deep Bronze / Brass Accents (Passes WCAG AA 4.5:1 on light bg) */
+  --color-accent-primary: #87651a;
+  --color-accent-hover: #6f5213;
+  --color-accent-subtle: rgba(135, 101, 26, 0.1);
+  --color-accent-border: rgba(135, 101, 26, 0.35);
+  --color-btn-primary-text: #ffffff;
+
+  /* Chips & Tags */
+  --color-chip-bg: #f4ede1;
+  --color-chip-border: #ded6c6;
+  --color-chip-active-bg: rgba(135, 101, 26, 0.12);
+  --color-chip-active-border: #87651a;
+  --color-chip-active-text: #1c1917;
+
+  /* Calm Status & Messages */
+  --color-calm-banner-bg: rgba(135, 101, 26, 0.08);
+  --color-calm-banner-border: rgba(135, 101, 26, 0.28);
+  --color-calm-banner-text: #87651a;
+
+  --color-ruby: #b91c1c;
+  --color-emerald: #059669;
+  --color-emerald-subtle: rgba(5, 150, 105, 0.12);
+
+  --shadow-subtle: 0 4px 16px rgba(40, 35, 25, 0.05);
   --shadow-card: 0 8px 24px rgba(40, 35, 25, 0.08);
+  --shadow-gold: 0 0 16px rgba(135, 101, 26, 0.12);
 }
 
-/* ─── Base Reset & Cinema Feel ────────────────────────────────────────────── */
+/* ─── Base Reset ──────────────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -91,20 +126,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   letter-spacing: -0.01em;
-  position: relative;
-}
-
-/* Subtle 35mm Film Grain Texture Overlay */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Accessible focus rings */
@@ -114,15 +136,6 @@ body::before {
 }
 
 /* ─── Typography Utility Classes ───────────────────────────────────────────── */
-.font-display {
-  font-family: var(--font-display);
-}
-
-.font-sans {
-  font-family: var(--font-sans);
-}
-
-/* Headings */
 h1, h2, h3, h4 {
   color: var(--color-text-primary);
   letter-spacing: -0.02em;
@@ -150,9 +163,10 @@ h1, h2, h3, h4 {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-subtle);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s ease,
-              box-shadow 0.25s ease;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease,
+              box-shadow 0.2s ease,
+              background-color 0.2s ease;
 }
 
 .cinema-card:hover {
@@ -166,13 +180,13 @@ h1, h2, h3, h4 {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 26px;
+  padding: 11px 24px;
   background-color: var(--color-accent-primary);
-  color: #0c0b0a;
+  color: var(--color-btn-primary-text);
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: 14px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   border: none;
   border-radius: var(--radius-pill);
   cursor: pointer;
@@ -190,7 +204,7 @@ h1, h2, h3, h4 {
 }
 
 .btn-cinema:disabled {
-  opacity: 0.4;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none;
 }
@@ -200,7 +214,7 @@ h1, h2, h3, h4 {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 11px 22px;
+  padding: 10px 20px;
   background: transparent;
   color: var(--color-text-primary);
   font-family: var(--font-sans);
@@ -219,60 +233,46 @@ h1, h2, h3, h4 {
   color: var(--color-accent-primary);
 }
 
-/* ─── Ticket-Stub Aesthetic (Signature Feature) ───────────────────────────── */
-.ticket-stub {
-  position: relative;
-  background-color: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-.ticket-stub::before,
-.ticket-stub::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 14px;
-  height: 14px;
-  background-color: var(--color-bg-primary);
-  border-radius: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  border: 1px solid var(--color-border);
-}
-
-.ticket-stub::before {
-  left: -8px;
-}
-.ticket-stub::after {
-  right: -8px;
-}
-
-/* ─── Vintage Theatre Marquee ──────────────────────────────────────────────── */
-.marquee-ribbon {
-  display: flex;
-  overflow: hidden;
+/* ─── Mood Chips ───────────────────────────────────────────────────────────── */
+.mood-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-chip-bg);
+  border: 1px solid var(--color-chip-border);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
   user-select: none;
-  gap: 2rem;
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-  padding: 10px 0;
-  background-color: var(--color-bg-secondary);
 }
 
-.marquee-content {
-  flex-shrink: 0;
+.mood-chip:hover {
+  border-color: var(--color-accent-border);
+  color: var(--color-text-primary);
+}
+
+.mood-chip.active {
+  background-color: var(--color-chip-active-bg);
+  border-color: var(--color-chip-active-border);
+  color: var(--color-chip-active-text);
+  font-weight: 600;
+}
+
+/* ─── Calm Status Messages ─────────────────────────────────────────────────── */
+.calm-message {
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-calm-banner-bg);
+  border: 1px solid var(--color-calm-banner-border);
+  color: var(--color-calm-banner-text);
+  font-size: 13px;
   display: flex;
-  justify-content: space-around;
-  min-width: 100%;
-  gap: 2rem;
-  animation: scrollMarquee 40s linear infinite;
-}
-
-@keyframes scrollMarquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+  align-items: center;
+  gap: 12px;
 }
 
 /* ─── Shimmer Loading Skeleton ─────────────────────────────────────────────── */
@@ -300,8 +300,5 @@ h1, h2, h3, h4 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  body::before {
-    display: none;
   }
 }

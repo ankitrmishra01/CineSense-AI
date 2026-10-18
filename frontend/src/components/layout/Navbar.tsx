@@ -53,9 +53,9 @@ export const Navbar: React.FC = () => {
           position: 'sticky',
           top: 0,
           zIndex: 100,
-          backgroundColor: 'rgba(12, 11, 10, 0.88)',
-          backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid var(--color-border)',
+          backgroundColor: 'var(--color-header-bg)',
+          backdropFilter: 'blur(16px)',
+          borderBottom: '1px solid var(--color-header-border)',
           padding: '0 20px',
         }}
       >
@@ -218,7 +218,7 @@ export const Navbar: React.FC = () => {
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
               }}
-              title="Quick Search (Ctrl+K)"
+              title="Quick Search (Ctrl+K / ⌘K)"
             >
               <span>Quick jump...</span>
               <kbd
@@ -230,7 +230,7 @@ export const Navbar: React.FC = () => {
                   border: '1px solid var(--color-border)',
                 }}
               >
-                ⌘K
+                {typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/i.test(navigator.userAgent) ? '⌘K' : 'Ctrl K'}
               </kbd>
             </button>
           </div>

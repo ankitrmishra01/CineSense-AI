@@ -27,7 +27,31 @@ export const RecommendationsPage: React.FC = () => {
     return (
       <PageWrapper>
         <div style={{ textAlign: 'center', padding: '80px 0' }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎞️</div>
+          <div
+            style={{
+              width: '56px',
+              height: '56px',
+              margin: '0 auto 20px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--color-accent-subtle)',
+              border: '1px solid var(--color-accent-border)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--color-accent-primary)',
+            }}
+          >
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+              <line x1="7" y1="2" x2="7" y2="22" />
+              <line x1="17" y1="2" x2="17" y2="22" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <line x1="2" y1="7" x2="7" y2="7" />
+              <line x1="2" y1="17" x2="7" y2="17" />
+              <line x1="17" y1="17" x2="22" y2="17" />
+              <line x1="17" y1="7" x2="22" y2="7" />
+            </svg>
+          </div>
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
@@ -72,7 +96,7 @@ export const RecommendationsPage: React.FC = () => {
                 style={{ fontSize: '12px', padding: '6px 14px' }}
                 title="Share this mood list"
               >
-                {copied ? '✓ Link Copied!' : '🔗 Share Atmosphere'}
+                {copied ? '✓ Link Copied' : 'Share Atmosphere'}
               </button>
               <button
                 onClick={() => {

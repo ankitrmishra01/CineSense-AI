@@ -30,85 +30,73 @@ export const HomePage: React.FC = () => {
 
   return (
     <PageWrapper>
-      {/* Vintage Cinema Marquee Ribbon */}
-      <div className="marquee-ribbon" style={{ marginBottom: '40px', borderRadius: 'var(--radius-sm)' }}>
-        <div className="marquee-content">
-          <span style={{ fontFamily: 'var(--font-serif)', fontSize: '13px', color: 'var(--color-accent-primary)', letterSpacing: '0.08em' }}>
-            ✦ NOW SCREENING: EMOTION-AWARE CINEMA DISCOVERY ✦ 35MM ARCHIVAL VIBES ✦ HYBRID VECTOR RE-RANKING ✦ GENUINE GROUNDED RECOMMENDATIONS ✦
-          </span>
-          <span style={{ fontFamily: 'var(--font-serif)', fontSize: '13px', color: 'var(--color-accent-primary)', letterSpacing: '0.08em' }}>
-            ✦ NOW SCREENING: EMOTION-AWARE CINEMA DISCOVERY ✦ 35MM ARCHIVAL VIBES ✦ HYBRID VECTOR RE-RANKING ✦ GENUINE GROUNDED RECOMMENDATIONS ✦
-          </span>
-        </div>
+      {/* Clean Archival Status Indicator */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '10px',
+          margin: '0 auto 36px',
+          padding: '5px 16px',
+          borderRadius: 'var(--radius-pill)',
+          backgroundColor: 'var(--color-bg-secondary)',
+          border: '1px solid var(--color-border)',
+          maxWidth: 'fit-content',
+        }}
+      >
+        <span style={{ fontSize: '11px', color: 'var(--color-accent-primary)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          Archival Index
+        </span>
+        <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: 'var(--color-text-muted)' }} />
+        <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+          Curated from 5,000+ films across 20 distinct cinematic atmospheres
+        </span>
       </div>
 
       {/* Hero */}
-      <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
+          transition={{ duration: 0.45, ease: 'easeOut' }}
         >
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              backgroundColor: 'var(--color-accent-subtle)',
-              border: '1px solid var(--color-accent-border)',
-              borderRadius: 'var(--radius-pill)',
-              padding: '4px 14px',
-              marginBottom: '16px',
-              fontSize: '12px',
-              color: 'var(--color-accent-primary)',
-              fontFamily: 'var(--font-serif)',
-              letterSpacing: '0.04em',
-            }}
-          >
-            <span>📽️</span>
-            <span>The Cinema of Your Mind</span>
-          </div>
-
           <h1
             style={{
               fontFamily: 'var(--font-serif)',
               fontWeight: 700,
-              fontSize: 'clamp(38px, 6vw, 68px)',
-              lineHeight: 1.08,
-              marginBottom: '16px',
-              letterSpacing: '-0.02em',
+              fontSize: 'clamp(32px, 5vw, 56px)',
               color: 'var(--color-text-primary)',
+              lineHeight: 1.15,
+              marginBottom: '16px',
             }}
           >
-            How are you feeling{' '}
-            <span style={{ fontStyle: 'italic', color: 'var(--color-accent-primary)' }}>
-              tonight?
-            </span>
+            How are you feeling <em style={{ fontStyle: 'italic', color: 'var(--color-accent-primary)' }}>tonight?</em>
           </h1>
           <p
             style={{
               fontFamily: 'var(--font-sans)',
-              fontSize: '17px',
+              fontSize: '16px',
               color: 'var(--color-text-secondary)',
-              maxWidth: '560px',
+              maxWidth: '540px',
               margin: '0 auto',
               lineHeight: 1.6,
             }}
           >
-            Describe the mood, atmosphere, or feeling you're craving. We curate films that match your inner world.
+            Describe your mood, atmosphere, or cinematic craving. We curate films that match your inner world.
           </p>
         </motion.div>
       </div>
 
       {/* Main input card */}
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15, duration: 0.4 }}
+        transition={{ delay: 0.1, duration: 0.35 }}
         className="cinema-card"
         style={{ padding: '32px', marginBottom: '20px' }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '26px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <div>
             <p
               style={{
@@ -126,14 +114,14 @@ export const HomePage: React.FC = () => {
             <MoodTextInput onSubmit={fetchRecommendations} />
           </div>
 
-          <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '22px' }}>
+          <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '20px' }}>
             <EmojiTagSelector />
           </div>
         </div>
       </motion.div>
 
       {/* Filter toggle */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
         <button
           id="toggle-filters"
           onClick={() => setShowFilters(!showFilters)}
@@ -170,66 +158,84 @@ export const HomePage: React.FC = () => {
       {/* Cold Start Indicator */}
       {slowLoading && (
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          style={{
-            padding: '12px 18px',
-            borderRadius: 'var(--radius-md)',
-            marginBottom: '16px',
-            backgroundColor: 'var(--color-accent-subtle)',
-            border: '1px solid var(--color-accent-border)',
-            color: 'var(--color-accent-primary)',
-            fontSize: '13px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-          }}
+          className="calm-message"
+          style={{ marginBottom: '16px' }}
         >
-          <span style={{ fontSize: '18px' }}>🎞️</span>
-          <span>Waking up the projection booth (Render cold start)... Calibrating film reels.</span>
+          <Spinner size={16} color="var(--color-calm-banner-text)" />
+          <span>Waking up the projection booth... Calibrating archival film reels.</span>
         </motion.div>
       )}
 
-      {/* Error */}
+      {/* Calm Status & Error Box */}
       {error && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+        <motion.div
+          role="alert"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
           style={{
-            padding: '12px 16px',
+            padding: '14px 18px',
             borderRadius: 'var(--radius-md)',
-            marginBottom: '16px',
-            background: 'rgba(239,68,68,0.1)',
-            border: '1px solid rgba(239,68,68,0.3)',
-            color: '#ef4444',
-            fontSize: '14px',
+            marginBottom: '20px',
+            backgroundColor: 'var(--color-calm-banner-bg)',
+            border: '1px solid var(--color-calm-banner-border)',
+            color: 'var(--color-calm-banner-text)',
+            fontSize: '13px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
           }}
         >
-          {error}
-        </motion.p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{error}</span>
+          </div>
+          <button
+            onClick={() => fetchRecommendations()}
+            style={{
+              background: 'none',
+              border: '1px solid var(--color-calm-banner-border)',
+              borderRadius: 'var(--radius-pill)',
+              padding: '4px 12px',
+              fontSize: '12px',
+              fontWeight: 600,
+              color: 'var(--color-calm-banner-text)',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Retry
+          </button>
+        </motion.div>
       )}
 
-      {/* Action buttons */}
+      {/* Action buttons (Normal width, no emoji) */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '24px' }}
+        transition={{ delay: 0.25 }}
+        style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '32px' }}
       >
         <button
           id="find-movies-btn"
           className="btn-cinema"
           onClick={() => fetchRecommendations()}
           disabled={loading}
-          style={{ flex: 1, minWidth: '220px', padding: '14px 28px', fontSize: '15px' }}
+          style={{ minWidth: '180px', padding: '12px 28px', fontSize: '14px' }}
         >
           {loading ? (
             <>
-              <Spinner size={18} color="#0c0b0a" />
-              <span>Projecting Recommendations...</span>
+              <Spinner size={16} color="var(--color-btn-primary-text)" />
+              <span>Projecting...</span>
             </>
           ) : (
-            '🎬 Find My Movies'
+            'Find My Movies'
           )}
         </button>
         <button
@@ -237,9 +243,9 @@ export const HomePage: React.FC = () => {
           className="btn-outline"
           onClick={surpriseMe}
           disabled={loading}
-          style={{ padding: '14px 24px', fontSize: '14px' }}
+          style={{ padding: '12px 22px', fontSize: '13px' }}
         >
-          🎲 Surprise Me
+          Surprise Me
         </button>
       </motion.div>
 
@@ -250,46 +256,18 @@ export const HomePage: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35 }}
+        transition={{ delay: 0.3 }}
         style={{ textAlign: 'left', marginTop: '40px' }}
       >
         <LiveMovieCarousel
           title="Trending Today"
-          emoji="🔥"
           fetchFn={moviesApi.getLiveTrending}
         />
         <LiveMovieCarousel
-          title="In Theaters Now"
-          emoji="🍿"
+          title="Now Playing in Theatres"
           fetchFn={moviesApi.getLiveNowPlaying}
         />
       </motion.div>
-
-      {/* Ambient cinema projector glow */}
-      <div
-        style={{
-          position: 'fixed',
-          top: '-15%',
-          right: '-10%',
-          width: '600px',
-          height: '600px',
-          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.04) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          zIndex: -1,
-        }}
-      />
-      <div
-        style={{
-          position: 'fixed',
-          bottom: '-15%',
-          left: '-10%',
-          width: '500px',
-          height: '500px',
-          background: 'radial-gradient(circle, rgba(180, 140, 70, 0.03) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          zIndex: -1,
-        }}
-      />
     </PageWrapper>
   );
 };
