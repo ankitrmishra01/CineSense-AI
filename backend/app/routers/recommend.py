@@ -227,9 +227,57 @@ async def recommend(
         candidate_ids = [movie_id for movie_id, _ in candidates]
         score_map = {movie_id: score for movie_id, score in candidates}
 
-        # Fetch candidate movies from DB
-        result = await db.execute(select(Movie).where(Movie.id.in_(candidate_ids)))
-        movies_in_db = {m.id: m for m in result.scalars().all()}
+        # Fetch candidate movies from DB with resilient fallback
+        movies_in_db = {}
+        try:
+            result = await db.execute(select(Movie).where(Movie.id.in_(candidate_ids)))
+            movies_in_db = {m.id: m for m in result.scalars().all()}
+        except Exception as db_err:
+            logger.warning("Database candidate lookup failed: %s. Using TMDB fallback.", db_err)
+
+        # If DB is unreachable or unseeded, hydrate candidates on the fly via TMDB
+        if not movies_in_db:
+            from app.services.tmdb_service import _tmdb_get_async
+            import asyncio
+
+            async def _fetch_tmdb_movie(mid: int) -> Optional[Movie]:
+                try:
+                    data = await _tmdb_get_async(f"/movie/{mid}")
+                    if data and "id" in data:
+                        g_list = [{"id": g["id"], "name": g["name"]} for g in data.get("genres", [])]
+                        return Movie(
+                            id=data["id"],
+                            title=data.get("title") or data.get("name") or "Unknown",
+                            overview=data.get("overview", ""),
+                            tagline=data.get("tagline"),
+                            genres=g_list,
+                            keywords=[],
+                            poster_path=data.get("poster_path"),
+                            backdrop_path=data.get("backdrop_path"),
+                            runtime=data.get("runtime"),
+                            vote_average=float(data.get("vote_average", 0.0)),
+                            vote_count=int(data.get("vote_count", 0)),
+                            release_date=None,
+                            trailer_key=None,
+                            watch_providers=None,
+                            cast_crew=None,
+                            belongs_to_collection=None,
+                            embedding_id=None,
+                        )
+                except Exception:
+                    pass
+                return None
+
+            top_candidate_ids = candidate_ids[:25]
+            fetched_movies = await asyncio.gather(*[_fetch_tmdb_movie(mid) for mid in top_candidate_ids])
+            movies_in_db = {m.id: m for m in fetched_movies if m is not None}
+
+        if not movies_in_db:
+            raise HTTPException(
+                status_code=503,
+                detail="Database is currently unavailable or unseeded. Run 'python scripts/seed_local_movies.py' to seed local movies.",
+                headers={"Retry-After": "5"},
+            )
 
     t_retrieval_done = time.perf_counter()
 
@@ -240,8 +288,11 @@ async def recommend(
     # Watchlist exclusion for authenticated users
     user_saved_movie_ids = set()
     if current_user:
-        wl_result = await db.execute(select(Watchlist.movie_id).where(Watchlist.user_id == current_user.id))
-        user_saved_movie_ids = set(wl_result.scalars().all())
+        try:
+            wl_result = await db.execute(select(Watchlist.movie_id).where(Watchlist.user_id == current_user.id))
+            user_saved_movie_ids = set(wl_result.scalars().all())
+        except Exception:
+            pass
 
     filtered: list[Movie] = []
 

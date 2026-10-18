@@ -69,21 +69,36 @@ docker-compose up postgres -d
 psql -U postgres -c "CREATE DATABASE cinesense;"
 ```
 
-### 3. Backend setup
+### 3. Run Locally (Zero-Setup SQLite Option)
+
+You can run CineSense AI completely locally with **zero external database dependencies**:
 
 ```bash
 cd backend
 
-# Create virtual environment
-python -m venv venv
-venv\Scripts\activate          # Windows
-# source venv/bin/activate     # macOS/Linux
-
-# Install dependencies
+# 1. Install dependencies (including aiosqlite and fastembed ONNX)
 pip install -r requirements.txt
 
-# Run database migrations
+# 2. Configure .env with local SQLite (or copy .env.example)
+# DATABASE_URL=sqlite+aiosqlite:///cinesense_local.db
+
+# 3. Seed initial catalog (~100 movies from TMDB & FAISS index)
+python scripts/seed_local_movies.py
+
+# 4. Start backend
+uvicorn app.main:app --reload --port 8000
+```
+
+> **Note on FAISS Index**: Pre-built FAISS index files (`faiss_index/movies.index` and `faiss_index/id_map.json`) are already committed to the repository for instant startup without waiting for hours of embedding generation!
+
+### 4. Full Production Pipeline (PostgreSQL)
+
+If using PostgreSQL (local or Neon):
+```bash
+cd backend
 alembic upgrade head
+python scripts/fetch_movies.py
+python scripts/build_embeddings.py
 ```
 
 ### 4. Data pipeline (required before first use)
