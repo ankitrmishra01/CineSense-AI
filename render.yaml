@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: cinesense-backend
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.10
+      - key: APP_NAME
+        value: "CineSense AI"
+      - key: DEBUG
+        value: "false"
+      - key: FAISS_INDEX_PATH
+        value: "faiss_index/movies.index"
+      - key: FAISS_ID_MAP_PATH
+        value: "faiss_index/id_map.json"
+      - key: EMBEDDING_MODEL
+        value: "sentence-transformers/all-MiniLM-L6-v2"
+      - key: CORS_ORIGINS
+        value: '["https://cine-sense-ai.vercel.app","http://localhost:5173"]'

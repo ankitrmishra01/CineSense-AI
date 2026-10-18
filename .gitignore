@@ -19,3 +19,5 @@ frontend/.env
 .DS_Store
 .vscode/
 .idea/
+.coverage
+test-results/

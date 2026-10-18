@@ -8,6 +8,7 @@ import { RecommendationsPage } from './pages/RecommendationsPage';
 import { MovieDetailPage } from './pages/MovieDetailPage';
 import { WatchlistPage } from './pages/WatchlistPage';
 import { SearchPage } from './pages/SearchPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 const AnimatedRoutes: React.FC = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const AnimatedRoutes: React.FC = () => {
         <Route path="/movie/:id" element={<MovieDetailPage />} />
         <Route path="/watchlist" element={<WatchlistPage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </AnimatePresence>
   );

@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
@@ -26,9 +27,10 @@ class Settings(BaseSettings):
     FAISS_INDEX_PATH: str = "faiss_index/movies.index"
     FAISS_ID_MAP_PATH: str = "faiss_index/id_map.json"
 
-    # Sentence Transformer
-    EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
+    # Embedding Cache & Settings
+    EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
     EMBEDDING_DIM: int = 384
+    FASTEMBED_CACHE_PATH: Optional[str] = None
 
     # App
     APP_NAME: str = "CineSense AI"

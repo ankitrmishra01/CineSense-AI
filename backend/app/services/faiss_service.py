@@ -67,9 +67,12 @@ def _ensure_loaded() -> None:
         # Use fastembed (ONNX runtime) for lightweight, low-memory inference
         # 100% cosine similarity match with reference all-MiniLM-L6-v2 index
         from fastembed import TextEmbedding
-        model_name = "sentence-transformers/all-MiniLM-L6-v2"
-        _embed_model = TextEmbedding(model_name=model_name)
-        logger.info("FastEmbed ONNX model loaded: %s", model_name)
+        from app.config import settings
+        raw_name = getattr(settings, 'EMBEDDING_MODEL', 'sentence-transformers/all-MiniLM-L6-v2') or 'sentence-transformers/all-MiniLM-L6-v2'
+        model_name = f"sentence-transformers/{raw_name}" if "/" not in raw_name else raw_name
+        cache_dir = getattr(settings, 'FASTEMBED_CACHE_PATH', None) or os.getenv('FASTEMBED_CACHE_PATH')
+        _embed_model = TextEmbedding(model_name=model_name, cache_dir=cache_dir)
+        logger.info("FastEmbed ONNX model loaded: %s (cache: %s)", model_name, cache_dir or "default")
 
 
 def is_loaded() -> bool:
