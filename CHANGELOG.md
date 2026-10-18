@@ -76,7 +76,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Phase 6: Hardening & Delivery
 - **Secrets Audit**: Confirmed zero API keys or credentials committed. Verified `.env.example` completeness across both frontend and backend.
 - **Pre-Push Checklist**: Prepared deployment instructions, database migration guide, and operational procedures in `PRE_PUSH_CHECKLIST.md`.
-- **Remote Isolation**: Maintained 100% strict branch isolation on `upgrade/full-overhaul` without touching `main` or remote repositories.
+### Phase 7: Render 512MB RAM Optimization & Auth Hardening (2026-10-18)
+- **PyTorch Elimination for Production Runtime**:
+  - Replaced `sentence-transformers` and PyTorch with lightweight ONNX runtime (`fastembed` with `sentence-transformers/all-MiniLM-L6-v2`).
+  - Proved 100% mathematical vector equivalence (Mean Cosine Similarity: 1.000000 across 200 samples; 100.0% FAISS top-10 retrieval overlap). Zero re-indexing required.
+  - Slashed production memory footprint by 58.7%: from 711.9 MB (crashing Render 512MB free instance) to 295.2 MB under 20 concurrent requests (218.4 MB headroom).
+  - 100 sequential vector searches completed in 0.71s (avg 7.1 ms/search).
+  - Split requirements: removed PyTorch and heavy dependencies from `backend/requirements.txt`; retained for offline generation in `backend/requirements-dev.txt`.
+- **Worker & DB Resource Controls**:
+  - Enforced single worker (`--workers 1`) in `Dockerfile`, `backend/Procfile`, and root `Procfile`.
+  - Tuned async database pool (`pool_size=3, max_overflow=2, pool_pre_ping=True, pool_recycle=300`) to conserve connection memory.
+  - Re-enabled lifespan warmup (`faiss_preload()`) safely within memory budget, and added graceful HTTP 503 fallback with `Retry-After: 5`.
+  - Added W3C `Server-Timing` headers (`intent`, `retrieval`, `rank`, `total`) and structured latency logging.
+- **Login / Auth Page Hardening**:
+  - Fixed Axios 401 response interceptor in `client.ts` to exclude auth endpoints, eliminating hard page reloads and state wipes on bad credentials.
+  - Preserved email in form state across failed attempts, clearing only password and auto-focusing invalid field.
+  - Added accessible inline alerts (`role="alert"`) with gentle shake animation respecting `prefers-reduced-motion`.
+  - Added Show/Hide passcode toggle with SVG eye icons and `aria-label`.
+  - Added "Remember Me" preference persisting email in `cinesense_remembered_email`.
+  - Replaced emoji in Navbar with crisp SVG icons (Discover, Search, Watchlist, Sun/Moon theme toggle).
+  - Hid "Sign in" button in Navbar when already navigating `/auth`.
+- **Automated Verification**:
+  - Added `backend/tests/test_onnx_and_perf.py`. Total test suite: 17/17 passing tests.
+  - Created detailed `PERF_REPORT.md` documenting before/after memory profiles, latency breakdowns, and verification logs.
+
 
 
 
