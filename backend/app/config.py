@@ -1,4 +1,4 @@
-from typing import Optional, Any
+from typing import Optional, Any, Union
 from pathlib import Path
 from pydantic import field_validator
 from pydantic_settings import BaseSettings
@@ -71,7 +71,7 @@ class Settings(BaseSettings):
     # App
     APP_NAME: str = "CineSense AI"
     DEBUG: bool = False
-    CORS_ORIGINS: list[str] = [
+    CORS_ORIGINS: Union[str, list[str]] = [
         "https://cine-sense-ai.vercel.app",
         "https://cinesense-ai.vercel.app",
         "http://localhost:5173",
@@ -79,7 +79,7 @@ class Settings(BaseSettings):
         "http://localhost:3000",
     ]
 
-    @field_validator("CORS_ORIGINS", mode="before")
+    @field_validator("CORS_ORIGINS", mode="after")
     @classmethod
     def assemble_cors_origins(cls, v: Any) -> list[str]:
         if isinstance(v, str):
