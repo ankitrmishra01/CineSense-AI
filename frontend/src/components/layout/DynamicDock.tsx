@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWatchlistStore } from '../../store/watchlistStore';
 import { useRecommendations } from '../../hooks/useRecommendations';
+import { useCommandPaletteStore } from '../../store/commandPaletteStore';
 
 interface DockItem {
   id: string;
@@ -20,6 +21,7 @@ export const DynamicDock: React.FC = () => {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const watchlistItems = useWatchlistStore((s) => s.items);
   const { surpriseMe } = useRecommendations();
+  const openPalette = useCommandPaletteStore((s) => s.open);
 
   // Hide dock completely on auth page for focused login experience
   if (location.pathname === '/auth') {
@@ -34,7 +36,7 @@ export const DynamicDock: React.FC = () => {
   };
 
   const handleOpenPalette = () => {
-    window.dispatchEvent(new CustomEvent('open-command-palette'));
+    openPalette();
   };
 
   const items: DockItem[] = [
@@ -249,6 +251,7 @@ export const DynamicDock: React.FC = () => {
               <motion.button
                 type="button"
                 onClick={handleClick}
+                onTap={handleClick}
                 whileHover={{ scale: 1.15, y: -3 }}
                 whileTap={{ scale: 0.92 }}
                 transition={{ type: 'spring', stiffness: 420, damping: 22 }}

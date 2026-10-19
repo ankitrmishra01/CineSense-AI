@@ -5,12 +5,20 @@ import { GENRES } from '../../types';
 import { useMoodStore } from '../../store/moodStore';
 import { useRecommendations } from '../../hooks/useRecommendations';
 
+import { useCommandPaletteStore } from '../../store/commandPaletteStore';
+
 interface CommandPaletteProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose }) => {
+export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen: propIsOpen, onClose: propOnClose }) => {
+  const storeIsOpen = useCommandPaletteStore((s) => s.isOpen);
+  const storeClose = useCommandPaletteStore((s) => s.close);
+
+  const isOpen = propIsOpen !== undefined ? propIsOpen : storeIsOpen;
+  const onClose = propOnClose || storeClose;
+
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);

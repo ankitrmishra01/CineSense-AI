@@ -6,12 +6,12 @@ import { CommandPalette } from './CommandPalette';
 import { LanguagePickerModal } from '../preferences/LanguagePickerModal';
 import { ChangePasswordModal } from '../auth/ChangePasswordModal';
 import { usePreferencesStore } from '../../store/preferencesStore';
+import { useCommandPaletteStore } from '../../store/commandPaletteStore';
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, handleLogout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const [paletteOpen, setPaletteOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const { preferredLanguages } = usePreferencesStore();
@@ -28,24 +28,22 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('themechange', handleThemeChange);
   }, [theme]);
 
-  // Global Ctrl+K / Cmd+K listener & Custom Event listener
+  const togglePalette = useCommandPaletteStore((s) => s.toggle);
+
+  // Global Ctrl+K / Cmd+K listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setPaletteOpen((prev) => !prev);
+        togglePalette();
       }
     };
-    const handleCustomOpen = () => setPaletteOpen(true);
 
     window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('open-command-palette', handleCustomOpen);
-
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('open-command-palette', handleCustomOpen);
     };
-  }, []);
+  }, [togglePalette]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -246,7 +244,7 @@ export const Navbar: React.FC = () => {
       </motion.nav>
 
       {/* Command Palette Modal */}
-      <CommandPalette isOpen={paletteOpen} onClose={() => setPaletteOpen(false)} />
+      <CommandPalette />
 
       {/* Language Preferences Picker Modal */}
       <LanguagePickerModal isOpen={pickerOpen} onClose={() => setPickerOpen(false)} />
