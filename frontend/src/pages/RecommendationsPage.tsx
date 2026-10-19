@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { PageWrapper } from '../components/layout/PageWrapper';
@@ -15,12 +15,19 @@ const LANG_MAP: Record<string, { name: string; native: string }> = SUPPORTED_LAN
 
 export const RecommendationsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { lastResults, reset } = useMoodStore();
+  const { lastResults, reset, filters, setFilters } = useMoodStore();
   const { loading, fetchRecommendations } = useRecommendations();
   const [copied, setCopied] = useState(false);
-  const [selectedLangFilter, setSelectedLangFilter] = useState<string>('all');
+  const [selectedLangFilter, setSelectedLangFilter] = useState<string>(filters?.original_language || 'all');
+
+  useEffect(() => {
+    setSelectedLangFilter(filters?.original_language || 'all');
+  }, [filters?.original_language]);
 
   const availableLanguages = useMemo(() => {
+    if (lastResults?.available_languages && Object.keys(lastResults.available_languages).length > 0) {
+      return Object.entries(lastResults.available_languages).sort((a, b) => b[1] - a[1]);
+    }
     if (!lastResults?.recommendations) return [];
     const counts: Record<string, number> = {};
     for (const item of lastResults.recommendations) {
@@ -30,13 +37,31 @@ export const RecommendationsPage: React.FC = () => {
     return Object.entries(counts).sort((a, b) => b[1] - a[1]);
   }, [lastResults]);
 
+  const totalAllCount = useMemo(() => {
+    if (lastResults?.available_languages) {
+      return Object.values(lastResults.available_languages).reduce((a, b) => a + b, 0);
+    }
+    return lastResults?.total_results || 0;
+  }, [lastResults]);
+
+  const handleSelectLanguage = (code: string) => {
+    const newLang = code === 'all' ? undefined : code;
+    setSelectedLangFilter(code);
+    const updatedFilters = {
+      ...(filters || {}),
+      original_language: newLang,
+    };
+    setFilters(updatedFilters);
+    fetchRecommendations({
+      filters: updatedFilters,
+      page: 1,
+    });
+  };
+
   const displayedItems = useMemo(() => {
     if (!lastResults?.recommendations) return [];
-    if (selectedLangFilter === 'all') return lastResults.recommendations;
-    return lastResults.recommendations.filter(
-      (item) => (item.movie.original_language || 'en') === selectedLangFilter
-    );
-  }, [lastResults, selectedLangFilter]);
+    return lastResults.recommendations;
+  }, [lastResults]);
 
   const handleShare = () => {
     if (!lastResults) return;
@@ -180,11 +205,11 @@ export const RecommendationsPage: React.FC = () => {
                 </span>
                 <button
                   type="button"
-                  onClick={() => setSelectedLangFilter('all')}
+                  onClick={() => handleSelectLanguage('all')}
                   className={selectedLangFilter === 'all' ? 'btn-cinema' : 'btn-outline'}
                   style={{ padding: '4px 12px', fontSize: '12px', borderRadius: 'var(--radius-pill)', cursor: 'pointer' }}
                 >
-                  All ({lastResults.recommendations.length})
+                  All ({totalAllCount})
                 </button>
                 {availableLanguages.map(([code, count]) => {
                   const langInfo = LANG_MAP[code] || { name: code.toUpperCase(), native: code };
@@ -193,7 +218,7 @@ export const RecommendationsPage: React.FC = () => {
                     <button
                       key={code}
                       type="button"
-                      onClick={() => setSelectedLangFilter(code)}
+                      onClick={() => handleSelectLanguage(code)}
                       className={isSelected ? 'btn-cinema' : 'btn-outline'}
                       style={{
                         padding: '4px 12px',

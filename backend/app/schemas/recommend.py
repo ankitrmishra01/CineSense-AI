@@ -48,6 +48,7 @@ class RecommendResponse(BaseModel):
     total_pages: int
     current_page: int
     recommendations: list[RecommendationItem]
+    available_languages: Optional[dict[str, int]] = None
 
 
 class ExplainRequest(BaseModel):

@@ -62,7 +62,7 @@ _QUEUE_LOCK = asyncio.Lock()
 def get_adaptive_search_k(filters: Optional[Any], has_language_filter: bool = False) -> int:
     """Dynamically scales candidate pool size with filter strictness and language constraints."""
     if not filters:
-        return 220 if has_language_filter else 80
+        return 500 if has_language_filter else 350
     active = 0
     if getattr(filters, 'genre_ids', None):
         active += 1
@@ -76,15 +76,15 @@ def get_adaptive_search_k(filters: Optional[Any], has_language_filter: bool = Fa
         active += 2
 
     if active == 0:
-        return 100
+        return 350
     elif active == 1:
-        return 180
+        return 450
     elif active == 2:
-        return 280
+        return 550
     elif active == 3:
-        return 380
+        return 650
     else:
-        return 480
+        return 800
 
 
 router = APIRouter(tags=["Recommendations"])
@@ -188,7 +188,7 @@ async def recommend(
             select(Movie)
             .where(or_(*conditions))
             .order_by(Movie.vote_average.desc().nullslast())
-            .limit(50)
+            .limit(100)
         )
         movies = result.scalars().all()
         if movies:
@@ -206,7 +206,7 @@ async def recommend(
             select(Movie)
             .where(Movie.belongs_to_collection.cast(String).ilike(f"%{franchise_name}%"))
             .order_by(Movie.release_date.asc().nullsfirst())
-            .limit(50)
+            .limit(100)
         )
         movies = result.scalars().all()
         if movies:
@@ -236,7 +236,7 @@ async def recommend(
             logger.info(f"SIMILAR_TO_MOVIE: Found '{ref_movie.title}' in DB. Doing FAISS vector search.")
             ref_vec = faiss_service.get_movie_vector(ref_movie.embedding_id)
             if ref_vec is not None:
-                candidates = await faiss_service.search_by_vector_async(ref_vec, top_k=50)
+                candidates = await faiss_service.search_by_vector_async(ref_vec, top_k=150)
         else:
             # 2b. Not in DB: Fetch TMDB live, embed overview, search FAISS
             logger.info(f"SIMILAR_TO_MOVIE: '{ref_title}' not in DB. Falling back to TMDB live + on-the-fly embedding.")
@@ -247,7 +247,7 @@ async def recommend(
                 overview = tmdb_ref.get("overview", "")
                 if overview:
                     ref_vec = await faiss_service.embed_text_async(overview)
-                    candidates = await faiss_service.search_by_vector_async(ref_vec, top_k=50)
+                    candidates = await faiss_service.search_by_vector_async(ref_vec, top_k=150)
         
         if candidates:
             candidate_ids = [movie_id for movie_id, _ in candidates]
@@ -407,6 +407,7 @@ async def recommend(
             pass
 
     filtered: list[Movie] = []
+    candidates_matching_non_lang: list[Movie] = []
 
     for movie_id in candidate_ids:
         # Exclude saved movies if logged in
@@ -422,14 +423,6 @@ async def recommend(
         # Explicit user genre filters
         if hasattr(filters, 'genre_ids') and filters.genre_ids:
             if not any(gid in movie_genre_ids for gid in filters.genre_ids):
-                continue
-
-        # Language constraints
-        if explicit_language:
-            if movie.original_language != explicit_language:
-                continue
-        elif regional_languages:
-            if movie.original_language not in regional_languages:
                 continue
 
         # Natural language negative genre filters ("no horror", etc.)
@@ -462,6 +455,16 @@ async def recommend(
         # Filter out unreleased movies
         if movie.release_date and movie.release_date > date.today():
             continue
+
+        candidates_matching_non_lang.append(movie)
+
+        # Language constraints
+        if explicit_language:
+            if movie.original_language != explicit_language:
+                continue
+        elif regional_languages:
+            if movie.original_language not in regional_languages:
+                continue
 
         filtered.append(movie)
 
@@ -568,6 +571,9 @@ async def recommend(
         total_dur, intent_dur, retrieval_dur, rank_dur,
     )
 
+    from collections import Counter
+    lang_counts = Counter(m.original_language for m in candidates_matching_non_lang if m.original_language)
+
     return RecommendResponse(
         session_id=session_id,
         query_summary=_summarize_query(payload.mood_text, payload.emotion_tags),
@@ -575,6 +581,7 @@ async def recommend(
         total_pages=total_pages,
         current_page=page,
         recommendations=recommendations,
+        available_languages=dict(lang_counts.most_common(14)),
     )
 
 

@@ -135,6 +135,7 @@ export interface RecommendResponse {
   total_pages: number;
   current_page: number;
   recommendations: RecommendationItem[];
+  available_languages?: Record<string, number>;
 }
 
 export interface WatchlistItem {
