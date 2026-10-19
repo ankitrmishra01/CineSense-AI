@@ -51,11 +51,12 @@ export const useRecommendations = () => {
     setError(null);
     setRetryStatus(null);
 
-    const maxAttempts = 3;
+    const startTime = Date.now();
+    const MAX_WAIT_MS = 90000; // 90 seconds max wait for Render free-tier cold spin-up
     let attempt = 0;
     let success = false;
 
-    while (attempt < maxAttempts && !success) {
+    while (Date.now() - startTime < MAX_WAIT_MS && !success) {
       attempt++;
       try {
         const { data } = await recommendApi.recommend(payload);
@@ -87,13 +88,25 @@ export const useRecommendations = () => {
             headers?: Record<string, string>;
             data?: { detail?: unknown };
           };
+          code?: string;
         };
         const status = axiosErr?.response?.status;
-        const retryAfterSec = parseInt(axiosErr?.response?.headers?.['retry-after'] || '2', 10) || 2;
+        const isColdStartOrBusy = status === 503 || status === 502 || status === 504 || !status || axiosErr?.code === 'ERR_NETWORK';
+        const elapsedSec = Math.round((Date.now() - startTime) / 1000);
 
-        if (status === 503 && attempt < maxAttempts) {
-          setRetryStatus(`Cinema engine is currently busy. Automatically retrying in ${retryAfterSec}s... (Attempt ${attempt}/${maxAttempts})`);
-          await new Promise((resolve) => setTimeout(resolve, retryAfterSec * 1000));
+        if (isColdStartOrBusy && (Date.now() - startTime < MAX_WAIT_MS - 5000)) {
+          const retryWait = Math.min(
+            Math.max(parseInt(axiosErr?.response?.headers?.['retry-after'] || '3', 10), 3),
+            8
+          );
+          let wakeMessage = `Waking up the cinema server from standby (${elapsedSec}s elapsed)...`;
+          if (elapsedSec > 30) {
+            wakeMessage = `Spinning up projection engine & loading AI models (${elapsedSec}s)... almost ready!`;
+          } else if (elapsedSec > 12) {
+            wakeMessage = `Server is warming up (${elapsedSec}s)... retrying automatically.`;
+          }
+          setRetryStatus(wakeMessage);
+          await new Promise((resolve) => setTimeout(resolve, retryWait * 1000));
         } else {
           const msg =
             axiosErr?.response?.data?.detail ||

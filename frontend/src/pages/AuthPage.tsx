@@ -40,7 +40,7 @@ export const AuthPage: React.FC = () => {
     }
   };
 
-  const executeAuth = async (isRetry = false) => {
+  const executeAuth = async (retryCount = 0) => {
     setError('');
     setLoading(true);
 
@@ -87,12 +87,15 @@ export const AuthPage: React.FC = () => {
       const detail = err?.response?.data?.detail;
 
       if (status === 401) {
+        setIsWakingUp(false);
         setError('Incorrect email or password. Please check your credentials and try again.');
         passwordRef.current?.focus();
       } else if (status === 400 || status === 409) {
+        setIsWakingUp(false);
         setError('An account with this email already exists. Please sign in instead.');
         emailRef.current?.focus();
       } else if (status === 422) {
+        setIsWakingUp(false);
         if (typeof detail === 'string') {
           setError(detail);
         } else if (Array.isArray(detail) && detail.length > 0) {
@@ -102,17 +105,19 @@ export const AuthPage: React.FC = () => {
         }
         passwordRef.current?.focus();
       } else if (status === 429) {
+        setIsWakingUp(false);
         setError('Too many attempts. Please wait a moment before trying again.');
-      } else if (!isRetry && (!status || status >= 500)) {
-        // Cold start or server spin-up: show message and retry once automatically after 3s
+      } else if (retryCount < 5 && (!status || status >= 500)) {
+        // Cold start or server spin-up: show message and retry progressively
+        const nextRetry = retryCount + 1;
         setIsWakingUp(true);
-        setError('Connecting to server, this may take a few seconds...');
+        setError(`Waking up server from cold standby (attempt ${nextRetry}/5)... please wait.`);
         setTimeout(() => {
-          setIsWakingUp(false);
-          executeAuth(true);
-        }, 3000);
+          executeAuth(nextRetry);
+        }, 4000);
         return;
       } else {
+        setIsWakingUp(false);
         setError(
           typeof detail === 'string'
             ? detail
@@ -129,7 +134,7 @@ export const AuthPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
-    await executeAuth(false);
+    await executeAuth(0);
   };
 
   return (

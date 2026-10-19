@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 import { CommandPalette } from './CommandPalette';
 import { LanguagePickerModal } from '../preferences/LanguagePickerModal';
+import { ChangePasswordModal } from '../auth/ChangePasswordModal';
 import { usePreferencesStore } from '../../store/preferencesStore';
 
 export const Navbar: React.FC = () => {
@@ -12,6 +13,7 @@ export const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const { preferredLanguages } = usePreferencesStore();
   const [theme, setTheme] = useState(
     () => localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
@@ -318,6 +320,15 @@ export const Navbar: React.FC = () => {
                   <span className="nav-username-text" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.username}</span>
                 </span>
                 <button
+                  id="nav-change-password-btn"
+                  className="btn-outline"
+                  onClick={() => setPasswordModalOpen(true)}
+                  style={{ padding: '6px 10px', fontSize: '12px', flexShrink: 0, position: 'relative', zIndex: 2 }}
+                  title="Change Password"
+                >
+                  Password
+                </button>
+                <button
                   className="btn-outline"
                   onClick={handleLogout}
                   style={{ padding: '6px 10px', fontSize: '12px', flexShrink: 0, position: 'relative', zIndex: 2 }}
@@ -344,6 +355,9 @@ export const Navbar: React.FC = () => {
 
       {/* Language Preferences Picker Modal */}
       <LanguagePickerModal isOpen={pickerOpen} onClose={() => setPickerOpen(false)} />
+
+      {/* Change Password Modal */}
+      <ChangePasswordModal isOpen={passwordModalOpen} onClose={() => setPasswordModalOpen(false)} />
     </>
   );
 };

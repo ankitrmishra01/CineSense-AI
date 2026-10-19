@@ -54,3 +54,5 @@ class InMemoryRateLimiter:
 login_rate_limiter = InMemoryRateLimiter(max_requests=10, window_seconds=60)
 # Signup: max 5 requests per minute per IP
 signup_rate_limiter = InMemoryRateLimiter(max_requests=5, window_seconds=60)
+# Change Password: max 5 requests per minute per IP
+change_password_rate_limiter = InMemoryRateLimiter(max_requests=5, window_seconds=60)

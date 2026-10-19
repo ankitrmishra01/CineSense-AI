@@ -15,15 +15,18 @@ async def lifespan(app: FastAPI):
     # Startup self-checks:
     logger.info("🎬 CineSense AI Backend Startup Self-Check...")
     
-    # 1. Warm up FAISS index + FastEmbed ONNX model
+    # 1. Warm up FAISS index + FastEmbed ONNX model & verify vector parity
     try:
         faiss_preload()
-        from app.services.faiss_service import get_faiss_stats
+        from app.services.faiss_service import get_faiss_stats, verify_embedding_model_parity
         f_stats = get_faiss_stats()
         logger.info("✓ FAISS Index loaded: %d items, dim %s, model: %s", 
-                    f_stats.get("total_movies", 0), f_stats.get("dimension"), f_stats.get("model"))
+                    f_stats.get("vectors", 0), f_stats.get("dimension"), f_stats.get("model"))
+        parity_check = verify_embedding_model_parity()
+        logger.info("✓ Embedding vector parity verified (cos_sim=%.6f, model=%s)", 
+                    parity_check.get("cosine_similarity", 1.0), parity_check.get("model"))
     except Exception as e:
-        logger.error("✗ Failed to load FAISS index or FastEmbed model: %s", e)
+        logger.error("✗ Failed to load FAISS index or FastEmbed model parity check failed: %s", e)
 
     # 2. Check Database connectivity and movie count
     from app.database import engine
@@ -62,10 +65,18 @@ async def health():
 
 @app.get("/health/detailed", tags=["Health"])
 async def detailed_health():
-    from app.services.faiss_service import get_faiss_stats
+    from app.services.faiss_service import get_faiss_stats, verify_embedding_model_parity
+    from app.services.language_service import get_translation_stats
     from app.database import engine
 
     faiss_info = get_faiss_stats()
+    parity_info = {}
+    try:
+        parity_info = verify_embedding_model_parity()
+    except Exception as e:
+        parity_info = {"status": "failed", "error": str(e)}
+
+    translation_info = get_translation_stats()
 
     db_status = "unknown"
     movie_count = 0
@@ -87,6 +98,8 @@ async def detailed_health():
             "movie_count": movie_count,
         },
         "faiss": faiss_info,
+        "model_parity": parity_info,
+        "translation": translation_info,
         "mode": "hybrid_db" if db_status == "connected" else "tmdb_direct_fallback",
     }
 

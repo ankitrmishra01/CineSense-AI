@@ -5,6 +5,13 @@ from pydantic import BaseModel, EmailStr, field_validator
 import re
 
 
+COMMON_WEAK_PASSWORDS = {
+    "12345678", "password", "password123", "123456789", "1234567890",
+    "qwerty123", "admin123", "welcome1", "iloveyou", "secret123",
+    "cinesense", "letmein1", "cinema123", "changeme", "abc12345"
+}
+
+
 class SignupRequest(BaseModel):
     email: EmailStr
     username: str
@@ -22,6 +29,26 @@ class SignupRequest(BaseModel):
     def password_strength(cls, v: str) -> str:
         if len(v) < 8:
             raise ValueError("Password must be at least 8 characters")
+        if len(v) > 128:
+            raise ValueError("Password must not exceed 128 characters")
+        if v.lower() in COMMON_WEAK_PASSWORDS:
+            raise ValueError("This password is too common and easily guessed. Please choose a stronger password.")
+        return v
+
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_new_password(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("New password must be at least 8 characters long")
+        if len(v) > 128:
+            raise ValueError("New password must not exceed 128 characters")
+        if v.lower() in COMMON_WEAK_PASSWORDS:
+            raise ValueError("This password is too common and easily guessed. Please choose a stronger password.")
         return v
 
 

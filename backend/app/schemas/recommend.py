@@ -1,5 +1,5 @@
 import uuid
-from typing import Optional
+from typing import Optional, Any
 from pydantic import BaseModel, model_validator
 from app.schemas.movie import MovieOut
 
@@ -49,6 +49,9 @@ class RecommendResponse(BaseModel):
     current_page: int
     recommendations: list[RecommendationItem]
     available_languages: Optional[dict[str, int]] = None
+    filter_notice: Optional[str] = None
+    pipeline_debug: Optional[dict[str, Any]] = None
+
 
 
 class ExplainRequest(BaseModel):

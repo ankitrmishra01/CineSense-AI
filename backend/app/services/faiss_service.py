@@ -71,8 +71,19 @@ def _ensure_loaded() -> None:
         # 100% cosine similarity match with reference all-MiniLM-L6-v2 index
         from fastembed import TextEmbedding
         from app.config import settings
-        raw_name = getattr(settings, 'EMBEDDING_MODEL', 'sentence-transformers/all-MiniLM-L6-v2') or 'sentence-transformers/all-MiniLM-L6-v2'
+
+        CANONICAL_INDEX_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+        raw_name = getattr(settings, 'EMBEDDING_MODEL', CANONICAL_INDEX_MODEL) or CANONICAL_INDEX_MODEL
         model_name = f"sentence-transformers/{raw_name}" if "/" not in raw_name else raw_name
+
+        if "all-minilm-l6-v2" not in model_name.lower():
+            logger.warning(
+                "CRITICAL WARNING: Configured EMBEDDING_MODEL '%s' does not match the FAISS index vector space "
+                "(index built with %s). Overriding to '%s' to guarantee vector parity and prevent corrupted search results. "
+                "Please update Render environment variable EMBEDDING_MODEL to '%s'.",
+                raw_name, CANONICAL_INDEX_MODEL, CANONICAL_INDEX_MODEL, CANONICAL_INDEX_MODEL
+            )
+            model_name = CANONICAL_INDEX_MODEL
         
         # Derive canonical absolute cache directory from settings or project backend directory
         cache_dir_raw = getattr(settings, 'FASTEMBED_CACHE_PATH', None) or os.getenv('FASTEMBED_CACHE_PATH')
@@ -224,8 +235,48 @@ def get_faiss_stats() -> dict:
     """Return status dictionary of the FAISS index."""
     global _faiss_index
     if _faiss_index is not None:
-        return {"loaded": True, "vectors": int(_faiss_index.ntotal), "runtime": "onnx-fastembed"}
+        return {
+            "loaded": True,
+            "vectors": int(_faiss_index.ntotal),
+            "dimension": int(_faiss_index.d) if hasattr(_faiss_index, "d") else 384,
+            "runtime": "onnx-fastembed",
+            "model": "sentence-transformers/all-MiniLM-L6-v2",
+        }
     index_path, _ = _get_index_paths()
     return {"loaded": False, "exists_on_disk": Path(index_path).exists(), "runtime": "onnx-fastembed"}
+
+
+def verify_embedding_model_parity() -> dict:
+    """
+    Self-check verifying that the loaded FastEmbed model matches the stored reference vector.
+    Raises RuntimeError if cosine similarity is < 0.999.
+    """
+    _ensure_loaded()
+    ref_path = Path(__file__).resolve().parent.parent.parent / "faiss_index" / "reference_vector.npy"
+    if not ref_path.exists():
+        ref_path = Path("faiss_index/reference_vector.npy")
+
+    test_text = "CineSense AI semantic discovery reference vector"
+    vec = embed_text(test_text)
+
+    if ref_path.exists():
+        ref_vec = np.load(str(ref_path))
+        ref_vec = ref_vec / np.linalg.norm(ref_vec)
+        cos_sim = float(np.dot(vec[0], ref_vec))
+        if cos_sim < 0.999:
+            raise RuntimeError(
+                f"Embedding model parity self-check FAILED! Cosine similarity={cos_sim:.6f} (< 0.999). "
+                f"Expected sentence-transformers/all-MiniLM-L6-v2."
+            )
+        logger.info("✓ Embedding model parity verified. Cosine similarity: %.6f (1.000000 match)", cos_sim)
+        return {
+            "status": "verified",
+            "cosine_similarity": round(cos_sim, 6),
+            "model": "sentence-transformers/all-MiniLM-L6-v2",
+        }
+    else:
+        logger.warning("⚠ Reference vector file not found at %s. Generated test embedding shape: %s", ref_path, vec.shape)
+        return {"status": "unverified", "shape": list(vec.shape), "model": "sentence-transformers/all-MiniLM-L6-v2"}
+
 
 

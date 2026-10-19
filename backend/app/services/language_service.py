@@ -16,6 +16,22 @@ logger = logging.getLogger(__name__)
 _TRANSLATION_CACHE: Dict[str, Tuple[str, Optional[str], Optional[str], float]] = {}
 CACHE_TTL_SECONDS = 3600  # 1 hour
 
+# Visible counters for translation observability
+_TRANSLATION_SUCCESS_COUNT: int = 0
+_TRANSLATION_TIMEOUT_COUNT: int = 0
+_TRANSLATION_FAILURE_COUNT: int = 0
+
+
+def get_translation_stats() -> dict:
+    """Return observability metrics for Groq query translation."""
+    return {
+        "success_count": _TRANSLATION_SUCCESS_COUNT,
+        "timeout_count": _TRANSLATION_TIMEOUT_COUNT,
+        "failure_count": _TRANSLATION_FAILURE_COUNT,
+        "cache_size": len(_TRANSLATION_CACHE),
+    }
+
+
 LANGUAGE_METADATA = {
     "hi": {"name": "Hindi", "native": "हिन्दी", "nicknames": ["bollywood", "hindi", "hindi cinema"]},
     "ta": {"name": "Tamil", "native": "தமிழ்", "nicknames": ["kollywood", "tamil", "tamil cinema"]},
@@ -177,13 +193,23 @@ async def translate_and_understand_query(query: str) -> dict:
             explicit_lang = parsed["explicit_language_filter"]
 
         # Cache result
+        global _TRANSLATION_SUCCESS_COUNT, _TRANSLATION_TIMEOUT_COUNT, _TRANSLATION_FAILURE_COUNT
+        _TRANSLATION_SUCCESS_COUNT += 1
         _TRANSLATION_CACHE[cache_key] = (translated_text, detected_lang, explicit_lang, now)
         logger.info(f"Groq translated '{q_trimmed}' -> '{translated_text}' (lang={detected_lang}, filter={explicit_lang})")
 
     except asyncio.TimeoutError:
-        logger.warning(f"Groq translation timed out (>2.0s) for query: '{q_trimmed}'. Falling back to raw text.")
+        _TRANSLATION_TIMEOUT_COUNT += 1
+        logger.warning(
+            f"Groq translation timed out (>2.0s) for query: '{q_trimmed}'. "
+            f"Total timeouts: {_TRANSLATION_TIMEOUT_COUNT}. Falling back to raw text."
+        )
     except Exception as e:
-        logger.warning(f"Groq translation error: {e}. Falling back to raw text.")
+        _TRANSLATION_FAILURE_COUNT += 1
+        logger.warning(
+            f"Groq translation error: {e}. "
+            f"Total translation failures: {_TRANSLATION_FAILURE_COUNT}. Falling back to raw text."
+        )
 
     return {
         "translated_text": translated_text,

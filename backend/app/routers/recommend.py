@@ -406,84 +406,163 @@ async def recommend(
         except Exception:
             pass
 
+    target_needed = max(payload.page * payload.limit, payload.limit)
+    stage_relaxation_applied = []
+    filter_notice = None
+
+    def _eval_movie(
+        m: Movie,
+        check_genre: bool = True,
+        check_rating: bool = True,
+        check_runtime: bool = True,
+        check_year: bool = True,
+        check_language: bool = True,
+    ) -> bool:
+        movie_genre_ids = [g["id"] for g in (m.genres or []) if isinstance(g, dict)]
+        if check_genre:
+            if hasattr(filters, 'genre_ids') and filters.genre_ids:
+                if not any(gid in movie_genre_ids for gid in filters.genre_ids):
+                    return False
+            if natural_constraints["exclude_genre_ids"]:
+                if any(gid in movie_genre_ids for gid in natural_constraints["exclude_genre_ids"]):
+                    return False
+        if check_rating and hasattr(filters, 'min_rating') and filters.min_rating is not None:
+            if not m.vote_average or float(m.vote_average) < filters.min_rating:
+                return False
+        if check_runtime:
+            effective_max_runtime = getattr(filters, 'max_runtime', None) or natural_constraints["max_runtime"]
+            if effective_max_runtime is not None:
+                if m.runtime and m.runtime > effective_max_runtime:
+                    return False
+        if check_year:
+            min_year = getattr(filters, 'min_year', None) or natural_constraints["min_year"]
+            if min_year is not None and m.release_date and m.release_date.year < min_year:
+                return False
+            max_year = natural_constraints["max_year"]
+            if max_year is not None and m.release_date and m.release_date.year > max_year:
+                return False
+        if m.release_date and m.release_date > date.today():
+            return False
+        if check_language:
+            if explicit_language:
+                if m.original_language != explicit_language:
+                    return False
+            elif regional_languages:
+                if m.original_language not in regional_languages:
+                    return False
+        return True
+
+    # Initial strict filtering
     filtered: list[Movie] = []
     candidates_matching_non_lang: list[Movie] = []
 
     for movie_id in candidate_ids:
-        # Exclude saved movies if logged in
         if movie_id in user_saved_movie_ids:
             continue
-
         movie = movies_in_db.get(movie_id)
         if not movie:
             continue
+        if _eval_movie(movie, check_language=False):
+            candidates_matching_non_lang.append(movie)
+        if _eval_movie(movie, check_language=True):
+            filtered.append(movie)
 
-        movie_genre_ids = [g["id"] for g in (movie.genres or []) if isinstance(g, dict)]
+    stage_strict_count = len(filtered)
 
-        # Explicit user genre filters
-        if hasattr(filters, 'genre_ids') and filters.genre_ids:
-            if not any(gid in movie_genre_ids for gid in filters.genre_ids):
+    # ── Step 1: Widen FAISS search_k if candidate pool is small ───────────────
+    if len(filtered) < target_needed and len(candidate_ids) < 1000:
+        logger.info(
+            "Candidate count (%d) below target (%d). Widening search_k to 1500.",
+            len(filtered), target_needed
+        )
+        stage_relaxation_applied.append("widen_search_k_1500")
+        try:
+            wider_candidates = await faiss_service.search_async(translated_search_text, top_k=1500)
+            new_ids = [mid for mid, _ in wider_candidates if mid not in movies_in_db]
+            if new_ids:
+                res = await db.execute(select(Movie).where(Movie.id.in_(new_ids)))
+                for m in res.scalars().all():
+                    movies_in_db[m.id] = m
+            for mid, sc in wider_candidates:
+                if mid not in score_map:
+                    score_map[mid] = sc
+            candidate_ids = [mid for mid, _ in wider_candidates]
+
+            # Re-evaluate with wider candidates
+            filtered = []
+            candidates_matching_non_lang = []
+            for movie_id in candidate_ids:
+                if movie_id in user_saved_movie_ids:
+                    continue
+                movie = movies_in_db.get(movie_id)
+                if not movie:
+                    continue
+                if _eval_movie(movie, check_language=False):
+                    candidates_matching_non_lang.append(movie)
+                if _eval_movie(movie, check_language=True):
+                    filtered.append(movie)
+            stage_strict_count = len(filtered)
+        except Exception as widen_err:
+            logger.warning("Failed to widen FAISS candidates: %s", widen_err)
+
+    # ── Step 2: Soft floor relaxation (rating / runtime / year) ───────────────
+    if len(filtered) < target_needed:
+        relaxed_matches = []
+        for movie_id in candidate_ids:
+            if movie_id in user_saved_movie_ids:
                 continue
-
-        # Natural language negative genre filters ("no horror", etc.)
-        if natural_constraints["exclude_genre_ids"]:
-            if any(gid in movie_genre_ids for gid in natural_constraints["exclude_genre_ids"]):
+            movie = movies_in_db.get(movie_id)
+            if not movie:
                 continue
+            # Relax rating and runtime constraints
+            if _eval_movie(movie, check_genre=True, check_rating=False, check_runtime=False, check_year=False, check_language=True):
+                relaxed_matches.append(movie)
+        if len(relaxed_matches) > len(filtered):
+            stage_relaxation_applied.append("soft_floor_relaxation")
+            filtered = relaxed_matches
+            filter_notice = "Relaxed rating and duration filters to show more titles."
 
-        # Rating filter
-        if hasattr(filters, 'min_rating') and filters.min_rating is not None:
-            if not movie.vote_average or float(movie.vote_average) < filters.min_rating:
-                continue
+    # ── Step 3: Catalog fill-up with notice if matches are catalog-limited ─────
+    strict_match_count = len(filtered)
+    if len(filtered) < target_needed:
+        stage_relaxation_applied.append("catalog_limit_fill_up")
+        existing_ids = {m.id for m in filtered}
 
-        # Runtime filter (explicit or natural)
-        effective_max_runtime = getattr(filters, 'max_runtime', None) or natural_constraints["max_runtime"]
-        if effective_max_runtime is not None:
-            if movie.runtime and movie.runtime > effective_max_runtime:
-                continue
+        # 1st priority fillers: matches adhering to mood/genres in other languages
+        fillers = [m for m in candidates_matching_non_lang if m.id not in existing_ids]
 
-        # Year filter (explicit or natural)
-        min_year = getattr(filters, 'min_year', None) or natural_constraints["min_year"]
-        if min_year is not None:
-            if movie.release_date and movie.release_date.year < min_year:
-                continue
+        # 2nd priority fillers: top semantic matches in database
+        if len(filtered) + len(fillers) < target_needed:
+            general_hydrated = sorted(
+                [
+                    m for m in movies_in_db.values()
+                    if m.id not in existing_ids and m not in fillers and (not m.release_date or m.release_date <= date.today())
+                ],
+                key=lambda m: score_map.get(m.id, 0.0),
+                reverse=True
+            )
+            fillers.extend(general_hydrated)
 
-        max_year = natural_constraints["max_year"]
-        if max_year is not None:
-            if movie.release_date and movie.release_date.year > max_year:
-                continue
+        shortfall = target_needed - len(filtered)
+        filtered.extend(fillers[:shortfall])
 
-        # Filter out unreleased movies
-        if movie.release_date and movie.release_date > date.today():
-            continue
-
-        candidates_matching_non_lang.append(movie)
-
-        # Language constraints
+        from app.services.language_service import LANGUAGE_METADATA
         if explicit_language:
-            if movie.original_language != explicit_language:
-                continue
+            lang_label = LANGUAGE_METADATA.get(explicit_language, {}).get("name", explicit_language.upper())
+            filter_notice = f"Found {strict_match_count} {lang_label} titles matching your criteria. Showing related recommendations to complete your list."
         elif regional_languages:
-            if movie.original_language not in regional_languages:
-                continue
-
-        filtered.append(movie)
+            filter_notice = f"Found {strict_match_count} titles matching your regional filters. Showing related recommendations to complete your list."
+        else:
+            filter_notice = f"Found {strict_match_count} titles matching all criteria. Showing related recommendations to complete your list."
 
     if not filtered:
-        # Fallback 1: if user excluded watchlist items and hit 0, relax watchlist exclusion
-        if user_saved_movie_ids:
-            filtered = [m for m in movies_in_db.values() if not m.release_date or m.release_date <= date.today()]
-        # Fallback 2: if strict language filter left 0 candidates, relax language filter
-        if not filtered and (explicit_language or regional_languages):
-            filtered = [m for m in movies_in_db.values() if not m.release_date or m.release_date <= date.today()]
-        if not filtered:
-            raise HTTPException(
-                status_code=404,
-                detail="No movies match the given filters. Try relaxing them.",
-            )
+        # Ultimate fallback to top catalog movies so user is never stranded
+        filtered = list(movies_in_db.values())[:payload.limit]
+        filter_notice = "Showing popular recommendations based on your query."
 
     # ── 5. Hybrid Re-ranking ──────────────────────────────────────────────────
-    filtered.sort(
-        key=lambda m: compute_hybrid_score(
+    def _movie_score(m: Movie) -> float:
+        return compute_hybrid_score(
             similarity_score=score_map.get(m.id, 0.0),
             vote_average=float(m.vote_average) if m.vote_average else None,
             vote_count=m.vote_count,
@@ -491,9 +570,16 @@ async def recommend(
             cohort_quality_score=float(m.cohort_quality_score) if m.cohort_quality_score else None,
             original_language=m.original_language,
             preferred_languages=user_preferred_languages,
-        ),
-        reverse=True
-    )
+        )
+
+    if strict_match_count > 0 and len(filtered) > strict_match_count:
+        strict_portion = filtered[:strict_match_count]
+        filler_portion = filtered[strict_match_count:]
+        strict_portion.sort(key=_movie_score, reverse=True)
+        filler_portion.sort(key=_movie_score, reverse=True)
+        filtered = strict_portion + filler_portion
+    else:
+        filtered.sort(key=_movie_score, reverse=True)
 
     # Diversity re-ranking if user has multiple preferred languages and no explicit language filter
     if user_preferred_languages and len(user_preferred_languages) > 1 and not explicit_language and not regional_languages:
@@ -515,10 +601,20 @@ async def recommend(
     total_results = len(filtered)
     total_pages = max(1, (total_results + payload.limit - 1) // payload.limit)
     page = max(1, min(payload.page, total_pages))
-    
+
     start_idx = (page - 1) * payload.limit
     end_idx = start_idx + payload.limit
     page_movies = filtered[start_idx:end_idx]
+
+    pipeline_debug = {
+        "stage_faiss_raw": len(candidate_ids),
+        "stage_db_hydrated": len(movies_in_db),
+        "stage_strict_initial": stage_strict_count,
+        "stage_relaxation_applied": stage_relaxation_applied,
+        "stage_final_count": len(filtered),
+        "page_movies_count": len(page_movies),
+    }
+    logger.info("Recommendation pipeline stages: %s", pipeline_debug)
 
     # ── 6. Build response with Grounded Explanations & Match % ─────────────────
     recommendations = []
@@ -582,6 +678,8 @@ async def recommend(
         current_page=page,
         recommendations=recommendations,
         available_languages=dict(lang_counts.most_common(14)),
+        filter_notice=filter_notice,
+        pipeline_debug=pipeline_debug,
     )
 
 

@@ -13,4 +13,10 @@ export const authApi = {
 
   logout: (refreshToken: string) =>
     apiClient.post('/auth/logout', { refresh_token: refreshToken }),
+
+  changePassword: (currentPassword: string, newPassword: string) =>
+    apiClient.post<{ status: string; message: string }>('/auth/change-password', {
+      current_password: currentPassword,
+      new_password: newPassword,
+    }),
 };

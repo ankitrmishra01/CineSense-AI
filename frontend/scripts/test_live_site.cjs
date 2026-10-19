@@ -78,17 +78,23 @@ const path = require('path');
     if (await closeBtn.count() > 0) await closeBtn.click();
   }
 
-  // TEST 5: AUTH LOGIN WITH ankitrmishra01@gmail.com
-  console.log('\n[5/5] Testing Auth Login on Live Site ...');
-  await page.goto('https://cine-sense-ai.vercel.app/auth', { waitUntil: 'networkidle' });
-  await page.locator('#auth-email').fill('ankitrmishra01@gmail.com');
-  await page.locator('#auth-password').fill('12345678');
-  await page.locator('button[type="submit"]').click();
-  await page.waitForTimeout(3500);
-  console.log('✓ Current URL after login:', page.url());
-  const userPill = await page.locator('#user-menu-btn, button:has-text("ankit"), a:has-text("Watchlist")').count();
-  console.log('✓ Authenticated UI element visible:', userPill > 0);
-  await page.screenshot({ path: path.resolve('../docs/screenshots/live_05_authenticated.png') });
+  // TEST 5: AUTH LOGIN WITH TEST CREDENTIALS
+  const testEmail = process.env.TEST_AUTH_EMAIL;
+  const testPassword = process.env.TEST_AUTH_PASSWORD;
+  if (testEmail && testPassword) {
+    console.log('\n[5/5] Testing Auth Login on Live Site ...');
+    await page.goto('https://cine-sense-ai.vercel.app/auth', { waitUntil: 'networkidle' });
+    await page.locator('#auth-email').fill(testEmail);
+    await page.locator('#auth-password').fill(testPassword);
+    await page.locator('button[type="submit"]').click();
+    await page.waitForTimeout(3500);
+    console.log('✓ Current URL after login:', page.url());
+    const userPill = await page.locator('#user-menu-btn, button:has-text("Watchlist"), a:has-text("Watchlist")').count();
+    console.log('✓ Authenticated UI element visible:', userPill > 0);
+    await page.screenshot({ path: path.resolve('../docs/screenshots/live_05_authenticated.png') });
+  } else {
+    console.log('\n[5/5] Skipping Auth Login (TEST_AUTH_EMAIL and TEST_AUTH_PASSWORD not set in env)');
+  }
 
   console.log('\n==================================================');
   console.log('🎉 ALL LIVE TESTS COMPLETED SUCCESSFULLY!');

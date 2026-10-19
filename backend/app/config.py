@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 from pathlib import Path
 from pydantic import field_validator
 from pydantic_settings import BaseSettings
@@ -57,7 +57,7 @@ class Settings(BaseSettings):
 
     # Groq
     GROQ_API_KEY: str = ""
-    GROQ_MODEL: str = "qwen/qwen3.8-27b"  # fast, low-latency for short explanations and multilingual translation
+    GROQ_MODEL: str = "llama-3.1-8b-instant"  # active, low-latency (<200ms) for query translation and explanations
 
     # FAISS
     FAISS_INDEX_PATH: str = "faiss_index/movies.index"
@@ -71,7 +71,35 @@ class Settings(BaseSettings):
     # App
     APP_NAME: str = "CineSense AI"
     DEBUG: bool = False
-    CORS_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:3000"]
+    CORS_ORIGINS: list[str] = [
+        "https://cine-sense-ai.vercel.app",
+        "https://cinesense-ai.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:4173",
+        "http://localhost:3000",
+    ]
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v: Any) -> list[str]:
+        if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        elif isinstance(v, list):
+            return v
+        return [
+            "https://cine-sense-ai.vercel.app",
+            "https://cinesense-ai.vercel.app",
+            "http://localhost:5173",
+            "http://localhost:4173",
+            "http://localhost:3000",
+        ]
 
     class Config:
         env_file = ".env"

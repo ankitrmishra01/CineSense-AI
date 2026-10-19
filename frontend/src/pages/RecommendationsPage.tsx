@@ -247,6 +247,26 @@ export const RecommendationsPage: React.FC = () => {
         <GridSkeleton count={8} />
       ) : lastResults ? (
         <>
+          {lastResults.filter_notice && (
+            <div
+              style={{
+                marginBottom: '20px',
+                padding: '12px 18px',
+                borderRadius: 'var(--radius-md)',
+                backgroundColor: 'rgba(217, 119, 6, 0.12)',
+                border: '1px solid rgba(217, 119, 6, 0.35)',
+                color: 'var(--color-text-primary)',
+                fontSize: '13px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                lineHeight: 1.5,
+              }}
+            >
+              <span style={{ fontSize: '16px' }}>ℹ️</span>
+              <span>{lastResults.filter_notice}</span>
+            </div>
+          )}
           <MovieGrid items={displayedItems} queryText={lastResults.query_summary} />
 
           {/* Pagination controls */}
