@@ -4,13 +4,13 @@ services:
     env: python
     plan: free
     region: oregon
-    buildCommand: pip install -r backend/requirements.txt
+    buildCommand: pip install -r backend/requirements.txt && python backend/scripts/download_model.py
     startCommand: uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port $PORT --workers 1
     healthCheckPath: /health
     autoDeploy: true
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.10
+        value: 3.12.7
       - key: APP_NAME
         value: "CineSense AI"
       - key: DEBUG

@@ -11,6 +11,7 @@ interface MoodState {
   currentPage: number;
   setMoodText: (text: string) => void;
   toggleEmoji: (emoji: string) => void;
+  clearEmojis: () => void;
   setFilters: (filters: RecommendFilters) => void;
   setResults: (results: RecommendResponse) => void;
   setSeed: (seed: number | null) => void;
@@ -38,6 +39,8 @@ export const useMoodStore = create<MoodState>()(
             ? state.selectedEmojis.filter((e) => e !== emoji)
             : [...state.selectedEmojis, emoji],
         })),
+
+      clearEmojis: () => set({ selectedEmojis: [] }),
 
       setFilters: (filters) => set({ filters }),
 

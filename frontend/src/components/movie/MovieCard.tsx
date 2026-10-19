@@ -9,6 +9,23 @@ import { useWatchlist } from '../../hooks/useWatchlist';
 import { useAuthStore } from '../../store/authStore';
 import { useFeedbackStore } from '../../store/feedbackStore';
 
+const LANGUAGE_MAP: Record<string, { name: string; native: string }> = {
+  hi: { name: 'Hindi', native: 'हिन्दी' },
+  ta: { name: 'Tamil', native: 'தமிழ்' },
+  te: { name: 'Telugu', native: 'తెలుగు' },
+  ml: { name: 'Malayalam', native: 'മലയാളം' },
+  kn: { name: 'Kannada', native: 'ಕನ್ನಡ' },
+  bn: { name: 'Bengali', native: 'বাংলা' },
+  mr: { name: 'Marathi', native: 'मराठी' },
+  pa: { name: 'Punjabi', native: 'ਪੰਜਾਬੀ' },
+  gu: { name: 'Gujarati', native: 'ગુજરાતી' },
+  ko: { name: 'Korean', native: '한국어' },
+  ja: { name: 'Japanese', native: '日本語' },
+  es: { name: 'Spanish', native: 'Español' },
+  fr: { name: 'French', native: 'Français' },
+  en: { name: 'English', native: 'EN' },
+};
+
 interface MovieCardProps {
   item: RecommendationItem;
   index?: number;
@@ -108,9 +125,18 @@ export const MovieCard: React.FC<MovieCardProps> = ({ item, index = 0, queryText
                 color: 'var(--color-text-muted)',
               }}
             >
-              <span style={{ fontSize: '36px' }}>🎬</span>
-              <span style={{ fontSize: '11px', fontFamily: 'var(--font-serif)', letterSpacing: '0.05em' }}>
-                Archival Print
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="2" ry="2" />
+                <line x1="7" y1="2" x2="7" y2="22" />
+                <line x1="17" y1="2" x2="17" y2="22" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <line x1="2" y1="7" x2="7" y2="7" />
+                <line x1="2" y1="17" x2="7" y2="17" />
+                <line x1="17" y1="17" x2="22" y2="17" />
+                <line x1="17" y1="7" x2="22" y2="7" />
+              </svg>
+              <span style={{ fontSize: '11px', fontFamily: 'var(--font-sans)', letterSpacing: '0.02em' }}>
+                No poster available
               </span>
             </div>
           )}
@@ -159,6 +185,26 @@ export const MovieCard: React.FC<MovieCardProps> = ({ item, index = 0, queryText
                 <span>{Number(movie.vote_average).toFixed(1)}</span>
               </div>
             ) : null}
+
+            {movie.original_language && (
+              <div
+                style={{
+                  backgroundColor: 'rgba(12, 11, 10, 0.82)',
+                  backdropFilter: 'blur(8px)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: 'var(--radius-pill)',
+                  padding: '2px 7px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  color: 'var(--color-accent-primary)',
+                  letterSpacing: '0.02em',
+                }}
+              >
+                <span>{LANGUAGE_MAP[movie.original_language]?.native || movie.original_language.toUpperCase()}</span>
+              </div>
+            )}
           </div>
 
           {/* Top Right: Watchlist & Hide Buttons */}
@@ -177,9 +223,9 @@ export const MovieCard: React.FC<MovieCardProps> = ({ item, index = 0, queryText
                   fontSize: '12px',
                   transition: 'all 0.2s ease',
                 }}
-                title={inWatchlist ? 'Remove from ticket collection' : 'Save to ticket collection'}
+                title={inWatchlist ? 'Remove from watchlist' : 'Add to watchlist'}
               >
-                {inWatchlist ? '🎟️ Saved' : '🎟️ Save'}
+                {inWatchlist ? '✓ Saved' : '+ Save'}
               </button>
             )}
 
@@ -224,10 +270,20 @@ export const MovieCard: React.FC<MovieCardProps> = ({ item, index = 0, queryText
               }}
             >
               {movie.title}
+              {movie.original_title && movie.original_title !== movie.title && (
+                <span style={{ fontSize: '12px', fontWeight: 400, color: 'var(--color-text-muted)', marginLeft: '6px' }}>
+                  ({movie.original_title})
+                </span>
+              )}
             </h3>
           </Link>
           <p style={{ fontSize: '12px', color: 'var(--color-text-muted)' }}>
-            {[year, movie.runtime ? `${movie.runtime}m` : null].filter(Boolean).join(' · ')}
+            {[
+              year,
+              movie.runtime ? `${movie.runtime}m` : null,
+              movie.original_language ? (LANGUAGE_MAP[movie.original_language]?.name || movie.original_language.toUpperCase()) : null,
+              movie.original_language && movie.original_language !== 'en' ? (movie.original_language === 'hi' ? 'Original Hindi' : 'Hindi dub: not verified') : null
+            ].filter(Boolean).join(' · ')}
           </p>
         </div>
 

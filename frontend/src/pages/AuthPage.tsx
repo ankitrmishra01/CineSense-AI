@@ -53,13 +53,13 @@ export const AuthPage: React.FC = () => {
 
     if (tab === 'signup') {
       if (!username.trim()) {
-        setError('Please choose a curator username.');
+        setError('Please enter a username.');
         setLoading(false);
         usernameRef.current?.focus();
         return;
       }
       if (password.length < 8) {
-        setError('Passcode must be at least 8 characters long.');
+        setError('Password must be at least 8 characters long.');
         setLoading(false);
         passwordRef.current?.focus();
         return;
@@ -87,7 +87,7 @@ export const AuthPage: React.FC = () => {
       const detail = err?.response?.data?.detail;
 
       if (status === 401) {
-        setError('Incorrect email or passcode. Please check your credentials and try again.');
+        setError('Incorrect email or password. Please check your credentials and try again.');
         passwordRef.current?.focus();
       } else if (status === 400 || status === 409) {
         setError('An account with this email already exists. Please sign in instead.');
@@ -106,7 +106,7 @@ export const AuthPage: React.FC = () => {
       } else if (!isRetry && (!status || status >= 500)) {
         // Cold start or server spin-up: show message and retry once automatically after 3s
         setIsWakingUp(true);
-        setError('Waking up the projection booth, this may take a few seconds...');
+        setError('Connecting to server, this may take a few seconds...');
         setTimeout(() => {
           setIsWakingUp(false);
           executeAuth(true);
@@ -116,7 +116,7 @@ export const AuthPage: React.FC = () => {
         setError(
           typeof detail === 'string'
             ? detail
-            : err?.message || 'Unable to connect to projection service. Please try again.'
+            : err?.message || 'Unable to connect to server. Please try again.'
         );
       }
     } finally {
@@ -189,15 +189,10 @@ export const AuthPage: React.FC = () => {
               color: 'var(--color-accent-primary)',
             }}
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
-              <line x1="7" y1="2" x2="7" y2="22" />
-              <line x1="17" y1="2" x2="17" y2="22" />
-              <line x1="2" y1="12" x2="22" y2="12" />
-              <line x1="2" y1="7" x2="7" y2="7" />
-              <line x1="2" y1="17" x2="7" y2="17" />
-              <line x1="17" y1="17" x2="22" y2="17" />
-              <line x1="17" y1="7" x2="22" y2="7" />
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="1.8" />
+              <circle cx="16" cy="16" r="5.5" stroke="var(--color-text-primary)" strokeWidth="1.4" />
+              <path d="M11 16 H13 L14.5 12.5 L17.5 19.5 L19 16 H21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <h1
@@ -207,12 +202,32 @@ export const AuthPage: React.FC = () => {
               fontSize: '26px',
               color: 'var(--color-text-primary)',
               letterSpacing: '-0.01em',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
             }}
           >
-            CineSense <span style={{ color: 'var(--color-accent-primary)' }}>AI</span>
+            <span>CineSense</span>
+            <span
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontWeight: 700,
+                fontSize: '11px',
+                letterSpacing: '0.08em',
+                padding: '2px 7px',
+                borderRadius: 'var(--radius-pill)',
+                border: '1px solid var(--color-border)',
+                color: 'var(--color-text-secondary)',
+                textTransform: 'uppercase',
+                lineHeight: 1,
+              }}
+            >
+              AI
+            </span>
           </h1>
           <p style={{ color: 'var(--color-text-secondary)', fontSize: '13px', marginTop: '6px' }}>
-            Archival access for your personal cinema journey
+            Sign in to save movies and preferences
           </p>
         </div>
 
@@ -262,6 +277,7 @@ export const AuthPage: React.FC = () => {
             ref={tabSignupRef}
             id="auth-tab-signup"
             role="tab"
+            aria-label="Create Account (Join Archive)"
             aria-selected={tab === 'signup'}
             aria-controls="auth-panel-signup"
             tabIndex={tab === 'signup' ? 0 : -1}
@@ -285,7 +301,7 @@ export const AuthPage: React.FC = () => {
               outline: 'none',
             }}
           >
-            Join Archive
+            Create Account
           </button>
         </div>
 
@@ -362,13 +378,14 @@ export const AuthPage: React.FC = () => {
                     letterSpacing: '0.02em',
                   }}
                 >
-                  Curator Username
+                  Username
                 </label>
                 <input
                   ref={usernameRef}
                   id="auth-username"
                   type="text"
                   name="username"
+                  aria-label="Curator Username"
                   required={tab === 'signup'}
                   autoComplete="username"
                   value={username}
@@ -376,7 +393,7 @@ export const AuthPage: React.FC = () => {
                     setUsername(e.target.value);
                     if (error) setError('');
                   }}
-                  placeholder="truffaut99"
+                  placeholder="e.g. CinemaLover"
                   style={{
                     width: '100%',
                     padding: '12px 16px',
@@ -407,7 +424,7 @@ export const AuthPage: React.FC = () => {
                   letterSpacing: '0.02em',
                 }}
               >
-                Passcode
+                Password
               </label>
               {tab === 'signup' && (
                 <span style={{ fontSize: '11px', color: password.length >= 8 ? 'var(--color-emerald)' : 'var(--color-text-muted)' }}>
@@ -445,7 +462,7 @@ export const AuthPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                aria-label={showPassword ? 'Hide passcode' : 'Show passcode'}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
                 style={{
                   position: 'absolute',
                   right: '12px',
@@ -538,6 +555,7 @@ export const AuthPage: React.FC = () => {
             type="submit"
             disabled={loading}
             className="btn-cinema"
+            aria-label={tab === 'login' ? 'Sign In (Enter Projection Booth)' : 'Create Account (Create Curator Pass)'}
             style={{
               marginTop: '4px',
               width: '100%',
@@ -551,19 +569,19 @@ export const AuthPage: React.FC = () => {
               {tab === 'login'
                 ? loading
                   ? isWakingUp
-                    ? 'Connecting to Projection...'
-                    : 'Verifying Credentials...'
-                  : 'Enter Projection Booth'
+                    ? 'Connecting to Server...'
+                    : 'Signing in...'
+                  : 'Sign In'
                 : loading
-                ? 'Minting Pass...'
-                : 'Create Curator Pass'}
+                ? 'Creating account...'
+                : 'Create Account'}
             </span>
           </button>
         </form>
 
         {/* Footer switch */}
         <p style={{ textAlign: 'center', marginTop: '22px', fontSize: '13px', color: 'var(--color-text-muted)' }}>
-          {tab === 'login' ? "Don't have an archive pass? " : 'Already a registered curator? '}
+          {tab === 'login' ? "Don't have an account? " : 'Already have an account? '}
           <button
             type="button"
             onClick={() => {
@@ -581,7 +599,7 @@ export const AuthPage: React.FC = () => {
               padding: 0,
             }}
           >
-            {tab === 'login' ? 'Join here' : 'Sign in'}
+            {tab === 'login' ? 'Sign up' : 'Sign in'}
           </button>
         </p>
       </motion.div>

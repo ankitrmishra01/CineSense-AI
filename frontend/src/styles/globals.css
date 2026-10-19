@@ -1,108 +1,302 @@
 @import "tailwindcss";
 
-/* ─── Cinema Design Tokens (Single Source of Truth) ────────────────────────── */
-:root {
-  /* Dark Theme (Default) — 4 Distinct Visible Surface Elevation Tiers */
-  --color-bg-primary: #0e0d0c;       /* Tier 1: Deep cinematic lounge page */
-  --color-bg-secondary: #161412;     /* Tier 2: Recessed / secondary container */
-  --color-bg-card: #1d1b18;          /* Tier 3: Distinct raised card */
-  --color-bg-card-hover: #26231f;    /* Tier 3b: Hover card elevation */
-  --color-bg-input: #121110;         /* Tier 4: Recessed clean input surface */
+/* ─── CineSense Token-Based Color System (60-30-10 Rule) ─────────────────────── */
 
-  --color-border: #302b25;           /* Soft, visible border */
-  --color-border-hover: #484037;     /* Hover border state */
-  --color-header-bg: rgba(14, 13, 12, 0.88);
-  --color-header-border: #28241f;
+/* ─── PALETTE: MIDNIGHT TEAL (Recommended Default) ────────────────────────── */
+:root,
+:root[data-palette="midnight"] {
+  /* 60% Neutral Surfaces — Deep non-muddy oceanic night */
+  --color-bg-primary: #090d14;       /* Tier 1: Page surface */
+  --color-bg-secondary: #0f1724;     /* Tier 2: Recessed container */
+  --color-bg-card: #162032;          /* Tier 3: Distinct raised card */
+  --color-bg-card-hover: #1d2a42;    /* Tier 3b: Hover card elevation */
+  --color-bg-input: #0c131e;         /* Tier 4: Clean recessed input */
+  --color-bg-popover: #1a2538;       /* Tier 5: Floating modals */
 
-  /* Typography */
-  --color-text-primary: #f5f1e8;     /* Warm ivory / cinema subtitle */
-  --color-text-secondary: #aba396;   /* Legible muted tone */
-  --color-text-muted: #787063;       /* Subtle archival tone */
+  --color-border: #22314b;           /* Visible, clean border */
+  --color-border-hover: #354c73;     /* Hover border state */
+  --color-header-bg: rgba(9, 13, 20, 0.92);
+  --color-header-border: #1a2538;
 
-  /* Antique Brass / Gold Accents */
-  --color-accent-primary: #d4af37;
-  --color-accent-hover: #e0be48;
-  --color-accent-subtle: rgba(212, 175, 55, 0.12);
-  --color-accent-border: rgba(212, 175, 55, 0.35);
-  --color-btn-primary-text: #0e0d0c;
+  /* 30% Supporting Typography (WCAG AA Compliant) */
+  --color-text-primary: #f8fafc;     /* 18.6:1 on page, 15.6:1 on card */
+  --color-text-secondary: #94a3b8;   /* 7.6:1 on page, 6.4:1 on card */
+  --color-text-muted: #8fa0b5;       /* 7.3:1 on page, 6.1:1 on card (PASS WCAG AA) */
 
-  /* Chips & Tags */
-  --color-chip-bg: #181614;
-  --color-chip-border: #302b25;
-  --color-chip-active-bg: rgba(212, 175, 55, 0.14);
-  --color-chip-active-border: #d4af37;
-  --color-chip-active-text: #f5f1e8;
+  /* 10% Primary Accent — Refined Petrol Teal & Ice-Blue */
+  --color-accent-primary: #14b8a6;
+  --color-accent-hover: #2dd4bf;
+  --color-accent-subtle: rgba(20, 184, 166, 0.14);
+  --color-accent-border: rgba(20, 184, 166, 0.45);
+  --color-btn-primary-text: #06090e; /* 9.2:1 contrast on #14b8a6 */
+  --color-accent-secondary: #38bdf8;
 
-  /* Calm Status & Messages (Muted gold / amber, not harsh red) */
-  --color-calm-banner-bg: rgba(212, 175, 55, 0.08);
-  --color-calm-banner-border: rgba(212, 175, 55, 0.28);
-  --color-calm-banner-text: #e0be48;
+  /* Chips */
+  --color-chip-bg: #0f1724;
+  --color-chip-border: #22314b;
+  --color-chip-active-bg: rgba(20, 184, 166, 0.16);
+  --color-chip-active-border: #14b8a6;
+  --color-chip-active-text: #f8fafc;
 
-  --color-ruby: #dc2626;
+  /* Status */
+  --color-calm-banner-bg: rgba(20, 184, 166, 0.1);
+  --color-calm-banner-border: rgba(20, 184, 166, 0.35);
+  --color-calm-banner-text: #2dd4bf;
+
+  --color-ruby: #f43f5e;
   --color-emerald: #10b981;
   --color-emerald-subtle: rgba(16, 185, 129, 0.12);
 
-  /* Radii */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 14px;
   --radius-xl: 20px;
   --radius-pill: 9999px;
 
-  /* Fonts */
-  --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Shadows */
-  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.4);
-  --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.55);
-  --shadow-gold: 0 0 20px rgba(212, 175, 55, 0.15);
+  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.6);
 }
 
-:root[data-theme="light"] {
-  /* Light Theme — Warm Parchment & White Raised Cards */
-  --color-bg-primary: #fbf9f4;       /* Tier 1: Warm paper background */
-  --color-bg-secondary: #f2ece0;     /* Tier 2: Recessed container */
-  --color-bg-card: #ffffff;          /* Tier 3: Pure white raised card */
-  --color-bg-card-hover: #faf6ee;    /* Tier 3b: Hover card elevation */
-  --color-bg-input: #ffffff;         /* Tier 4: Clean crisp white input */
+:root[data-theme="light"],
+:root[data-palette="midnight"][data-theme="light"] {
+  /* Midnight Teal Light Theme — Crisp cool surface, pure white cards */
+  --color-bg-primary: #f8fafc;
+  --color-bg-secondary: #f1f5f9;
+  --color-bg-card: #ffffff;
+  --color-bg-card-hover: #f8fafc;
+  --color-bg-input: #ffffff;
+  --color-bg-popover: #ffffff;
 
-  --color-border: #ded6c6;           /* Clear warm border */
-  --color-border-hover: #c4b9a3;     /* Darker hover border */
-  --color-header-bg: rgba(251, 249, 244, 0.92);  /* Matches light theme */
-  --color-header-border: #e8e0d0;
+  --color-border: #cbd5e1;
+  --color-border-hover: #94a3b8;
+  --color-header-bg: rgba(248, 250, 252, 0.94);
+  --color-header-border: #e2e8f0;
 
-  /* Typography — Ink on paper, high contrast */
-  --color-text-primary: #1c1917;     /* Deep ink black */
-  --color-text-secondary: #4a453e;   /* Deep charcoal (WCAG AA compliant) */
-  --color-text-muted: #736c62;
+  /* Typography — Deep slate black & muted slate (WCAG AAA) */
+  --color-text-primary: #0f172a;     /* 18.2:1 on card, 17.5:1 on page */
+  --color-text-secondary: #334155;   /* 10.1:1 on card, 9.6:1 on page */
+  --color-text-muted: #475569;       /* 7.6:1 on card, 7.2:1 on page */
 
-  /* Deep Bronze / Brass Accents (Passes WCAG AA 4.5:1 on light bg) */
-  --color-accent-primary: #87651a;
-  --color-accent-hover: #6f5213;
-  --color-accent-subtle: rgba(135, 101, 26, 0.1);
-  --color-accent-border: rgba(135, 101, 26, 0.35);
-  --color-btn-primary-text: #ffffff;
+  /* Teal 700 passes 5.47:1 AA on light surfaces */
+  --color-accent-primary: #0f766e;
+  --color-accent-hover: #115e59;
+  --color-accent-subtle: rgba(15, 118, 110, 0.1);
+  --color-accent-border: rgba(15, 118, 110, 0.35);
+  --color-btn-primary-text: #ffffff; /* 5.47:1 contrast on #0f766e */
+  --color-accent-secondary: #0284c7;
 
-  /* Chips & Tags */
-  --color-chip-bg: #f4ede1;
-  --color-chip-border: #ded6c6;
-  --color-chip-active-bg: rgba(135, 101, 26, 0.12);
-  --color-chip-active-border: #87651a;
-  --color-chip-active-text: #1c1917;
+  --color-chip-bg: #f1f5f9;
+  --color-chip-border: #cbd5e1;
+  --color-chip-active-bg: rgba(13, 148, 136, 0.12);
+  --color-chip-active-border: #0d9488;
+  --color-chip-active-text: #0f172a;
 
-  /* Calm Status & Messages */
-  --color-calm-banner-bg: rgba(135, 101, 26, 0.08);
-  --color-calm-banner-border: rgba(135, 101, 26, 0.28);
-  --color-calm-banner-text: #87651a;
+  --color-calm-banner-bg: rgba(13, 148, 136, 0.08);
+  --color-calm-banner-border: rgba(13, 148, 136, 0.28);
+  --color-calm-banner-text: #0d9488;
 
   --color-ruby: #b91c1c;
   --color-emerald: #059669;
   --color-emerald-subtle: rgba(5, 150, 105, 0.12);
 
-  --shadow-subtle: 0 4px 16px rgba(40, 35, 25, 0.05);
-  --shadow-card: 0 8px 24px rgba(40, 35, 25, 0.08);
-  --shadow-gold: 0 0 16px rgba(135, 101, 26, 0.12);
+  --shadow-subtle: 0 4px 16px rgba(15, 23, 42, 0.05);
+  --shadow-card: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+/* ─── PALETTE: VELVET WINE ─────────────────────────────────────────────────── */
+:root[data-palette="velvet"] {
+  --color-bg-primary: #0e0a0d;
+  --color-bg-secondary: #171015;
+  --color-bg-card: #221820;
+  --color-bg-card-hover: #2c202a;
+  --color-bg-input: #120d11;
+  --color-bg-popover: #261b24;
+
+  --color-border: #3a2836;
+  --color-border-hover: #533a4d;
+  --color-header-bg: rgba(14, 10, 13, 0.92);
+  --color-header-border: #261b24;
+
+  --color-text-primary: #fff1f2;
+  --color-text-secondary: #a89ba2;
+  --color-text-muted: #a1939b;
+
+  --color-accent-primary: #e11d48;
+  --color-accent-hover: #f43f5e;
+  --color-accent-subtle: rgba(225, 29, 72, 0.14);
+  --color-accent-border: rgba(225, 29, 72, 0.45);
+  --color-btn-primary-text: #ffffff;
+  --color-accent-secondary: #fda4af;
+
+  --color-chip-bg: #171015;
+  --color-chip-border: #3a2836;
+  --color-chip-active-bg: rgba(225, 29, 72, 0.16);
+  --color-chip-active-border: #e11d48;
+  --color-chip-active-text: #fff1f2;
+
+  --color-calm-banner-bg: rgba(225, 29, 72, 0.1);
+  --color-calm-banner-border: rgba(225, 29, 72, 0.35);
+  --color-calm-banner-text: #f43f5e;
+}
+
+:root[data-palette="velvet"][data-theme="light"] {
+  --color-bg-primary: #fffbfa;
+  --color-bg-secondary: #fcf2f2;
+  --color-bg-card: #ffffff;
+  --color-bg-card-hover: #fff5f5;
+  --color-bg-input: #ffffff;
+  --color-bg-popover: #ffffff;
+
+  --color-border: #e7d8d8;
+  --color-border-hover: #cbb8b8;
+  --color-header-bg: rgba(255, 251, 250, 0.94);
+  --color-header-border: #f0e3e3;
+
+  --color-text-primary: #1c1417;
+  --color-text-secondary: #524247;
+  --color-text-muted: #5e4f55;
+
+  --color-accent-primary: #be123c;
+  --color-accent-hover: #9f1239;
+  --color-accent-subtle: rgba(190, 18, 60, 0.1);
+  --color-accent-border: rgba(190, 18, 60, 0.35);
+  --color-btn-primary-text: #ffffff;
+  --color-accent-secondary: #64748b;
+
+  --color-chip-bg: #fcf2f2;
+  --color-chip-border: #e7d8d8;
+  --color-chip-active-bg: rgba(190, 18, 60, 0.12);
+  --color-chip-active-border: #be123c;
+  --color-chip-active-text: #1c1417;
+
+  --color-calm-banner-bg: rgba(190, 18, 60, 0.08);
+  --color-calm-banner-border: rgba(190, 18, 60, 0.28);
+  --color-calm-banner-text: #be123c;
+}
+
+/* ─── PALETTE: INDIGO INK ─────────────────────────────────────────────────── */
+:root[data-palette="indigo"] {
+  --color-bg-primary: #090a12;
+  --color-bg-secondary: #111322;
+  --color-bg-card: #181b30;
+  --color-bg-card-hover: #202440;
+  --color-bg-input: #0d0f1a;
+  --color-bg-popover: #1c1f38;
+
+  --color-border: #2b2f52;
+  --color-border-hover: #3f4577;
+  --color-header-bg: rgba(9, 10, 18, 0.92);
+  --color-header-border: #1c1f38;
+
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #9aa3c2;
+
+  --color-accent-primary: #4f46e5;
+  --color-accent-hover: #6366f1;
+  --color-accent-subtle: rgba(79, 70, 229, 0.14);
+  --color-accent-border: rgba(79, 70, 229, 0.45);
+  --color-btn-primary-text: #ffffff;
+  --color-accent-secondary: #94a3b8;
+
+  --color-chip-bg: #111322;
+  --color-chip-border: #2b2f52;
+  --color-chip-active-bg: rgba(79, 70, 229, 0.16);
+  --color-chip-active-border: #4f46e5;
+  --color-chip-active-text: #f8fafc;
+
+  --color-calm-banner-bg: rgba(79, 70, 229, 0.1);
+  --color-calm-banner-border: rgba(79, 70, 229, 0.35);
+  --color-calm-banner-text: #818cf8;
+}
+
+:root[data-palette="indigo"][data-theme="light"] {
+  --color-bg-primary: #f8f9ff;
+  --color-bg-secondary: #eef2ff;
+  --color-bg-card: #ffffff;
+  --color-bg-card-hover: #f5f7ff;
+  --color-bg-input: #ffffff;
+  --color-bg-popover: #ffffff;
+
+  --color-border: #cbd5e1;
+  --color-border-hover: #94a3b8;
+  --color-header-bg: rgba(248, 249, 255, 0.94);
+  --color-header-border: #e0e7ff;
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-muted: #475569;
+
+  --color-accent-primary: #4338ca;
+  --color-accent-hover: #3730a3;
+  --color-accent-subtle: rgba(67, 56, 202, 0.1);
+  --color-accent-border: rgba(79, 70, 229, 0.35);
+  --color-btn-primary-text: #ffffff;
+  --color-accent-secondary: #64748b;
+
+  --color-chip-bg: #eef2ff;
+  --color-chip-border: #cbd5e1;
+  --color-chip-active-bg: rgba(79, 70, 229, 0.12);
+  --color-chip-active-border: #4f46e5;
+  --color-chip-active-text: #0f172a;
+
+  --color-calm-banner-bg: rgba(79, 70, 229, 0.08);
+  --color-calm-banner-border: rgba(79, 70, 229, 0.28);
+  --color-calm-banner-text: #4f46e5;
+}
+
+/* ─── Mood-Reactive Hue Tokens ────────────────────────────────────────────── */
+:root {
+  --mood-sad-hue: #5b8fb9;
+  --mood-sad-bg: rgba(91, 143, 185, 0.16);
+  --mood-sad-border: rgba(91, 143, 185, 0.45);
+
+  --mood-happy-hue: #e09f3e;
+  --mood-happy-bg: rgba(224, 159, 62, 0.16);
+  --mood-happy-border: rgba(224, 159, 62, 0.45);
+
+  --mood-anxious-hue: #9d7bb0;
+  --mood-anxious-bg: rgba(157, 123, 176, 0.16);
+  --mood-anxious-border: rgba(157, 123, 176, 0.45);
+
+  --mood-cozy-hue: #d07a50;
+  --mood-cozy-bg: rgba(208, 122, 80, 0.16);
+  --mood-cozy-border: rgba(208, 122, 80, 0.45);
+
+  --mood-shocked-hue: #e76f51;
+  --mood-shocked-bg: rgba(231, 111, 81, 0.16);
+  --mood-shocked-border: rgba(231, 111, 81, 0.45);
+
+  --mood-thoughtful-hue: #4a8d88;
+  --mood-thoughtful-bg: rgba(74, 141, 136, 0.16);
+  --mood-thoughtful-border: rgba(74, 141, 136, 0.45);
+
+  --mood-romantic-hue: #c9697a;
+  --mood-romantic-bg: rgba(201, 105, 122, 0.16);
+  --mood-romantic-border: rgba(201, 105, 122, 0.45);
+
+  --mood-action-hue: #d35400;
+  --mood-action-bg: rgba(211, 84, 0, 0.16);
+  --mood-action-border: rgba(211, 84, 0, 0.45);
+
+  --mood-calm-hue: #4b7b99;
+  --mood-calm-bg: rgba(75, 123, 153, 0.16);
+  --mood-calm-border: rgba(75, 123, 153, 0.45);
+
+  --mood-intense-hue: #b02a37;
+  --mood-intense-bg: rgba(176, 42, 55, 0.16);
+  --mood-intense-border: rgba(176, 42, 55, 0.45);
+
+  --mood-scary-hue: #79659b;
+  --mood-scary-bg: rgba(121, 101, 155, 0.16);
+  --mood-scary-border: rgba(121, 101, 155, 0.45);
+
+  --mood-dreamy-hue: #6370ad;
+  --mood-dreamy-bg: rgba(99, 112, 173, 0.16);
+  --mood-dreamy-border: rgba(99, 112, 173, 0.45);
 }
 
 /* ─── Base Reset ──────────────────────────────────────────────────────────── */
@@ -174,13 +368,15 @@ h1, h2, h3, h4 {
   box-shadow: var(--shadow-card);
 }
 
-/* ─── Buttons & Controls ───────────────────────────────────────────────────── */
+/* ─── Buttons & Controls (Clear 3-Tier Hierarchy) ──────────────────────────── */
+/* Primary Action Button (Single per screen) */
+.btn-primary,
 .btn-cinema {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 11px 24px;
+  padding: 10px 22px;
   background-color: var(--color-accent-primary);
   color: var(--color-btn-primary-text);
   font-family: var(--font-sans);
@@ -192,29 +388,35 @@ h1, h2, h3, h4 {
   cursor: pointer;
   transition: transform 0.15s ease, background-color 0.2s ease, opacity 0.2s;
   text-decoration: none;
+  min-height: 40px;
 }
 
+.btn-primary:hover,
 .btn-cinema:hover {
   background-color: var(--color-accent-hover);
   transform: translateY(-1px);
 }
 
+.btn-primary:active,
 .btn-cinema:active {
   transform: translateY(1px);
 }
 
+.btn-primary:disabled,
 .btn-cinema:disabled {
   opacity: 0.45;
   cursor: not-allowed;
   transform: none;
 }
 
-.btn-outline {
+/* Secondary Action Button (Outlined) */
+.btn-outline,
+.btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 9px 18px;
   background: transparent;
   color: var(--color-text-primary);
   font-family: var(--font-sans);
@@ -225,21 +427,45 @@ h1, h2, h3, h4 {
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
+  min-height: 38px;
 }
 
-.btn-outline:hover {
+.btn-outline:hover,
+.btn-secondary:hover {
   background-color: var(--color-bg-card-hover);
-  border-color: var(--color-accent-border);
-  color: var(--color-accent-primary);
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
 }
 
-/* ─── Mood Chips ───────────────────────────────────────────────────────────── */
+/* Tertiary Action Button (Text with subtle underline) */
+.btn-tertiary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  text-decoration: none;
+}
+.btn-tertiary:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+/* ─── Mood Chips & Suggestion Chips ────────────────────────────────────────── */
+/* 1. Selectable Mood Tag Chips (Min 44px touch target) */
 .mood-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
-  font-size: 12px;
+  min-height: 44px;
+  padding: 8px 16px;
+  font-size: 13px;
   font-weight: 500;
   border-radius: var(--radius-pill);
   background-color: var(--color-chip-bg);
@@ -251,7 +477,7 @@ h1, h2, h3, h4 {
 }
 
 .mood-chip:hover {
-  border-color: var(--color-accent-border);
+  border-color: var(--color-border-hover);
   color: var(--color-text-primary);
 }
 
@@ -262,9 +488,33 @@ h1, h2, h3, h4 {
   font-weight: 600;
 }
 
+/* 2. "Try:" Inspiration Chips (Lighter example style, distinct from mood tags) */
+.try-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  border: 1px dashed var(--color-border);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.try-chip:hover {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
+}
+
 /* ─── Calm Status Messages ─────────────────────────────────────────────────── */
 .calm-message {
-  padding: 14px 18px;
+  padding: 12px 16px;
   border-radius: var(--radius-md);
   background-color: var(--color-calm-banner-bg);
   border: 1px solid var(--color-calm-banner-border);
@@ -272,7 +522,7 @@ h1, h2, h3, h4 {
   font-size: 13px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* ─── Shimmer Loading Skeleton ─────────────────────────────────────────────── */
@@ -300,5 +550,73 @@ h1, h2, h3, h4 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Responsive Navbar & Layout ─────────────────────────────────────────── */
+.app-navbar {
+  padding: 0 16px;
+}
+
+.app-page-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+.mood-chips-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+}
+
+.mood-chips-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.try-chips-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.try-chips-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav-quick-jump {
+    display: none !important;
+  }
+  .app-navbar {
+    padding: 0 10px !important;
+  }
+  .app-page-wrapper {
+    padding: 16px 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-center-links {
+    display: none !important;
+  }
+  .nav-lang-label {
+    display: none !important;
+  }
+  .nav-wordmark {
+    font-size: 19px !important;
+  }
+  .nav-btn-signin {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
   }
 }

@@ -76,18 +76,29 @@ def generate_grounded_explanation(
                 if t in overview.lower() or any(t in kw for kw in keywords):
                     matched_themes.append(t)
 
+    # Language and director grounding
+    from app.services.language_service import LANGUAGE_METADATA
+    lang_info = LANGUAGE_METADATA.get(movie.original_language or "", {})
+    lang_name = lang_info.get("name", "")
+    director = None
+    if movie.cast_crew and isinstance(movie.cast_crew, dict):
+        director = movie.cast_crew.get("director")
+
+    director_str = f", directed by {director}" if director else ""
+    lang_prefix = f"{lang_name} " if (lang_name and movie.original_language != "en") else ""
+
     # Format grounded sentence
     if matched_themes:
         theme_str = ", ".join(matched_themes[:2])
-        return f"Reflects your mood through its poignant focus on {theme_str} within a gripping {genre_str.lower()} setting."
+        return f"Reflects your mood through its focus on {theme_str} within an acclaimed {lang_prefix}{genre_str.lower()} setting{director_str}."
 
     if tagline and len(tagline) < 100:
-        return f'{tagline} — an evocative {genre_str.lower()} journey that matches your selected emotional tone.'
+        return f'{tagline} — an evocative {lang_prefix}{genre_str.lower()} journey{director_str} matching your selected emotional tone.'
 
     if keywords and len(keywords) >= 2:
-        return f"Explores evocative themes of {keywords[0]} and {keywords[1]} across a well-crafted {genre_str.lower()} narrative."
+        return f"Explores evocative themes of {keywords[0]} and {keywords[1]} across a well-crafted {lang_prefix}{genre_str.lower()} narrative{director_str}."
 
     if movie.vote_average and float(movie.vote_average) >= 7.5:
-        return f"A highly acclaimed {genre_str.lower()} piece ({float(movie.vote_average):.1f}/10) tailored to this atmosphere."
+        return f"A highly acclaimed {lang_prefix}{genre_str.lower()} work ({float(movie.vote_average):.1f}/10){director_str} attuned to this atmosphere."
 
-    return f"A resonant {genre_str.lower()} work with an emotional rhythm attuned to your search."
+    return f"A resonant {lang_prefix}{genre_str.lower()} work{director_str} with an emotional rhythm attuned to your search."

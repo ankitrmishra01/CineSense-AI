@@ -1,12 +1,48 @@
 from typing import Optional
+from pathlib import Path
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+
+_BACKEND_DIR = Path(__file__).resolve().parent.parent
+_DEFAULT_FASTEMBED_CACHE = str((_BACKEND_DIR / ".cache" / "fastembed").resolve())
 
 
 class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "postgresql+asyncpg://postgres:password@localhost:5432/cinesense"
-    SYNC_DATABASE_URL: str = "postgresql+psycopg2://postgres:password@localhost:5432/cinesense"
+    SYNC_DATABASE_URL: Optional[str] = None
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def assemble_async_db_url(cls, v: Optional[str]) -> str:
+        if not v:
+            return "sqlite+aiosqlite:///cinesense_dev.db"
+        url = v.strip()
+        if url.startswith("postgres://"):
+            return url.replace("postgres://", "postgresql+asyncpg://", 1)
+        if url.startswith("postgresql://") and not url.startswith("postgresql+"):
+            return url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return url
+
+    @field_validator("SYNC_DATABASE_URL", mode="before")
+    @classmethod
+    def assemble_sync_db_url(cls, v: Optional[str], info) -> str:
+        if v and v.strip() and "localhost" not in v:
+            url = v.strip()
+            if url.startswith("postgres://"):
+                return url.replace("postgres://", "postgresql+psycopg2://", 1)
+            if url.startswith("postgresql://") and not url.startswith("postgresql+"):
+                return url.replace("postgresql://", "postgresql+psycopg2://", 1)
+            return url
+        # Derive from DATABASE_URL if available
+        data = info.data
+        async_url = data.get("DATABASE_URL")
+        if async_url:
+            if "sqlite" in async_url:
+                return async_url.replace("+aiosqlite", "")
+            return async_url.replace("+asyncpg", "+psycopg2")
+        return v or "postgresql+psycopg2://postgres:password@localhost:5432/cinesense"
 
     # JWT
     SECRET_KEY: str = "change-this-secret-key-in-production"
@@ -21,7 +57,7 @@ class Settings(BaseSettings):
 
     # Groq
     GROQ_API_KEY: str = ""
-    GROQ_MODEL: str = "llama-3.1-8b-instant"  # fast, low-latency for short explanations
+    GROQ_MODEL: str = "qwen/qwen3.8-27b"  # fast, low-latency for short explanations and multilingual translation
 
     # FAISS
     FAISS_INDEX_PATH: str = "faiss_index/movies.index"
@@ -30,7 +66,7 @@ class Settings(BaseSettings):
     # Embedding Cache & Settings
     EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
     EMBEDDING_DIM: int = 384
-    FASTEMBED_CACHE_PATH: Optional[str] = None
+    FASTEMBED_CACHE_PATH: Optional[str] = _DEFAULT_FASTEMBED_CACHE
 
     # App
     APP_NAME: str = "CineSense AI"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useMoodStore } from '../../store/moodStore';
 
 interface MoodTextInputProps {
@@ -6,62 +6,61 @@ interface MoodTextInputProps {
   placeholder?: string;
 }
 
-const CINEMA_PROMPTS = [
-  "Rainy midnight comfort with bittersweet romance...",
-  "Gritty cyberpunk detective in a sprawling neon metropolis...",
-  "Slow-burn psychological mystery with a shocking twist...",
-  "Heartfelt coming-of-age story that will make me laugh and cry...",
-  "Intense claustrophobic thriller that doesn't let you breathe...",
+const SAMPLE_PROMPTS = [
+  { label: 'Rainy Comfort', text: 'Melancholic rainy night comfort with bittersweet emotions' },
+  { label: 'Mind-Bending Sci-Fi', text: 'Mind-bending sci-fi with philosophical concepts and mystery' },
+  { label: 'Slow-Burn Noir', text: 'Atmospheric slow-burn detective thriller with unexpected turns' },
+  { label: 'Lighthearted Joy', text: 'Warm, funny, uplifting comedy to lift my spirits' },
 ];
 
 export const MoodTextInput: React.FC<MoodTextInputProps> = ({ onSubmit }) => {
-  const { moodText, setMoodText } = useMoodStore();
-  const [promptIndex, setPromptIndex] = useState(0);
+  const { moodText, setMoodText, selectedEmojis } = useMoodStore();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Auto-resize textarea between 2 rows (~52px) and 6 rows (~150px)
   useEffect(() => {
-    const interval = setInterval(() => {
-      setPromptIndex((prev) => (prev + 1) % CINEMA_PROMPTS.length);
-    }, 4500);
-    return () => clearInterval(interval);
-  }, []);
+    const el = textareaRef.current;
+    if (el) {
+      el.style.height = 'auto';
+      const nextH = Math.min(Math.max(el.scrollHeight, 52), 150);
+      el.style.height = `${nextH}px`;
+    }
+  }, [moodText]);
 
-  const handleKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       onSubmit?.();
     }
   };
 
-  const samplePrompts = [
-    { label: 'Melancholy & Comfort', text: 'Melancholic rainy night comfort with deep poetic emotions' },
-    { label: 'Mind-Bending Sci-Fi', text: 'Mind-bending philosophical sci-fi with incredible concepts' },
-    { label: 'Slow-Burn Mystery', text: 'Atmospheric slow-burn noir thriller with unexpected revelations' },
-    { label: 'Unapologetic Joy', text: 'Lighthearted hilarious feel-good comedy to lift my spirits' },
-  ];
-
   return (
     <div style={{ position: 'relative' }}>
       <div style={{ position: 'relative' }}>
         <textarea
+          ref={textareaRef}
           id="mood-text-input"
           value={moodText}
           onChange={(e) => setMoodText(e.target.value)}
-          onKeyDown={handleKey}
-          placeholder={`e.g. ${CINEMA_PROMPTS[promptIndex]}`}
-          rows={3}
+          onKeyDown={handleKeyDown}
+          placeholder="e.g. A slow-burn mystery in the rain, or like Blade Runner 2049..."
+          rows={2}
           style={{
             width: '100%',
-            padding: '16px 48px 16px 18px',
+            minHeight: '52px',
+            maxHeight: '150px',
+            padding: '12px 42px 12px 14px',
             backgroundColor: 'var(--color-bg-input)',
             border: '1px solid var(--color-border)',
             borderRadius: 'var(--radius-md)',
             color: 'var(--color-text-primary)',
             fontFamily: 'var(--font-sans)',
-            fontSize: '15px',
-            lineHeight: 1.6,
+            fontSize: '14px',
+            lineHeight: 1.5,
             outline: 'none',
             resize: 'none',
-            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+            transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
+            boxSizing: 'border-box',
           }}
           onFocus={(e) => {
             e.currentTarget.style.borderColor = 'var(--color-accent-border)';
@@ -74,43 +73,53 @@ export const MoodTextInput: React.FC<MoodTextInputProps> = ({ onSubmit }) => {
         />
         {moodText && (
           <button
+            type="button"
             onClick={() => setMoodText('')}
             style={{
               position: 'absolute',
-              right: '14px',
-              top: '14px',
+              right: '10px',
+              top: '12px',
               background: 'none',
               border: 'none',
               color: 'var(--color-text-muted)',
               cursor: 'pointer',
-              fontSize: '16px',
+              fontSize: '14px',
               padding: '4px',
               lineHeight: 1,
+              borderRadius: '50%',
             }}
             title="Clear prompt"
+            aria-label="Clear text"
           >
             ✕
           </button>
         )}
       </div>
 
-      {/* Quick inspiration chips */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
-        <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600, marginRight: '2px' }}>
+      {/* Combined query indicator */}
+      {moodText.trim() && selectedEmojis.length > 0 && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '6px', fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+          <span style={{ color: 'var(--color-accent-primary)', fontSize: '11px' }}>●</span>
+          <span>Using your text description + {selectedEmojis.length} selected {selectedEmojis.length === 1 ? 'mood' : 'moods'}</span>
+        </div>
+      )}
+
+      {/* Suggestion Chips ("Try:") */}
+      <div className="try-chips-scroll" style={{ marginTop: '10px' }}>
+        <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600, flexShrink: 0 }}>
           Try:
         </span>
-        {samplePrompts.map((p) => {
-          const isSelected = moodText === p.text;
-          return (
-            <button
-              key={p.label}
-              onClick={() => setMoodText(p.text)}
-              className={`mood-chip ${isSelected ? 'active' : ''}`}
-            >
-              {p.label}
-            </button>
-          );
-        })}
+        {SAMPLE_PROMPTS.map((p) => (
+          <button
+            key={p.label}
+            type="button"
+            onClick={() => setMoodText(p.text)}
+            className="try-chip"
+            title={`Fill: "${p.text}"`}
+          >
+            {p.label}
+          </button>
+        ))}
       </div>
     </div>
   );

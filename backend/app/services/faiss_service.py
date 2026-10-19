@@ -18,6 +18,9 @@ _faiss_index = None
 _id_map: Optional[list[int]] = None  # embedding_id → movie_id
 _embed_model = None
 _load_lock = threading.Lock()
+_EMBED_CACHE: dict[str, np.ndarray] = {}
+_MAX_EMBED_CACHE_SIZE = 512
+_cache_lock = threading.Lock()
 
 
 def _get_index_paths() -> tuple[str, str]:
@@ -70,9 +73,27 @@ def _ensure_loaded() -> None:
         from app.config import settings
         raw_name = getattr(settings, 'EMBEDDING_MODEL', 'sentence-transformers/all-MiniLM-L6-v2') or 'sentence-transformers/all-MiniLM-L6-v2'
         model_name = f"sentence-transformers/{raw_name}" if "/" not in raw_name else raw_name
-        cache_dir = getattr(settings, 'FASTEMBED_CACHE_PATH', None) or os.getenv('FASTEMBED_CACHE_PATH')
+        
+        # Derive canonical absolute cache directory from settings or project backend directory
+        cache_dir_raw = getattr(settings, 'FASTEMBED_CACHE_PATH', None) or os.getenv('FASTEMBED_CACHE_PATH')
+        if not cache_dir_raw:
+            cache_dir_path = (Path(__file__).resolve().parent.parent.parent / ".cache" / "fastembed").resolve()
+        else:
+            cache_dir_path = Path(cache_dir_raw)
+            if not cache_dir_path.is_absolute():
+                cache_dir_path = (Path(__file__).resolve().parent.parent.parent / cache_dir_path).resolve()
+
+        cache_dir = str(cache_dir_path)
+
+        # Runtime offline safety: If local cache directory contains model files, force offline runtime flags
+        # inside Python so no runtime internet connection is needed, while tolerating absence of dashboard env vars.
+        if cache_dir_path.exists() and any(cache_dir_path.iterdir()):
+            os.environ.setdefault("HF_HUB_OFFLINE", "1")
+            os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+            logger.info("Local fastembed cache detected (%s). Runtime offline mode enforced.", cache_dir)
+
         _embed_model = TextEmbedding(model_name=model_name, cache_dir=cache_dir)
-        logger.info("FastEmbed ONNX model loaded: %s (cache: %s)", model_name, cache_dir or "default")
+        logger.info("FastEmbed ONNX model loaded: %s (cache: %s)", model_name, cache_dir)
 
 
 def is_loaded() -> bool:
@@ -82,11 +103,23 @@ def is_loaded() -> bool:
 
 def embed_text(text: str) -> np.ndarray:
     """Embed a single query string; returns a float32 (1, dim) L2-normalized numpy array."""
+    cleaned = text.strip()
+    with _cache_lock:
+        if cleaned in _EMBED_CACHE:
+            return _EMBED_CACHE[cleaned].copy()
+
     _ensure_loaded()
-    vecs = np.array(list(_embed_model.embed([text])), dtype=np.float32)
+    vecs = np.array(list(_embed_model.embed([cleaned])), dtype=np.float32)
     norm = np.linalg.norm(vecs, axis=1, keepdims=True)
     vecs = vecs / np.maximum(norm, 1e-12)
-    return vecs.astype(np.float32)
+    res = vecs.astype(np.float32)
+
+    with _cache_lock:
+        if len(_EMBED_CACHE) >= _MAX_EMBED_CACHE_SIZE:
+            _EMBED_CACHE.pop(next(iter(_EMBED_CACHE)))
+        _EMBED_CACHE[cleaned] = res
+
+    return res.copy()
 
 
 def embed_texts(texts: list[str]) -> np.ndarray:
@@ -120,16 +153,51 @@ def search(query_text: str, top_k: int = 100) -> list[tuple[int, float]]:
 
 
 def search_by_vector(query_vec: np.ndarray, top_k: int = 100) -> list[tuple[int, float]]:
-    """Perform k-NN search directly with a vector."""
+    """
+    Perform k-NN search directly with an embedding vector.
+    Returns list of (movie_id, similarity_score) sorted by descending similarity.
+    """
     _ensure_loaded()
-    distances, indices = _faiss_index.search(query_vec, top_k)
+    if query_vec.ndim == 1:
+        query_vec = np.expand_dims(query_vec, axis=0)
+    norm = np.linalg.norm(query_vec, axis=1, keepdims=True)
+    query_vec = query_vec / np.maximum(norm, 1e-12)
+    distances, indices = _faiss_index.search(query_vec.astype(np.float32), top_k)
+
     results = []
     for dist, idx in zip(distances[0], indices[0]):
         if idx == -1:
             continue
         movie_id = _id_map[idx]
         results.append((movie_id, float(dist)))
+
     return results
+
+
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
+
+# Dedicated bounded thread pool for off-event-loop CPU-intensive vector operations
+# 3 workers keeps CPU thrashing low on single/dual vCPUs and memory tightly bounded (<350MB)
+_VECTOR_EXECUTOR = ThreadPoolExecutor(max_workers=3, thread_name_prefix="faiss_thread_worker")
+
+
+async def embed_text_async(text: str) -> np.ndarray:
+    """Run embed_text in the dedicated thread pool off the event loop."""
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(_VECTOR_EXECUTOR, embed_text, text)
+
+
+async def search_async(query_text: str, top_k: int = 100) -> list[tuple[int, float]]:
+    """Run FAISS search in the dedicated thread pool off the event loop."""
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(_VECTOR_EXECUTOR, search, query_text, top_k)
+
+
+async def search_by_vector_async(query_vec: np.ndarray, top_k: int = 100) -> list[tuple[int, float]]:
+    """Run FAISS vector search in the dedicated thread pool off the event loop."""
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(_VECTOR_EXECUTOR, search_by_vector, query_vec, top_k)
 
 
 def get_movie_vector(embedding_id: int) -> Optional[np.ndarray]:

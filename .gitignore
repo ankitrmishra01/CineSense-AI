@@ -22,3 +22,9 @@ frontend/.env
 .idea/
 .coverage
 test-results/
+
+# Caches & Reports
+.cache/
+backend/.cache/
+lighthouse*.json
+frontend/lighthouse*.json

@@ -3,12 +3,16 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 import { CommandPalette } from './CommandPalette';
+import { LanguagePickerModal } from '../preferences/LanguagePickerModal';
+import { usePreferencesStore } from '../../store/preferencesStore';
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, handleLogout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const { preferredLanguages } = usePreferencesStore();
   const [theme, setTheme] = useState(
     () => localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
   );
@@ -49,6 +53,7 @@ export const Navbar: React.FC = () => {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4 }}
+        className="app-navbar"
         style={{
           position: 'sticky',
           top: 0,
@@ -56,7 +61,9 @@ export const Navbar: React.FC = () => {
           backgroundColor: 'var(--color-header-bg)',
           backdropFilter: 'blur(16px)',
           borderBottom: '1px solid var(--color-header-border)',
-          padding: '0 20px',
+          boxSizing: 'border-box',
+          width: '100%',
+          maxWidth: '100vw',
         }}
       >
         <div
@@ -67,15 +74,16 @@ export const Navbar: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '16px',
+            gap: '8px',
+            flexWrap: 'nowrap',
           }}
         >
-          {/* Logo with Film Reel Icon */}
-          <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {/* Logo with Aperture Pulse Icon & Balanced Wordmark */}
+          <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
             <div
               style={{
-                width: '36px',
-                height: '36px',
+                width: '34px',
+                height: '34px',
                 backgroundColor: 'var(--color-accent-subtle)',
                 border: '1px solid var(--color-accent-border)',
                 borderRadius: '8px',
@@ -85,24 +93,19 @@ export const Navbar: React.FC = () => {
                 color: 'var(--color-accent-primary)',
               }}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
-                <line x1="7" y1="2" x2="7" y2="22" />
-                <line x1="17" y1="2" x2="17" y2="22" />
-                <line x1="2" y1="12" x2="22" y2="12" />
-                <line x1="2" y1="7" x2="7" y2="7" />
-                <line x1="2" y1="17" x2="7" y2="17" />
-                <line x1="17" y1="17" x2="22" y2="17" />
-                <line x1="17" y1="7" x2="22" y2="7" />
+              <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 3C8.82 3 3 8.82 3 16s5.82 13 13 13c3.6 0 6.88-1.46 9.25-3.83-5.2 0-9.42-4.22-9.42-9.42 0-4.08 2.6-7.55 6.27-8.86C20.17 4.24 18.17 3 16 3z" fill="var(--color-accent-primary)" />
+                <path d="M24 10l1.2 2.8L28 14l-2.8 1.2L24 18l-1.2-2.8L20 14l2.8-1.2L24 10z" fill="var(--color-accent-secondary)" />
               </svg>
             </div>
-            <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span
+                className="nav-wordmark"
                 style={{
                   fontFamily: 'var(--font-serif)',
                   fontWeight: 700,
-                  fontSize: '20px',
-                  letterSpacing: '0.01em',
+                  fontSize: '22px',
+                  letterSpacing: '-0.01em',
                   color: 'var(--color-text-primary)',
                 }}
               >
@@ -111,12 +114,15 @@ export const Navbar: React.FC = () => {
               <span
                 style={{
                   fontFamily: 'var(--font-sans)',
-                  fontWeight: 600,
-                  fontSize: '11px',
-                  letterSpacing: '0.12em',
-                  color: 'var(--color-accent-primary)',
-                  marginLeft: '4px',
+                  fontWeight: 700,
+                  fontSize: '10px',
+                  letterSpacing: '0.08em',
+                  padding: '2px 6px',
+                  borderRadius: 'var(--radius-pill)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-secondary)',
                   textTransform: 'uppercase',
+                  lineHeight: 1,
                 }}
               >
                 AI
@@ -125,7 +131,7 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* Center: Nav links with Clean SVG Icons & Command Search */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div className="nav-center-links" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 1, minWidth: 0 }}>
             {/* Discover Link */}
             <Link
               to="/"
@@ -134,13 +140,13 @@ export const Navbar: React.FC = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                padding: '6px 14px',
-                borderRadius: 'var(--radius-pill)',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-sm)',
                 fontSize: '13px',
-                fontWeight: 500,
-                color: isActive('/') ? 'var(--color-accent-primary)' : 'var(--color-text-secondary)',
-                backgroundColor: isActive('/') ? 'var(--color-bg-card-hover)' : 'transparent',
-                border: isActive('/') ? '1px solid var(--color-border-hover)' : '1px solid transparent',
+                fontWeight: isActive('/') ? 600 : 500,
+                color: isActive('/') ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+                backgroundColor: isActive('/') ? 'var(--color-accent-subtle)' : 'transparent',
+                borderBottom: isActive('/') ? '2px solid var(--color-accent-primary)' : '2px solid transparent',
                 transition: 'all 0.2s',
               }}
             >
@@ -148,7 +154,7 @@ export const Navbar: React.FC = () => {
                 <circle cx="12" cy="12" r="10" />
                 <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
               </svg>
-              <span>Discover</span>
+              <span className="nav-link-text">Discover</span>
             </Link>
 
             {/* Search Link */}
@@ -159,13 +165,13 @@ export const Navbar: React.FC = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                padding: '6px 14px',
-                borderRadius: 'var(--radius-pill)',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-sm)',
                 fontSize: '13px',
-                fontWeight: 500,
-                color: isActive('/search') ? 'var(--color-accent-primary)' : 'var(--color-text-secondary)',
-                backgroundColor: isActive('/search') ? 'var(--color-bg-card-hover)' : 'transparent',
-                border: isActive('/search') ? '1px solid var(--color-border-hover)' : '1px solid transparent',
+                fontWeight: isActive('/search') ? 600 : 500,
+                color: isActive('/search') ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+                backgroundColor: isActive('/search') ? 'var(--color-accent-subtle)' : 'transparent',
+                borderBottom: isActive('/search') ? '2px solid var(--color-accent-primary)' : '2px solid transparent',
                 transition: 'all 0.2s',
               }}
             >
@@ -173,7 +179,7 @@ export const Navbar: React.FC = () => {
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
-              <span>Search</span>
+              <span className="nav-link-text">Search</span>
             </Link>
 
             {/* Watchlist Link (Authenticated only) */}
@@ -185,26 +191,27 @@ export const Navbar: React.FC = () => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  padding: '6px 14px',
-                  borderRadius: 'var(--radius-pill)',
+                  padding: '6px 12px',
+                  borderRadius: 'var(--radius-sm)',
                   fontSize: '13px',
-                  fontWeight: 500,
-                  color: isActive('/watchlist') ? 'var(--color-accent-primary)' : 'var(--color-text-secondary)',
-                  backgroundColor: isActive('/watchlist') ? 'var(--color-bg-card-hover)' : 'transparent',
-                  border: isActive('/watchlist') ? '1px solid var(--color-border-hover)' : '1px solid transparent',
+                  fontWeight: isActive('/watchlist') ? 600 : 500,
+                  color: isActive('/watchlist') ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+                  backgroundColor: isActive('/watchlist') ? 'var(--color-accent-subtle)' : 'transparent',
+                  borderBottom: isActive('/watchlist') ? '2px solid var(--color-accent-primary)' : '2px solid transparent',
                   transition: 'all 0.2s',
                 }}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                 </svg>
-                <span>Watchlist</span>
+                <span className="nav-link-text">Watchlist</span>
               </Link>
             )}
 
             {/* Quick Command Palette Button */}
             <button
               onClick={() => setPaletteOpen(true)}
+              className="nav-quick-jump"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -235,8 +242,35 @@ export const Navbar: React.FC = () => {
             </button>
           </div>
 
-          {/* Auth Section & Theme */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Auth Section, Language & Theme */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+            {/* Language Selector Button */}
+            <button
+              id="language-picker-btn"
+              onClick={() => setPickerOpen(true)}
+              aria-label="Change language preferences"
+              className="btn-outline"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 8px',
+                fontSize: '12px',
+                borderRadius: 'var(--radius-pill)',
+                fontWeight: 500,
+              }}
+              title="Change language preferences"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
+              <span className="nav-lang-label font-indic" style={{ textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                {preferredLanguages.length > 0 ? preferredLanguages.slice(0, 3).join(' · ') : 'LANG'}
+              </span>
+            </button>
+
             {/* Theme Toggle Button with Crisp SVG Icons */}
             <button
               onClick={toggleTheme}
@@ -276,26 +310,27 @@ export const Navbar: React.FC = () => {
 
             {isAuthenticated ? (
               <>
-                <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: '4px', maxWidth: '80px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                     <circle cx="12" cy="7" r="4" />
                   </svg>
-                  <span>{user?.username}</span>
+                  <span className="nav-username-text" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.username}</span>
                 </span>
                 <button
                   className="btn-outline"
                   onClick={handleLogout}
-                  style={{ padding: '6px 14px', fontSize: '12px' }}
+                  style={{ padding: '6px 10px', fontSize: '12px', flexShrink: 0, position: 'relative', zIndex: 2 }}
                 >
                   Sign out
                 </button>
               </>
             ) : location.pathname !== '/auth' ? (
               <button
-                className="btn-cinema"
+                id="nav-signin-btn"
+                className="btn-outline nav-btn-signin"
                 onClick={() => navigate('/auth')}
-                style={{ padding: '7px 18px', fontSize: '13px' }}
+                style={{ padding: '6px 14px', fontSize: '13px', fontWeight: 500 }}
               >
                 Sign in
               </button>
@@ -306,6 +341,9 @@ export const Navbar: React.FC = () => {
 
       {/* Command Palette Modal */}
       <CommandPalette isOpen={paletteOpen} onClose={() => setPaletteOpen(false)} />
+
+      {/* Language Preferences Picker Modal */}
+      <LanguagePickerModal isOpen={pickerOpen} onClose={() => setPickerOpen(false)} />
     </>
   );
 };

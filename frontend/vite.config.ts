@@ -7,6 +7,20 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/react-router-dom/')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules/framer-motion/') || id.includes('node_modules/lucide-react/')) {
+            return 'vendor-motion';
+          }
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
   },

@@ -76,22 +76,33 @@ You can run CineSense AI completely locally with **zero external database depend
 ```bash
 cd backend
 
-# 1. Install dependencies (including aiosqlite and fastembed ONNX)
+# 1. Install dependencies (Fastembed ONNX, aiosqlite, FastAPI)
 pip install -r requirements.txt
 
-# 2. Configure .env with local SQLite (or copy .env.example)
+# 2. Pre-bake embedding model to local cache (runs offline thereafter)
+python scripts/download_model.py
+
+# 3. Configure .env with local SQLite (or copy .env.example)
 # DATABASE_URL=sqlite+aiosqlite:///cinesense_local.db
 
-# 3. Seed initial catalog (~100 movies from TMDB & FAISS index)
+# 4. Seed full local catalog (seeds all 5,170 FAISS candidates; resumable & rate-limited)
 python scripts/seed_local_movies.py
 
-# 4. Start backend
+# 5. Start backend with single worker async concurrency
 uvicorn app.main:app --reload --port 8000
 ```
 
 > **Note on FAISS Index**: Pre-built FAISS index files (`faiss_index/movies.index` and `faiss_index/id_map.json`) are already committed to the repository for instant startup without waiting for hours of embedding generation!
 
-### 4. Full Production Pipeline (PostgreSQL)
+### 4. FastEmbed ONNX Runtime & Memory Footprint
+
+To eliminate Render 512 MB out-of-memory restarts caused by PyTorch and `sentence-transformers`:
+- **Query Embedding Runtime**: Switched from PyTorch to Fastembed ONNX (`fastembed`), reducing production memory footprint from **740 MB** to **~280 MB baseline / 308 MB peak**.
+- **Pre-Baked Model**: The ONNX model (`all-MiniLM-L6-v2-onnx`) is downloaded at build time via `python scripts/download_model.py` into `.cache/fastembed`.
+- **Offline Startup**: Running instances operate 100% offline with `HF_HUB_OFFLINE=1` and `TRANSFORMERS_OFFLINE=1`.
+- **Offline Tooling**: PyTorch and sentence-transformers remain strictly in `requirements-dev.txt` for offline batch index creation (`build_embeddings.py`).
+
+### 5. Full Production Pipeline (PostgreSQL)
 
 If using PostgreSQL (local or Neon):
 ```bash
@@ -120,11 +131,11 @@ This creates:
 - `backend/faiss_index/movies.index`
 - `backend/faiss_index/id_map.json`
 
-### 5. Start the backend
+### 6. Start the backend
 
 ```bash
 cd backend
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1
 ```
 
 API docs available at: http://localhost:8000/docs

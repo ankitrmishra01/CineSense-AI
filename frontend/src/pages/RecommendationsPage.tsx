@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { PageWrapper } from '../components/layout/PageWrapper';
@@ -6,12 +6,37 @@ import { MovieGrid } from '../components/movie/MovieGrid';
 import { GridSkeleton } from '../components/ui/Skeleton';
 import { useMoodStore } from '../store/moodStore';
 import { useRecommendations } from '../hooks/useRecommendations';
+import { SUPPORTED_LANGUAGES } from '../store/preferencesStore';
+
+const LANG_MAP: Record<string, { name: string; native: string }> = SUPPORTED_LANGUAGES.reduce((acc, item) => {
+  acc[item.code] = { name: item.name, native: item.native };
+  return acc;
+}, {} as Record<string, { name: string; native: string }>);
 
 export const RecommendationsPage: React.FC = () => {
   const navigate = useNavigate();
   const { lastResults, reset } = useMoodStore();
   const { loading, fetchRecommendations } = useRecommendations();
   const [copied, setCopied] = useState(false);
+  const [selectedLangFilter, setSelectedLangFilter] = useState<string>('all');
+
+  const availableLanguages = useMemo(() => {
+    if (!lastResults?.recommendations) return [];
+    const counts: Record<string, number> = {};
+    for (const item of lastResults.recommendations) {
+      const lang = item.movie.original_language || 'en';
+      counts[lang] = (counts[lang] || 0) + 1;
+    }
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  }, [lastResults]);
+
+  const displayedItems = useMemo(() => {
+    if (!lastResults?.recommendations) return [];
+    if (selectedLangFilter === 'all') return lastResults.recommendations;
+    return lastResults.recommendations.filter(
+      (item) => (item.movie.original_language || 'en') === selectedLangFilter
+    );
+  }, [lastResults, selectedLangFilter]);
 
   const handleShare = () => {
     if (!lastResults) return;
@@ -96,7 +121,7 @@ export const RecommendationsPage: React.FC = () => {
                 style={{ fontSize: '12px', padding: '6px 14px' }}
                 title="Share this mood list"
               >
-                {copied ? '✓ Link Copied' : 'Share Atmosphere'}
+                {copied ? '✓ Link Copied' : 'Share Results'}
               </button>
               <button
                 onClick={() => {
@@ -125,7 +150,7 @@ export const RecommendationsPage: React.FC = () => {
                 fontWeight: 600,
               }}
             >
-              Curated Screening
+              Recommendations
             </span>
             <h1
               style={{
@@ -143,9 +168,51 @@ export const RecommendationsPage: React.FC = () => {
                 "{lastResults.query_summary}"
               </span>
             </h1>
-            <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}>
-              {lastResults.total_results} matching titles sorted by hybrid cosine resonance and viewer confidence
+            <p style={{ color: 'var(--color-text-secondary)', fontSize: '14px', marginBottom: '16px' }}>
+              {lastResults.total_results} movies matching your mood and preferences
             </p>
+
+            {/* Quick Language Filter Chips */}
+            {availableLanguages.length > 1 && (
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center', marginTop: '12px' }}>
+                <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+                  Filter Language:
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedLangFilter('all')}
+                  className={selectedLangFilter === 'all' ? 'btn-cinema' : 'btn-outline'}
+                  style={{ padding: '4px 12px', fontSize: '12px', borderRadius: 'var(--radius-pill)', cursor: 'pointer' }}
+                >
+                  All ({lastResults.recommendations.length})
+                </button>
+                {availableLanguages.map(([code, count]) => {
+                  const langInfo = LANG_MAP[code] || { name: code.toUpperCase(), native: code };
+                  const isSelected = selectedLangFilter === code;
+                  return (
+                    <button
+                      key={code}
+                      type="button"
+                      onClick={() => setSelectedLangFilter(code)}
+                      className={isSelected ? 'btn-cinema' : 'btn-outline'}
+                      style={{
+                        padding: '4px 12px',
+                        fontSize: '12px',
+                        borderRadius: 'var(--radius-pill)',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        transition: 'all 0.15s ease',
+                      }}
+                    >
+                      <span className="font-indic">{langInfo.native}</span>
+                      <span style={{ opacity: 0.8, fontSize: '11px' }}>({count})</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </motion.div>
         )}
       </div>
@@ -155,7 +222,7 @@ export const RecommendationsPage: React.FC = () => {
         <GridSkeleton count={8} />
       ) : lastResults ? (
         <>
-          <MovieGrid items={lastResults.recommendations} queryText={lastResults.query_summary} />
+          <MovieGrid items={displayedItems} queryText={lastResults.query_summary} />
 
           {/* Pagination controls */}
           <div
@@ -174,10 +241,10 @@ export const RecommendationsPage: React.FC = () => {
               onClick={() => fetchRecommendations({ page: lastResults.current_page - 1 })}
               style={{ padding: '8px 18px', fontSize: '13px' }}
             >
-              ← Previous Reel
+              ← Previous
             </button>
-            <span style={{ color: 'var(--color-text-secondary)', fontSize: '13px', fontFamily: 'var(--font-serif)' }}>
-              Reel {lastResults.current_page} of {lastResults.total_pages}
+            <span style={{ color: 'var(--color-text-secondary)', fontSize: '13px', fontFamily: 'var(--font-sans)' }}>
+              Page {lastResults.current_page} of {lastResults.total_pages}
             </span>
             <button
               className="btn-outline"
@@ -185,7 +252,7 @@ export const RecommendationsPage: React.FC = () => {
               onClick={() => fetchRecommendations({ page: lastResults.current_page + 1 })}
               style={{ padding: '8px 18px', fontSize: '13px' }}
             >
-              Next Reel →
+              Next →
             </button>
           </div>
 

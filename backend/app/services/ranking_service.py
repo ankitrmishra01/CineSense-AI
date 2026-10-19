@@ -51,21 +51,35 @@ def compute_hybrid_score(
     vote_average: Optional[float] = None,
     vote_count: Optional[int] = None,
     release_year: Optional[int] = None,
+    cohort_quality_score: Optional[float] = None,
+    original_language: Optional[str] = None,
+    preferred_languages: Optional[list[str]] = None,
+    language_weight: float = 1.0,
 ) -> float:
     """
-    Blends vector semantic similarity with audience credibility and recency:
-    70% Vector Similarity + 15% Audience Rating + 10% Vote Volume Confidence + 5% Recency.
-    Applies a vote count floor so unrated obscure movies do not dominate top results.
+    Blends vector semantic similarity with Bayesian cohort quality, recency, and language preferences.
+    Formula:
+    65% Semantic Similarity + 20% Bayesian Quality Score + 10% Vote Confidence + 5% Recency,
+    multiplied by a Language Preference Boost (1.0 to 1.15).
     """
     # 1. Base vector similarity
     sim = max(0.0, min(1.0, similarity_score))
 
-    # 2. Rating factor (0.0 to 1.0)
-    rating_factor = (float(vote_average) / 10.0) if vote_average else 0.60
+    # 2. Quality factor (0.0 to 1.0)
+    # If cohort_quality_score exists, use Bayesian shrinkage score (0-10) / 10.0
+    if cohort_quality_score is not None and float(cohort_quality_score) > 0:
+        quality_factor = min(1.0, float(cohort_quality_score) / 10.0)
+    elif vote_average is not None and float(vote_average) > 0:
+        quality_factor = min(1.0, float(vote_average) / 10.0)
+    else:
+        quality_factor = 0.60
 
     # 3. Vote count confidence log-scale (0 to 1.0)
     count = vote_count or 0
-    confidence = min(1.0, math.log10(count + 1) / 4.0)
+    if count >= 15:
+        confidence = min(1.0, 0.5 + (math.log10(count + 1) / 8.0))
+    else:
+        confidence = max(0.2, math.log10(count + 1) / 4.0)
 
     # 4. Recency factor
     current_year = datetime.now().year
@@ -73,19 +87,74 @@ def compute_hybrid_score(
     years_ago = max(0, current_year - year)
     recency_factor = max(0.5, 1.0 - (years_ago / 80.0))
 
-    # Low-count penalty: movies with fewer than 50 votes are discounted
-    penalty = 1.0
-    if count < 50:
-        penalty = 0.82
-
-    hybrid = (
-        0.70 * sim +
-        0.15 * rating_factor +
+    base_score = (
+        0.65 * sim +
+        0.20 * quality_factor +
         0.10 * confidence +
         0.05 * recency_factor
-    ) * penalty
+    )
 
-    return round(hybrid, 5)
+    # 5. Language preference boost
+    lang_boost = 1.0
+    if preferred_languages and original_language:
+        if original_language in preferred_languages:
+            rank_idx = preferred_languages.index(original_language)
+            boost_bonus = max(0.04, 0.12 - (rank_idx * 0.04))
+            lang_boost = 1.0 + (boost_bonus * language_weight)
+
+    return round(base_score * lang_boost, 5)
+
+
+def apply_diversity_rerank(
+    movies: list[dict],
+    preferred_languages: Optional[list[str]] = None,
+    target_count: int = 20
+) -> list[dict]:
+    """
+    Applies diversity re-ranking so the top results present a balanced mix
+    across the user's preferred languages, while preserving high-relevance matches.
+    """
+    if not preferred_languages or len(preferred_languages) <= 1 or len(movies) <= 4:
+        return movies[:target_count]
+
+    # Partition by language
+    by_lang: dict[str, list[dict]] = {l: [] for l in preferred_languages}
+    others: list[dict] = []
+
+    for m in movies:
+        lang = m.get("original_language")
+        if lang in by_lang:
+            by_lang[lang].append(m)
+        else:
+            others.append(m)
+
+    result = []
+    seen_ids = set()
+
+    # Round-robin allocation across preferred languages
+    idx = 0
+    max_len = max((len(lst) for lst in by_lang.values()), default=0)
+    while len(result) < target_count and idx < max_len:
+        for l in preferred_languages:
+            if idx < len(by_lang[l]):
+                movie = by_lang[l][idx]
+                mid = movie.get("id")
+                if mid not in seen_ids:
+                    result.append(movie)
+                    seen_ids.add(mid)
+                    if len(result) >= target_count:
+                        break
+        idx += 1
+
+    # Fill remaining slots with top remaining movies
+    remaining = [m for m in movies if m.get("id") not in seen_ids]
+    for m in remaining:
+        if len(result) >= target_count:
+            break
+        result.append(m)
+        seen_ids.add(m.get("id"))
+
+    return result
 
 
 def extract_natural_constraints(query: str) -> dict:

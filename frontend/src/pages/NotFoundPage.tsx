@@ -32,10 +32,10 @@ export const NotFoundPage: React.FC = () => {
         >
           <div
             style={{
-              width: '64px',
-              height: '64px',
+              width: '56px',
+              height: '56px',
               margin: '0 auto 20px',
-              borderRadius: '50%',
+              borderRadius: '12px',
               backgroundColor: 'var(--color-accent-subtle)',
               border: '1px solid var(--color-accent-border)',
               display: 'flex',
@@ -44,9 +44,10 @@ export const NotFoundPage: React.FC = () => {
               color: 'var(--color-accent-primary)',
             }}
           >
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="1.8" />
+              <circle cx="16" cy="16" r="5.5" stroke="var(--color-text-primary)" strokeWidth="1.4" />
+              <path d="M11 16 H13 L14.5 12.5 L17.5 19.5 L19 16 H21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
 
@@ -65,7 +66,7 @@ export const NotFoundPage: React.FC = () => {
               marginBottom: '16px',
             }}
           >
-            Error 404
+            404 Not Found
           </div>
 
           <h1
@@ -77,7 +78,7 @@ export const NotFoundPage: React.FC = () => {
               marginBottom: '12px',
             }}
           >
-            Reel Missing from the Archives
+            Page Not Found
           </h1>
 
           <p
@@ -88,7 +89,7 @@ export const NotFoundPage: React.FC = () => {
               marginBottom: '28px',
             }}
           >
-            The cinematic sequence or archive record you requested cannot be located. It may have been unlisted, moved, or never filmed.
+            The page you requested could not be found. It may have been moved or the link may be broken.
           </p>
 
           <Link
@@ -108,7 +109,7 @@ export const NotFoundPage: React.FC = () => {
               <line x1="19" y1="12" x2="5" y2="12" />
               <polyline points="12 19 5 12 12 5" />
             </svg>
-            Return to Cinema Lobby
+            Return to Home
           </Link>
         </motion.div>
       </div>

@@ -87,7 +87,7 @@ export const SearchPage: React.FC = () => {
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
-          <span>Archival Index</span>
+          <span>Catalog Search</span>
         </div>
 
         <h1
@@ -99,7 +99,7 @@ export const SearchPage: React.FC = () => {
             color: 'var(--color-text-primary)',
           }}
         >
-          Direct Title & Franchise Search
+          Search Movies
         </h1>
 
         <form onSubmit={onSubmit} style={{ display: 'flex', gap: '10px', marginBottom: '44px' }}>
@@ -145,12 +145,17 @@ export const SearchPage: React.FC = () => {
         <div style={{ textAlign: 'center', padding: '60px 0' }}>
           <Spinner size={32} color="var(--color-accent-primary)" />
           <p style={{ marginTop: '16px', color: 'var(--color-text-muted)', fontSize: '13px' }}>
-            Searching archival film catalog...
+            Searching movies...
           </p>
         </div>
       ) : hasSearched && results.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--color-text-secondary)' }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎞️</div>
+          <div style={{ width: '48px', height: '48px', margin: '0 auto 16px', color: 'var(--color-text-muted)' }}>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
           <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', marginBottom: '8px' }}>
             No titles found
           </h3>
@@ -168,7 +173,7 @@ export const SearchPage: React.FC = () => {
               fontFamily: 'var(--font-sans)',
             }}
           >
-            Found {results.length} film prints
+            Found {results.length} movies
           </p>
           <MovieGrid
             items={results.map((m) => ({

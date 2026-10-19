@@ -9,6 +9,8 @@ class RecommendFilters(BaseModel):
     min_rating: Optional[float] = None
     max_runtime: Optional[int] = None
     min_year: Optional[int] = None
+    original_language: Optional[str] = None
+    preferred_languages: Optional[list[str]] = None
 
 
 class RecommendRequest(BaseModel):
@@ -18,6 +20,8 @@ class RecommendRequest(BaseModel):
     page: int = 1
     limit: int = 20
     seed: Optional[int] = None
+    preferred_languages: Optional[list[str]] = None
+    preferred_audio_mode: Optional[str] = None
 
     @model_validator(mode="after")
     def at_least_one_mood_input(self) -> "RecommendRequest":

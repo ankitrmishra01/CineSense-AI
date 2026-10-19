@@ -3,23 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="CineSense AI — A refined, emotion-aware cinema discovery platform. Describe how you feel and discover films that resonate." />
-    <meta name="theme-color" content="#0c0b0a" />
+    <meta name="description" content="CineSense — Describe a mood or a movie you loved. We'll find what fits." />
+    <meta name="theme-color" content="#111215" />
 
     <!-- Open Graph / Social Sharing -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="CineSense AI — Emotion-Aware Movie Discovery" />
-    <meta property="og:description" content="Discover movies matching your exact mood, aesthetic, and tempo with semantic AI recommendations." />
-    <meta property="og:image" content="https://cine-sense-ai.vercel.app/hero.png" />
+    <meta property="og:title" content="CineSense — Emotion-Aware Movie Discovery" />
+    <meta property="og:description" content="Describe a mood or a movie you loved. We'll find what fits." />
+    <meta property="og:image" content="/og-image.png" />
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="CineSense AI — Emotion-Aware Movie Discovery" />
-    <meta property="twitter:description" content="Discover movies matching your exact mood, aesthetic, and tempo." />
+    <meta property="twitter:title" content="CineSense — Emotion-Aware Movie Discovery" />
+    <meta property="twitter:description" content="Describe a mood or a movie you loved. We'll find what fits." />
+    <meta property="twitter:image" content="/og-image.png" />
 
-    <!-- Google Fonts: Playfair Display + Inter -->
+    <!-- Preconnect to TMDB image CDN for instant poster loading -->
+    <link rel="preconnect" href="https://image.tmdb.org" />
+    <link rel="dns-prefetch" href="https://image.tmdb.org" />
+
+    <!-- Google Fonts: Inter + Playfair Display (optimized non-render-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" media="print" onload="this.media='all'" />
 
     <title>CineSense AI — Emotion-Aware Cinema Discovery</title>
   </head>

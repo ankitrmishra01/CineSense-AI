@@ -37,8 +37,16 @@ def _quick_rule_classify(query: str) -> Optional[IntentResponse]:
         name = franchise_match.group(1) or franchise_match.group(2) or franchise_match.group(3)
         return IntentResponse(intent="FRANCHISE", entities={"franchise_name": name.strip()})
 
-    # Pure emoji / emotion tag pattern
-    if any(tag in q for tag in ["sad, heartbroken", "happy, funny", "anxious, stressed", "warm, comforting", "surprised, mind-blowing", "thought-provoking", "romantic, love", "cool, action", "relaxing, slow", "intense, exciting", "scary, horror", "dreamy, atmospheric"]):
+    # Quick heuristic for obvious mood/genre descriptions
+    MOOD_WORDS = {
+        "comfort", "melancholic", "rainy", "intense", "psychological", "twist",
+        "comedy", "noir", "horror", "space", "romance", "courtroom", "satire",
+        "sports", "underdog", "time travel", "divorce", "fantasy", "whimsical",
+        "atmospheric", "suspense", "mystery", "thriller", "action", "drama",
+        "sad", "heartbroken", "grieving", "happy", "uplifting", "feel", "night", "story"
+    }
+    words = set(re.findall(r"\w+", q_lower))
+    if len(words & MOOD_WORDS) >= 2 or any(p in q_lower for p in ["comfort movie", "plot twist", "time travel", "rainy night", "coming of age"]):
         return IntentResponse(intent="MOOD", entities={"mood_description": q})
 
     return None
@@ -50,44 +58,21 @@ async def classify_intent(query_text: str) -> IntentResponse:
         logger.info(f"Intent resolved by rule: {rule_match.intent} -> {rule_match.entities}")
         return rule_match
 
-    # 2. LLM classification via Groq
+    # 2. LLM classification via Groq with fast 1.2s timeout and safe fallback
+    import asyncio
     from app.services.llm_service import get_llm_provider
     provider = get_llm_provider()
     
     system_prompt = (
-        "You are a highly accurate intent classification engine for a movie recommendation app. "
-        "Your sole purpose is to analyze user queries and output a strictly formatted JSON object.\n\n"
-        "Supported Intents:\n"
-        "1. MOOD: For general vibes, emotional requests, or broad descriptive searches (e.g. 'feeling sad', 'want a cozy movie', 'mind bending sci fi', 'movies about space').\n"
-        "2. SIMILAR_TO_MOVIE: User wants movies similar to a specific movie.\n"
-        "3. FRANCHISE: User wants all movies in a specific series or franchise.\n"
-        "4. GENRE_FILTER: User wants a specific genre, optionally from a specific era/year, with NO emotional/mood context (e.g. 'action movies from the 90s', 'horror movies').\n"
-        "5. ACTOR_DIRECTOR: User wants movies by a specific actor or director.\n\n"
-        "Rules:\n"
-        "- Respond with ONLY valid JSON. No markdown formatting, no code blocks.\n"
-        "- Schema: { \"intent\": \"...\", \"entities\": { ... } }\n\n"
-        "Few-shot Examples:\n"
-        "Input: 'I'm feeling lonely and want something comforting'\n"
-        "Output: { \"intent\": \"MOOD\", \"entities\": { \"mood_description\": \"lonely, comforting\" } }\n\n"
-        "Input: 'movies like Interstellar'\n"
-        "Output: { \"intent\": \"SIMILAR_TO_MOVIE\", \"entities\": { \"movie_title\": \"Interstellar\" } }\n\n"
-        "Input: 'the lord of the rings all movies'\n"
-        "Output: { \"intent\": \"FRANCHISE\", \"entities\": { \"franchise_name\": \"The Lord of the Rings\" } }\n\n"
-        "Input: 'action movies from the 90s'\n"
-        "Output: { \"intent\": \"GENRE_FILTER\", \"entities\": { \"genre\": \"Action\", \"year_range\": \"1990-1999\" } }\n\n"
-        "Input: 'movies directed by Christopher Nolan'\n"
-        "Output: { \"intent\": \"ACTOR_DIRECTOR\", \"entities\": { \"person_name\": \"Christopher Nolan\", \"role\": \"director\" } }\n\n"
-        "Input: 'movies with Tom Hanks'\n"
-        "Output: { \"intent\": \"ACTOR_DIRECTOR\", \"entities\": { \"person_name\": \"Tom Hanks\", \"role\": \"actor\" } }\n\n"
-        "Input: 'Leonardo DiCaprio movies'\n"
-        "Output: { \"intent\": \"ACTOR_DIRECTOR\", \"entities\": { \"person_name\": \"Leonardo DiCaprio\", \"role\": \"unspecified\" } }\n"
+        "You are an intent classification engine for a movie recommendation app. "
+        "Output strictly valid JSON with keys 'intent' and 'entities'.\n"
+        "Supported Intents: MOOD, SIMILAR_TO_MOVIE, FRANCHISE, GENRE_FILTER, ACTOR_DIRECTOR."
     )
-    
     user_prompt = f"Input: '{query_text}'\nOutput:"
     
-    for attempt in range(2):
-        try:
-            response = await provider._client.chat.completions.create(
+    try:
+        async def _call():
+            return await provider._client.chat.completions.create(
                 model=provider._model,
                 messages=[
                     {"role": "system", "content": system_prompt},
@@ -95,18 +80,17 @@ async def classify_intent(query_text: str) -> IntentResponse:
                 ],
                 temperature=0.0,
                 response_format={"type": "json_object"},
-                max_tokens=150,
+                max_tokens=80,
             )
-            raw_json = response.choices[0].message.content.strip()
-            data = json.loads(raw_json)
-            intent = data.get("intent", "MOOD")
-            if intent not in ["MOOD", "SIMILAR_TO_MOVIE", "FRANCHISE", "GENRE_FILTER", "ACTOR_DIRECTOR"]:
-                intent = "MOOD"
-            return IntentResponse(intent=intent, entities=data.get("entities", {}))
-        except Exception as e:
-            logger.warning(f"Intent classification attempt {attempt+1} failed: {e}")
-            if attempt == 1:
-                break
+        response = await asyncio.wait_for(_call(), timeout=1.2)
+        raw_json = response.choices[0].message.content.strip()
+        data = json.loads(raw_json)
+        intent = data.get("intent", "MOOD")
+        if intent not in ["MOOD", "SIMILAR_TO_MOVIE", "FRANCHISE", "GENRE_FILTER", "ACTOR_DIRECTOR"]:
+            intent = "MOOD"
+        return IntentResponse(intent=intent, entities=data.get("entities", {}))
+    except Exception as e:
+        logger.info(f"Intent classification skipped/fallback ({e}); defaulting to MOOD.")
 
     # Safe fallback
     return IntentResponse(intent="MOOD", entities={"mood_description": query_text})

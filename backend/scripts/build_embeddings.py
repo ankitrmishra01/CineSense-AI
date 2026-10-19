@@ -40,19 +40,59 @@ ID_MAP_PATH = settings.FAISS_ID_MAP_PATH
 BATCH_SIZE = 256
 
 
+LANGUAGE_NAMES = {
+    "hi": "Hindi Bollywood",
+    "ta": "Tamil Kollywood",
+    "te": "Telugu Tollywood",
+    "ml": "Malayalam Mollywood",
+    "kn": "Kannada Sandalwood",
+    "bn": "Bengali",
+    "mr": "Marathi",
+    "pa": "Punjabi",
+    "gu": "Gujarati",
+    "ko": "Korean K-cinema K-drama",
+    "ja": "Japanese Anime",
+    "es": "Spanish",
+    "fr": "French",
+    "en": "English Hollywood",
+    "it": "Italian",
+    "de": "German",
+    "zh": "Chinese",
+}
+
+
 def build_text_for_movie(movie: Movie) -> str:
-    """Combine overview + tagline + keywords into a single embedding string."""
+    """Combine title + original_title + language + genres + tagline + overview + keywords + cast/director."""
     parts = []
-    if movie.overview:
-        parts.append(movie.overview)
+    if movie.title:
+        parts.append(movie.title)
+    if movie.original_title and movie.original_title != movie.title:
+        parts.append(movie.original_title)
+
+    lang_desc = LANGUAGE_NAMES.get(movie.original_language, movie.original_language or "")
+    if lang_desc:
+        parts.append(f"Language: {lang_desc}")
+
+    if movie.genres:
+        genre_names = [g["name"] for g in movie.genres if isinstance(g, dict)]
+        parts.append("Genres: " + " ".join(genre_names))
+
     if movie.tagline:
         parts.append(movie.tagline)
+    if movie.overview:
+        parts.append(movie.overview)
     if movie.keywords:
         kw_list = movie.keywords if isinstance(movie.keywords, list) else []
         parts.append(". ".join(kw_list[:20]))
-    if movie.genres:
-        genre_names = [g["name"] for g in movie.genres if isinstance(g, dict)]
-        parts.append(" ".join(genre_names))
+
+    if movie.cast_crew and isinstance(movie.cast_crew, dict):
+        cast_list = movie.cast_crew.get("cast", [])
+        director = movie.cast_crew.get("director")
+        if cast_list:
+            parts.append("Starring: " + ", ".join(cast_list[:4]))
+        if director:
+            parts.append("Directed by: " + director)
+
     return " ".join(parts).strip() or movie.title
 
 

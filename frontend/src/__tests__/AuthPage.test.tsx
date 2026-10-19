@@ -69,8 +69,8 @@ describe('AuthPage Component Tests', () => {
     );
 
     const emailInput = screen.getByLabelText(/email address/i) as HTMLInputElement;
-    const passwordInput = screen.getByLabelText(/^passcode$/i) as HTMLInputElement;
-    const submitBtn = screen.getByRole('button', { name: /enter projection booth/i });
+    const passwordInput = screen.getByLabelText(/^password$|^passcode$/i) as HTMLInputElement;
+    const submitBtn = screen.getByRole('button', { name: /enter projection booth|sign in/i });
 
     // Enter credentials
     fireEvent.change(emailInput, { target: { value: 'testuser@example.com' } });
@@ -86,7 +86,7 @@ describe('AuthPage Component Tests', () => {
     await waitFor(() => {
       const alert = screen.getByRole('alert');
       expect(alert).toBeInTheDocument();
-      expect(alert.textContent).toMatch(/incorrect email or passcode/i);
+      expect(alert.textContent).toMatch(/incorrect email or (passcode|password)/i);
     });
 
     // Verify email is RETAINED and password is CLEARED
@@ -101,14 +101,14 @@ describe('AuthPage Component Tests', () => {
       </MemoryRouter>
     );
 
-    const passwordInput = screen.getByLabelText(/^passcode$/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$|^passcode$/i) as HTMLInputElement;
     expect(passwordInput.type).toBe('password');
 
-    const toggleBtn = screen.getByLabelText(/show passcode/i);
+    const toggleBtn = screen.getByLabelText(/show (passcode|password)/i);
     fireEvent.click(toggleBtn);
     expect(passwordInput.type).toBe('text');
 
-    const hideBtn = screen.getByLabelText(/hide passcode/i);
+    const hideBtn = screen.getByLabelText(/hide (passcode|password)/i);
     fireEvent.click(hideBtn);
     expect(passwordInput.type).toBe('password');
   });
@@ -123,9 +123,9 @@ describe('AuthPage Component Tests', () => {
     );
 
     const emailInput = screen.getByLabelText(/email address/i);
-    const passwordInput = screen.getByLabelText(/^passcode$/i);
+    const passwordInput = screen.getByLabelText(/^password$|^passcode$/i);
     const rememberCheckbox = screen.getByLabelText(/remember my email on this device/i);
-    const submitBtn = screen.getByRole('button', { name: /enter projection booth/i });
+    const submitBtn = screen.getByRole('button', { name: /enter projection booth|sign in/i });
 
     fireEvent.change(emailInput, { target: { value: 'remember@example.com' } });
     fireEvent.change(passwordInput, { target: { value: 'correctpassword' } });

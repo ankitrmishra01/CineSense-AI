@@ -1,0 +1,2257 @@
+{
+  "Setting A (Baseline No-Language)": {
+    "overall_p10": 0.435,
+    "avg_latency_ms": 63.913142681121826,
+    "category_p10": {
+      "English": 0.6533333333333334,
+      "Hindi": 0.3466666666666667,
+      "Regional Indian": 0.24666666666666667,
+      "International": 0.49333333333333335
+    },
+    "lang_distribution": {
+      "da": 1,
+      "en": 155,
+      "ta": 52,
+      "ml": 30,
+      "es": 39,
+      "ko": 45,
+      "fr": 33,
+      "de": 2,
+      "tr": 4,
+      "hi": 105,
+      "ja": 57,
+      "cn": 5,
+      "nl": 1,
+      "te": 18,
+      "ar": 2,
+      "fa": 2,
+      "zh": 27,
+      "pa": 1,
+      "mr": 2,
+      "th": 1,
+      "kn": 1,
+      "bn": 10,
+      "pt": 5,
+      "it": 1,
+      "pl": 1
+    },
+    "query_details": [
+      {
+        "id": "EN-01",
+        "category": "English",
+        "prompt": "mind-bending sci-fi with philosophical concepts",
+        "p10": 0.7,
+        "latency_ms": 3036.1173152923584,
+        "top_titles": [
+          "Fimbul (da, 10) [Language mismatch (da not in {'en'})]",
+          "Doctor Strange in the Multiverse of Madness (en, 7.222) [Genre mismatch (movie genres: ['Fantasy', 'Action', 'Adventure'], expected: ['Science Fiction', 'Mystery', 'Drama'])]",
+          "A Beautiful Mind (en, 7.853) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-02",
+        "category": "English",
+        "prompt": "melancholic rainy night comfort movie",
+        "p10": 0.3,
+        "latency_ms": 15.000104904174805,
+        "top_titles": [
+          "Good Night (ta, 7.271) [Language mismatch (ta not in {'ja', 'ko', 'en'})]",
+          "Blush (en, 7.8) [Relevant]",
+          "Singin' in the Rain (en, 8.124) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-03",
+        "category": "English",
+        "prompt": "intense psychological thriller with shocking plot twist",
+        "p10": 0.6,
+        "latency_ms": 14.750480651855469,
+        "top_titles": [
+          "Memoir of a Murderer (ko, 7.408) [Relevant]",
+          "[REC] (es, 7.235) [Language mismatch (es not in {'ko', 'en'})]",
+          "It Was Just an Accident (fr, 7.1) [Language mismatch (fr not in {'ko', 'en'})]"
+        ]
+      },
+      {
+        "id": "EN-04",
+        "category": "English",
+        "prompt": "laugh out loud buddy comedy",
+        "p10": 0.8,
+        "latency_ms": 19.00005340576172,
+        "top_titles": [
+          "Limelight (en, 7.9) [Relevant]",
+          "Superbad (en, 7.274) [Relevant]",
+          "The King of Comedy (en, 7.768) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-05",
+        "category": "English",
+        "prompt": "gritty realistic crime detective noir",
+        "p10": 1.0,
+        "latency_ms": 16.102313995361328,
+        "top_titles": [
+          "Crime 101 (en, 7.033) [Relevant]",
+          "Knives Out (en, 7.843) [Relevant]",
+          "Catch Me If You Can (en, 7.978) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-06",
+        "category": "English",
+        "prompt": "haunting atmospheric horror in isolated house",
+        "p10": 0.7,
+        "latency_ms": 14.096260070800781,
+        "top_titles": [
+          "Ghosts (en, 8.1) [Relevant]",
+          "A Quiet Place Part II (en, 7.428) [Relevant]",
+          "A Haunted House 2 (en, 6.2) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-07",
+        "category": "English",
+        "prompt": "epic space exploration and survival against odds",
+        "p10": 0.6,
+        "latency_ms": 15.034675598144531,
+        "top_titles": [
+          "Star Trek Beyond (en, 6.791) [Relevant]",
+          "Pacific Rim (en, 7) [Relevant]",
+          "Avengers: Infinity War (en, 8.245) [Genre mismatch (movie genres: ['Genre', 'Genre', 'Genre'], expected: ['Science Fiction', 'Adventure'])]"
+        ]
+      },
+      {
+        "id": "EN-08",
+        "category": "English",
+        "prompt": "heartwarming coming of age summer romance",
+        "p10": 0.7,
+        "latency_ms": 14.998912811279297,
+        "top_titles": [
+          "Winter Spring Summer or Fall (en, 7.288) [Relevant]",
+          "My First Summer (en, 8) [Relevant]",
+          "Life in a Year (en, 8.223) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-09",
+        "category": "English",
+        "prompt": "high stakes courtroom drama and moral dilemma",
+        "p10": 0.8,
+        "latency_ms": 13.902425765991211,
+        "top_titles": [
+          "Witness for the Prosecution (en, 8.205) [Relevant]",
+          "Philadelphia (en, 7.701) [Relevant]",
+          "Just Mercy (en, 7.839) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-10",
+        "category": "English",
+        "prompt": "relentless action movie with incredible choreography",
+        "p10": 0.7,
+        "latency_ms": 13.560295104980469,
+        "top_titles": [
+          "Ballerina (en, 7.265) [Relevant]",
+          "Incredibles 2 (en, 7.452) [Relevant]",
+          "Chainsaw Man - The Movie: Reze Arc (ja, 8.54) [Genre mismatch (movie genres: ['Genre', 'Genre', 'Genre', 'Genre'], expected: ['Action', 'Thriller'])]"
+        ]
+      },
+      {
+        "id": "EN-11",
+        "category": "English",
+        "prompt": "cynical political satire and journalism investigation",
+        "p10": 0.8,
+        "latency_ms": 10.994911193847656,
+        "top_titles": [
+          "The Post (en, 7.005) [Relevant]",
+          "Spotlight (en, 7.811) [Relevant]",
+          "A Few Good Men (en, 7.562) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-12",
+        "category": "English",
+        "prompt": "underdog sports story overcoming all obstacles",
+        "p10": 0.4,
+        "latency_ms": 13.674020767211914,
+        "top_titles": [
+          "Rising Phoenix (en, 8.1) [Genre mismatch (movie genres: ['Documentary'], expected: ['Drama'])]",
+          "83 (hi, 7.196) [Language mismatch (hi not in {'en'})]",
+          "The Art of Racing in the Rain (en, 8.148) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-13",
+        "category": "English",
+        "prompt": "time travel paradox and altered timelines",
+        "p10": 0.5,
+        "latency_ms": 11.999845504760742,
+        "top_titles": [
+          "About Time (en, 7.899) [Genre mismatch (movie genres: ['Drama', 'Romance', 'Fantasy'], expected: ['Science Fiction', 'Thriller'])]",
+          "Timecrimes (es, 7.02) [Language mismatch (es not in {'en'})]",
+          "In Time (en, 7) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-14",
+        "category": "English",
+        "prompt": "bittersweet divorce and family reconciliation",
+        "p10": 0.6,
+        "latency_ms": 12.161731719970703,
+        "top_titles": [
+          "A Separation (fa, 7.904) [Language mismatch (fa not in {'en', 'fr'})]",
+          "Marriage Story (en, 7.733) [Relevant]",
+          "Our Fault (es, 7.385) [Language mismatch (es not in {'en', 'fr'})]"
+        ]
+      },
+      {
+        "id": "EN-15",
+        "category": "English",
+        "prompt": "whimsical fantasy adventure with talking animals",
+        "p10": 0.6,
+        "latency_ms": 10.242223739624023,
+        "top_titles": [
+          "Hoppers (en, 8.132) [Relevant]",
+          "Wolfwalkers (en, 8.167) [Relevant]",
+          "GOAT (en, 8.045) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-01",
+        "category": "Hindi",
+        "prompt": "हॉरर कॉमेडी फिल्में",
+        "p10": 0.0,
+        "latency_ms": 11.591911315917969,
+        "top_titles": [
+          "Cosmic Princess Kaguya! (ja, 8.104) [Genre mismatch (movie genres: ['Animation', 'Fantasy', 'Music', 'Science Fiction'], expected: ['Horror', 'Comedy'])]",
+          "Left-Handed Girl (zh, 7.276) [Genre mismatch (movie genres: ['Drama'], expected: ['Horror', 'Comedy'])]",
+          "Dear You (zh, 8.7) [Language mismatch (zh not in ['hi'])]"
+        ]
+      },
+      {
+        "id": "HI-02",
+        "category": "Hindi",
+        "prompt": "दिल को छू लेने वाली प्रेम कहानी",
+        "p10": 0.8,
+        "latency_ms": 16.436338424682617,
+        "top_titles": [
+          "Kabhi Khushi Kabhie Gham (hi, 7.7) [Relevant]",
+          "Kal Ho Naa Ho (hi, 7.5) [Relevant]",
+          "Khosla Ka Ghosla! (hi, 7.335) [Genre mismatch (movie genres: ['Comedy'], expected: ['Romance', 'Drama'])]"
+        ]
+      },
+      {
+        "id": "HI-03",
+        "category": "Hindi",
+        "prompt": "रोमांचक सस्पेंस मर्डर मिस्ट्री",
+        "p10": 0.3,
+        "latency_ms": 17.276763916015625,
+        "top_titles": [
+          "Mrs. (hi, 6.66) [Genre mismatch (movie genres: ['Drama'], expected: ['Mystery', 'Thriller', 'Crime'])]",
+          "Haider (hi, 7.248) [Relevant]",
+          "Jai Bhim (ta, 7.371) [Language mismatch (ta not in ['hi'])]"
+        ]
+      },
+      {
+        "id": "HI-04",
+        "category": "Hindi",
+        "prompt": "परिवार के साथ देखने वाली हंसी की फिल्म",
+        "p10": 0.9,
+        "latency_ms": 15.301942825317383,
+        "top_titles": [
+          "Udaan (hi, 7.278) [Relevant]",
+          "Srikanth (hi, 7.5) [Relevant]",
+          "Satyaprem Ki Katha (hi, 6.862) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-05",
+        "category": "Hindi",
+        "prompt": "देशभक्ति और सेना की सच्ची कहानी",
+        "p10": 0.7,
+        "latency_ms": 15.208244323730469,
+        "top_titles": [
+          "Kabhi Khushi Kabhie Gham (hi, 7.7) [Relevant]",
+          "Srikanth (hi, 7.5) [Relevant]",
+          "Khosla Ka Ghosla! (hi, 7.335) [Genre mismatch (movie genres: ['Comedy'], expected: ['Action', 'Drama', 'History', 'War'])]"
+        ]
+      },
+      {
+        "id": "HI-06",
+        "category": "Hindi",
+        "prompt": "koi badhiya suspense thriller movie batao",
+        "p10": 0.1,
+        "latency_ms": 12.560129165649414,
+        "top_titles": [
+          "Viduthalai: Part I (ta, 7.9) [Language mismatch (ta not in {'hi'})]",
+          "Imaikkaa Nodigal (ta, 6.901) [Language mismatch (ta not in {'hi'})]",
+          "Oththa Seruppu Size 7 (ta, 7.947) [Language mismatch (ta not in {'hi'})]"
+        ]
+      },
+      {
+        "id": "HI-07",
+        "category": "Hindi",
+        "prompt": "dost ke sath dekhne wali mast bollywood comedy",
+        "p10": 0.6,
+        "latency_ms": 13.967037200927734,
+        "top_titles": [
+          "Ankhon Dekhi (hi, 7.065) [Relevant]",
+          "Amar Katha (hi, 10) [Relevant]",
+          "Kho Gaye Hum Kahan (hi, 6.568) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-08",
+        "category": "Hindi",
+        "prompt": "pyar aur dard wali emotional movie",
+        "p10": 0.1,
+        "latency_ms": 15.110254287719727,
+        "top_titles": [
+          "Sanam Teri Kasam (hi, 7.9) [Relevant]",
+          "Pelli Choopulu (te, 7.304) [Language mismatch (te not in {'hi'})]",
+          "Shyam Singha Roy (te, 6.66) [Language mismatch (te not in {'hi'})]"
+        ]
+      },
+      {
+        "id": "HI-09",
+        "category": "Hindi",
+        "prompt": "bhai action movie chahiye dhoom dhadaka",
+        "p10": 0.6,
+        "latency_ms": 14.562606811523438,
+        "top_titles": [
+          "Dhoom Dhaam (hi, 7.045) [Genre mismatch (movie genres: ['Comedy'], expected: ['Action', 'Thriller'])]",
+          "Dhurandhar (hi, 7.336) [Relevant]",
+          "Dhee (te, 6.813) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-10",
+        "category": "Hindi",
+        "prompt": "dimag hila dene wali psychological movie",
+        "p10": 0.1,
+        "latency_ms": 12.389898300170898,
+        "top_titles": [
+          "Nerkonda Paarvai (ta, 6.9) [Language mismatch (ta not in {'hi', 'en'})]",
+          "Sanam Teri Kasam (hi, 7.9) [Genre mismatch (movie genres: ['Drama', 'Romance'], expected: ['Thriller', 'Mystery'])]",
+          "Pihu (hi, 7.6) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-11",
+        "category": "Hindi",
+        "prompt": "gangster underworld raw crime like Anurag Kashyap",
+        "p10": 0.1,
+        "latency_ms": 12.832164764404297,
+        "top_titles": [
+          "The Gangster, the Cop, the Devil (ko, 7.897) [Language mismatch (ko not in {'hi'})]",
+          "Aaranya Kaandam (ta, 7.512) [Language mismatch (ta not in {'hi'})]",
+          "Imaikkaa Nodigal (ta, 6.901) [Language mismatch (ta not in {'hi'})]"
+        ]
+      },
+      {
+        "id": "HI-12",
+        "category": "Hindi",
+        "prompt": "social issue comedy drama like Rajkumar Hirani",
+        "p10": 0.0,
+        "latency_ms": 11.683225631713867,
+        "top_titles": [
+          "Bharathanatyam (ml, 7.222) [Language mismatch (ml not in {'hi'})]",
+          "Dear Comrade (te, 6.676) [Language mismatch (te not in {'hi'})]",
+          "Sookshmadarshini (ml, 7.4) [Language mismatch (ml not in {'hi'})]"
+        ]
+      },
+      {
+        "id": "HI-13",
+        "category": "Hindi",
+        "prompt": "college romance and friendship nostalgia",
+        "p10": 0.0,
+        "latency_ms": 11.525392532348633,
+        "top_titles": [
+          "Friends: The Reunion (en, 7.806) [Language mismatch (en not in {'hi'})]",
+          "Flipped (en, 8) [Language mismatch (en not in {'hi'})]",
+          "Past Lives (en, 7.694) [Language mismatch (en not in {'hi'})]"
+        ]
+      },
+      {
+        "id": "HI-14",
+        "category": "Hindi",
+        "prompt": "courtroom battle for justice in India",
+        "p10": 0.4,
+        "latency_ms": 10.524511337280273,
+        "top_titles": [
+          "Court (mr, 6.947) [Language mismatch (mr not in {'ta', 'hi'})]",
+          "Nail Polish (hi, 6.632) [Relevant]",
+          "Witness for the Prosecution (en, 8.205) [Language mismatch (en not in {'ta', 'hi'})]"
+        ]
+      },
+      {
+        "id": "HI-15",
+        "category": "Hindi",
+        "prompt": "sports underdog biopics Bollywood",
+        "p10": 0.5,
+        "latency_ms": 12.409448623657227,
+        "top_titles": [
+          "83 (hi, 7.196) [Relevant]",
+          "Torbaaz (hi, 7.3) [Relevant]",
+          "Bison Kaalamaadan (ta, 7.4) [Language mismatch (ta not in ['hi'])]"
+        ]
+      },
+      {
+        "id": "REG-01",
+        "category": "Regional Indian",
+        "prompt": "திருப்பங்கள் நிறைந்த அதிரடி திரைப்படம்",
+        "p10": 0.6,
+        "latency_ms": 13.588428497314453,
+        "top_titles": [
+          "DC (ta, 7.731) [Relevant]",
+          "Srikanth (hi, 7.5) [Genre mismatch (movie genres: ['Drama'], expected: ['Action', 'Thriller', 'Crime'])]",
+          "3BHK (ta, 7) [Genre mismatch (movie genres: ['Family', 'Drama'], expected: ['Action', 'Thriller', 'Crime'])]"
+        ]
+      },
+      {
+        "id": "REG-02",
+        "category": "Regional Indian",
+        "prompt": "குடும்ப நகைச்சுவை திரைப்படம்",
+        "p10": 0.7,
+        "latency_ms": 15.464544296264648,
+        "top_titles": [
+          "Kanaa (ta, 7.3) [Relevant]",
+          "Love Today (ta, 6.931) [Relevant]",
+          "Jigarthanda DoubleX (ta, 7.7) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-03",
+        "category": "Regional Indian",
+        "prompt": "grounded kollywood crime investigation thriller",
+        "p10": 0.8,
+        "latency_ms": 12.001991271972656,
+        "top_titles": [
+          "Kuttram 23 (ta, 7.029) [Relevant]",
+          "Dhuruvangal Pathinaaru (ta, 7.823) [Relevant]",
+          "Kolaigaran (ta, 6.344) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-04",
+        "category": "Regional Indian",
+        "prompt": "masterpieces of Mani Ratnam",
+        "p10": 0.0,
+        "latency_ms": 12.004613876342773,
+        "top_titles": [
+          "Arahan (ko, 6.6) [Language mismatch (ko not in {'ta', 'hi'})]",
+          "Bad Trip (pt, 10) [Genre mismatch (movie genres: ['Thriller'], expected: ['Drama', 'Romance', 'Action'])]",
+          "Anandabhadram (ml, 7.482) [Genre mismatch (movie genres: ['Fantasy', 'Horror', 'Thriller'], expected: ['Drama', 'Romance', 'Action'])]"
+        ]
+      },
+      {
+        "id": "REG-05",
+        "category": "Regional Indian",
+        "prompt": "మంచి ప్రేమ కథ మరియు భావోద్వేగ చిత్రం",
+        "p10": 0.0,
+        "latency_ms": 12.030601501464844,
+        "top_titles": [
+          "Dear You (zh, 8.7) [Language mismatch (zh not in ['te'])]",
+          "Bajrangi Bhaijaan (hi, 7.8) [Language mismatch (hi not in ['te'])]",
+          "Gangubai Kathiawadi (hi, 7.456) [Language mismatch (hi not in ['te'])]"
+        ]
+      },
+      {
+        "id": "REG-06",
+        "category": "Regional Indian",
+        "prompt": "భారీ యాక్షన్ మరియు సస్పెన్స్ సినిమా",
+        "p10": 0.0,
+        "latency_ms": 12.537956237792969,
+        "top_titles": [
+          "Dear You (zh, 8.7) [Genre mismatch (movie genres: ['Drama', 'Family', 'Comedy'], expected: ['Action', 'Thriller'])]",
+          "Cosmic Princess Kaguya! (ja, 8.104) [Genre mismatch (movie genres: ['Animation', 'Fantasy', 'Music', 'Science Fiction'], expected: ['Action', 'Thriller'])]",
+          "Better Days (zh, 8.1) [Genre mismatch (movie genres: ['Drama', 'Crime', 'Romance'], expected: ['Action', 'Thriller'])]"
+        ]
+      },
+      {
+        "id": "REG-07",
+        "category": "Regional Indian",
+        "prompt": "grand visual spectacles by SS Rajamouli",
+        "p10": 0.0,
+        "latency_ms": 12.184381484985352,
+        "top_titles": [
+          "A Beautiful Mind (en, 7.853) [Language mismatch (en not in {'te'})]",
+          "Grand Illusion (fr, 7.86) [Language mismatch (fr not in {'te'})]",
+          "MEMORIES (en, 10) [Language mismatch (en not in {'te'})]"
+        ]
+      },
+      {
+        "id": "REG-08",
+        "category": "Regional Indian",
+        "prompt": "മനോഹരമായ കുടുംബ ചിത്രം",
+        "p10": 0.0,
+        "latency_ms": 13.17453384399414,
+        "top_titles": [
+          "Cosmic Princess Kaguya! (ja, 8.104) [Genre mismatch (movie genres: ['Animation', 'Fantasy', 'Music', 'Science Fiction'], expected: ['Family', 'Drama'])]",
+          "Left-Handed Girl (zh, 7.276) [Language mismatch (zh not in ['ml'])]",
+          "Dear You (zh, 8.7) [Language mismatch (zh not in ['ml'])]"
+        ]
+      },
+      {
+        "id": "REG-09",
+        "category": "Regional Indian",
+        "prompt": "കുറ്റാന്വേഷണ ത്രില്ലർ",
+        "p10": 0.0,
+        "latency_ms": 13.070344924926758,
+        "top_titles": [
+          "Dear You (zh, 8.7) [Genre mismatch (movie genres: ['Drama', 'Family', 'Comedy'], expected: ['Crime', 'Thriller', 'Mystery'])]",
+          "Left-Handed Girl (zh, 7.276) [Genre mismatch (movie genres: ['Drama'], expected: ['Crime', 'Thriller', 'Mystery'])]",
+          "Cosmic Princess Kaguya! (ja, 8.104) [Genre mismatch (movie genres: ['Animation', 'Fantasy', 'Music', 'Science Fiction'], expected: ['Crime', 'Thriller', 'Mystery'])]"
+        ]
+      },
+      {
+        "id": "REG-10",
+        "category": "Regional Indian",
+        "prompt": "realistic mollywood subtle drama like Dileesh Pothan",
+        "p10": 0.8,
+        "latency_ms": 13.000249862670898,
+        "top_titles": [
+          "Uyare (ml, 7.388) [Relevant]",
+          "Pariyerum Perumal (ta, 8.2) [Language mismatch (ta not in ['ml'])]",
+          "Bharathanatyam (ml, 7.222) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-11",
+        "category": "Regional Indian",
+        "prompt": "ಉತ್ತಮ ಕೌಟುಂಬಿಕ ಹಾಸ್ಯ ಚಲನಚಿತ್ರ",
+        "p10": 0.0,
+        "latency_ms": 13.000011444091797,
+        "top_titles": [
+          "Dear You (zh, 8.7) [Language mismatch (zh not in ['kn'])]",
+          "Cosmic Princess Kaguya! (ja, 8.104) [Genre mismatch (movie genres: ['Animation', 'Fantasy', 'Music', 'Science Fiction'], expected: ['Comedy', 'Family', 'Drama'])]",
+          "Left-Handed Girl (zh, 7.276) [Language mismatch (zh not in ['kn'])]"
+        ]
+      },
+      {
+        "id": "REG-12",
+        "category": "Regional Indian",
+        "prompt": "epic sandalwood folklore action drama",
+        "p10": 0.0,
+        "latency_ms": 12.541055679321289,
+        "top_titles": [
+          "Everett Yorumu (tr, 10) [Language mismatch (tr not in ['kn'])]",
+          "Dust Bunny (en, 6.683) [Language mismatch (en not in ['kn'])]",
+          "Wildwood (en, 10) [Genre mismatch (movie genres: ['Genre', 'Genre', 'Genre'], expected: ['Action', 'Drama', 'Fantasy'])]"
+        ]
+      },
+      {
+        "id": "REG-13",
+        "category": "Regional Indian",
+        "prompt": "ভালোবাসার রোমান্টিক সিনেমা",
+        "p10": 0.8,
+        "latency_ms": 15.63882827758789,
+        "top_titles": [
+          "Chotushkone (bn, 7.433) [Relevant]",
+          "Srikanth (hi, 7.5) [Language mismatch (hi not in ['bn'])]",
+          "Aparajito (bn, 7.85) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-14",
+        "category": "Regional Indian",
+        "prompt": "गंभीर भावनिक मराठी चित्रपट",
+        "p10": 0.0,
+        "latency_ms": 14.03188705444336,
+        "top_titles": [
+          "Badtameez Gill (hi, 10) [Genre mismatch (movie genres: [], expected: ['Drama'])]",
+          "Good Newwz (hi, 6.5) [Language mismatch (hi not in ['mr'])]",
+          "Udaan (hi, 7.278) [Language mismatch (hi not in ['mr'])]"
+        ]
+      },
+      {
+        "id": "REG-15",
+        "category": "Regional Indian",
+        "prompt": "ਦਿਲਚਸਪ ਪੰਜਾਬੀ ਕਾਮੇਡੀ",
+        "p10": 0.0,
+        "latency_ms": 11.99650764465332,
+        "top_titles": [
+          "Cosmic Princess Kaguya! (ja, 8.104) [Genre mismatch (movie genres: ['Animation', 'Fantasy', 'Music', 'Science Fiction'], expected: ['Comedy'])]",
+          "Left-Handed Girl (zh, 7.276) [Genre mismatch (movie genres: ['Drama'], expected: ['Comedy'])]",
+          "Dear You (zh, 8.7) [Language mismatch (zh not in ['pa'])]"
+        ]
+      },
+      {
+        "id": "INT-01",
+        "category": "International",
+        "prompt": "긴장감 넘치는 심리 스릴러",
+        "p10": 0.5,
+        "latency_ms": 17.082691192626953,
+        "top_titles": [
+          "Train to Busan (ko, 7.751) [Relevant]",
+          "The Way Home (ko, 8.012) [Genre mismatch (movie genres: ['Drama', 'Family'], expected: ['Thriller', 'Mystery'])]",
+          "Snowpiercer (ko, 6.909) [Genre mismatch (movie genres: ['Action', 'Science Fiction', 'Drama'], expected: ['Thriller', 'Mystery'])]"
+        ]
+      },
+      {
+        "id": "INT-02",
+        "category": "International",
+        "prompt": "감동적인 로맨스 영화",
+        "p10": 0.5,
+        "latency_ms": 16.07203483581543,
+        "top_titles": [
+          "The Beauty Inside (ko, 7.646) [Relevant]",
+          "Even If This Love Disappears Tonight (ko, 8.5) [Relevant]",
+          "Period. End of Sentence. (hi, 7.7) [Genre mismatch (movie genres: ['Documentary'], expected: ['Romance', 'Drama'])]"
+        ]
+      },
+      {
+        "id": "INT-03",
+        "category": "International",
+        "prompt": "social satire dark comedy like Bong Joon-ho",
+        "p10": 0.3,
+        "latency_ms": 12.999296188354492,
+        "top_titles": [
+          "Jojo Rabbit (en, 7.973) [Language mismatch (en not in {'ko'})]",
+          "Veteran (ko, 6.895) [Relevant]",
+          "Dégradant (fr, 10) [Language mismatch (fr not in {'ko'})]"
+        ]
+      },
+      {
+        "id": "INT-04",
+        "category": "International",
+        "prompt": "korean revenge noir with visceral action",
+        "p10": 0.9,
+        "latency_ms": 12.01176643371582,
+        "top_titles": [
+          "Bedevilled (ko, 7.214) [Relevant]",
+          "The Villainess (ko, 6.9) [Relevant]",
+          "A Bittersweet Life (ko, 7.433) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-05",
+        "category": "International",
+        "prompt": "心を揺さぶる感動のアニメ映画",
+        "p10": 0.8,
+        "latency_ms": 13.528108596801758,
+        "top_titles": [
+          "Yojimbo (ja, 8.081) [Relevant]",
+          "A Whisker Away (ja, 7.859) [Relevant]",
+          "In This Corner of the World (ja, 7.9) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-06",
+        "category": "International",
+        "prompt": "whimsical magical studio ghibli anime like Miyazaki",
+        "p10": 0.6,
+        "latency_ms": 14.051198959350586,
+        "top_titles": [
+          "Spirited Away (ja, 8.536) [Relevant]",
+          "Zen - Grogu and Dust Bunnies (ja, 5.961) [Low rating (5.961 < 7.0)]",
+          "Earwig and the Witch (ja, 5.9) [Low rating (5.9 < 7.0)]"
+        ]
+      },
+      {
+        "id": "INT-07",
+        "category": "International",
+        "prompt": "quiet japanese slice of life family drama",
+        "p10": 0.3,
+        "latency_ms": 11.996984481811523,
+        "top_titles": [
+          "Rental Family (en, 7.685) [Language mismatch (en not in {'ja'})]",
+          "Tokyo Story (ja, 8.149) [Relevant]",
+          "Versa (en, 8.281) [Language mismatch (en not in {'ja'})]"
+        ]
+      },
+      {
+        "id": "INT-08",
+        "category": "International",
+        "prompt": "película de suspenso y misterio en español",
+        "p10": 0.0,
+        "latency_ms": 12.839317321777344,
+        "top_titles": [
+          "El Siete Machos (es, 8.254) [Genre mismatch (movie genres: ['Comedy', 'Western'], expected: ['Thriller', 'Mystery'])]",
+          "El Cementerio de los Elefantes (es, 8.991) [Genre mismatch (movie genres: ['Drama'], expected: ['Thriller', 'Mystery'])]",
+          "El mesero (es, 8) [Genre mismatch (movie genres: ['Comedy'], expected: ['Thriller', 'Mystery'])]"
+        ]
+      },
+      {
+        "id": "INT-09",
+        "category": "International",
+        "prompt": "spanish dark psychological crime twist",
+        "p10": 0.8,
+        "latency_ms": 12.014627456665039,
+        "top_titles": [
+          "Mexican Psycho (es, 7.1) [Relevant]",
+          "The Secret in Their Eyes (es, 7.966) [Relevant]",
+          "The Three Deaths of Marisela Escobedo (es, 8.8) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-10",
+        "category": "International",
+        "prompt": "film français romantique et poétique",
+        "p10": 0.8,
+        "latency_ms": 13.900518417358398,
+        "top_titles": [
+          "Les culottées (fr, 10) [Relevant]",
+          "Non-retour (fr, 10) [Relevant]",
+          "Dégradant (fr, 10) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-11",
+        "category": "International",
+        "prompt": "french elegant coming of age drama",
+        "p10": 0.8,
+        "latency_ms": 12.087106704711914,
+        "top_titles": [
+          "Moonbeams (fr, 10) [Relevant]",
+          "Regarde toi (fr, 10) [Relevant]",
+          "Close (fr, 7.8) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-12",
+        "category": "International",
+        "prompt": "haunting scandinavian noir crime mystery",
+        "p10": 0.2,
+        "latency_ms": 12.01486587524414,
+        "top_titles": [
+          "M (de, 8.057) [Language mismatch (de not in {'en', 'no', 'sv', 'da'})]",
+          "Anatomy of a Fall (fr, 7.507) [Language mismatch (fr not in {'en', 'no', 'sv', 'da'})]",
+          "Glass Onion: A Knives Out Mystery (en, 7.018) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-13",
+        "category": "International",
+        "prompt": "gritty martial arts action with ruthless stunts",
+        "p10": 0.3,
+        "latency_ms": 14.572858810424805,
+        "top_titles": [
+          "Officer Black Belt (ko, 7.684) [Relevant]",
+          "Karate Kid: Legends (en, 6.977) [Language mismatch (en not in {'th', 'cn', 'ko', 'id', 'zh'})]",
+          "Kung Fu Hustle (cn, 7.523) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-14",
+        "category": "International",
+        "prompt": "existential european arthouse cinema",
+        "p10": 0.2,
+        "latency_ms": 14.57834243774414,
+        "top_titles": [
+          "Klaus (en, 8.217) [Genre mismatch (movie genres: ['Animation', 'Family', 'Comedy'], expected: ['Drama'])]",
+          "DC Showcase: Death (en, 8.377) [Language mismatch (en not in {'de', 'it', 'es', 'fr'})]",
+          "Moonbeams (fr, 10) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-15",
+        "category": "International",
+        "prompt": "dramatic latin american survival journey",
+        "p10": 0.4,
+        "latency_ms": 13.757467269897461,
+        "top_titles": [
+          "Facing El Chapo (es, 8.777) [Genre mismatch (movie genres: ['Genre', 'Genre', 'Genre'], expected: ['Drama', 'Adventure'])]",
+          "The Lost Children (es, 7.5) [Genre mismatch (movie genres: ['Documentary'], expected: ['Drama', 'Adventure'])]",
+          "Embrace of the Serpent (es, 7.67) [Relevant]"
+        ]
+      }
+    ]
+  },
+  "Setting B (Language-Aware, No Pref)": {
+    "overall_p10": 0.567936507936508,
+    "avg_latency_ms": 1214.5996689796448,
+    "category_p10": {
+      "English": 0.5666666666666667,
+      "Hindi": 0.58,
+      "Regional Indian": 0.6374603174603174,
+      "International": 0.4876190476190476
+    },
+    "lang_distribution": {
+      "en": 168,
+      "hi": 204,
+      "ml": 31,
+      "te": 21,
+      "ta": 31,
+      "ko": 26,
+      "kn": 6,
+      "bn": 5,
+      "mr": 10,
+      "pa": 10,
+      "ja": 22,
+      "es": 20,
+      "fr": 13
+    },
+    "query_details": [
+      {
+        "id": "EN-01",
+        "category": "English",
+        "prompt": "mind-bending sci-fi with philosophical concepts",
+        "p10": 0.6,
+        "latency_ms": 1347.7048873901367,
+        "top_titles": [
+          "Doctor Strange in the Multiverse of Madness (en, 7.22) [Genre mismatch (movie genres: ['Fantasy', 'Action', 'Adventure'], expected: ['Science Fiction', 'Mystery', 'Drama'])]",
+          "A Beautiful Mind (en, 7.85) [Relevant]",
+          "Project Hail Mary (en, 8.63) [Genre mismatch (movie genres: ['Genre', 'Genre'], expected: ['Science Fiction', 'Mystery', 'Drama'])]"
+        ]
+      },
+      {
+        "id": "EN-02",
+        "category": "English",
+        "prompt": "melancholic rainy night comfort movie",
+        "p10": 0.4,
+        "latency_ms": 44.5857048034668,
+        "top_titles": [
+          "Raincoat (hi, 7.41) [Language mismatch (hi not in {'ja', 'ko', 'en'})]",
+          "Sleepers (en, 7.6) [Relevant]",
+          "Bhool Bhulaiyaa 2 (hi, 6.06) [Genre mismatch (movie genres: ['Horror', 'Comedy'], expected: ['Drama', 'Romance'])]"
+        ]
+      },
+      {
+        "id": "EN-03",
+        "category": "English",
+        "prompt": "intense psychological thriller with shocking plot twist",
+        "p10": 0.4,
+        "latency_ms": 67.81125068664551,
+        "top_titles": [
+          "Hostel (hi, 5.1) [Low rating (5.1 < 6.5)]",
+          "Psycho Killer (en, 6.7) [Relevant]",
+          "Climax (hi, 2.7) [Low rating (2.7 < 6.5)]"
+        ]
+      },
+      {
+        "id": "EN-04",
+        "category": "English",
+        "prompt": "laugh out loud buddy comedy",
+        "p10": 0.5,
+        "latency_ms": 277.30870246887207,
+        "top_titles": [
+          "Atithi Tum Kab Jaoge? (hi, 6.2) [Language mismatch (hi not in {'en'})]",
+          "Limelight (en, 7.9) [Relevant]",
+          "Chup Chup Ke (hi, 6.31) [Language mismatch (hi not in {'en'})]"
+        ]
+      },
+      {
+        "id": "EN-05",
+        "category": "English",
+        "prompt": "gritty realistic crime detective noir",
+        "p10": 0.9,
+        "latency_ms": 1241.3408756256104,
+        "top_titles": [
+          "Murder 2 (hi, 5.76) [Low rating (5.76 < 6.5)]",
+          "Crime 101 (en, 7.03) [Relevant]",
+          "Knives Out (en, 7.84) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-06",
+        "category": "English",
+        "prompt": "haunting atmospheric horror in isolated house",
+        "p10": 0.5,
+        "latency_ms": 31.566619873046875,
+        "top_titles": [
+          "Haunted (hi, 5.8) [Language mismatch (hi not in {'en'})]",
+          "A Haunted House 2 (en, 6.2) [Relevant]",
+          "Haunted 3D: Echoes of the Past (hi, 10.0) [Language mismatch (hi not in {'en'})]"
+        ]
+      },
+      {
+        "id": "EN-07",
+        "category": "English",
+        "prompt": "epic space exploration and survival against odds",
+        "p10": 0.8,
+        "latency_ms": 1220.5841541290283,
+        "top_titles": [
+          "Star Trek Beyond (en, 6.79) [Relevant]",
+          "Pacific Rim (en, 7.0) [Relevant]",
+          "Avengers: Infinity War (en, 8.24) [Genre mismatch (movie genres: ['Genre', 'Genre', 'Genre'], expected: ['Science Fiction', 'Adventure'])]"
+        ]
+      },
+      {
+        "id": "EN-08",
+        "category": "English",
+        "prompt": "heartwarming coming of age summer romance",
+        "p10": 0.7,
+        "latency_ms": 50.577402114868164,
+        "top_titles": [
+          "Girls Will Be Girls (hi, 7.06) [Language mismatch (hi not in {'en'})]",
+          "Winter Spring Summer or Fall (en, 7.29) [Relevant]",
+          "Sunny Sanskari Ki Tulsi Kumari (hi, 5.64) [Language mismatch (hi not in {'en'})]"
+        ]
+      },
+      {
+        "id": "EN-09",
+        "category": "English",
+        "prompt": "high stakes courtroom drama and moral dilemma",
+        "p10": 0.5,
+        "latency_ms": 47.692298889160156,
+        "top_titles": [
+          "Jolly LLB (hi, 7.13) [Language mismatch (hi not in {'en'})]",
+          "Witness for the Prosecution (en, 8.21) [Relevant]",
+          "Nail Polish (hi, 6.63) [Language mismatch (hi not in {'en'})]"
+        ]
+      },
+      {
+        "id": "EN-10",
+        "category": "English",
+        "prompt": "relentless action movie with incredible choreography",
+        "p10": 0.5,
+        "latency_ms": 1250.8351802825928,
+        "top_titles": [
+          "An Action Hero (hi, 6.52) [Language mismatch (hi not in {'ko', 'id', 'en'})]",
+          "Ballerina (en, 7.26) [Relevant]",
+          "Kick (hi, 5.7) [Language mismatch (hi not in {'ko', 'id', 'en'})]"
+        ]
+      },
+      {
+        "id": "EN-11",
+        "category": "English",
+        "prompt": "cynical political satire and journalism investigation",
+        "p10": 0.7,
+        "latency_ms": 1247.4660873413086,
+        "top_titles": [
+          "Writing with Fire (hi, 7.3) [Language mismatch (hi not in {'en'})]",
+          "The Post (en, 7.0) [Relevant]",
+          "The Sabarmati Report (hi, 5.64) [Low rating (5.64 < 6.5)]"
+        ]
+      },
+      {
+        "id": "EN-12",
+        "category": "English",
+        "prompt": "underdog sports story overcoming all obstacles",
+        "p10": 0.4,
+        "latency_ms": 32.488107681274414,
+        "top_titles": [
+          "83 (hi, 7.2) [Language mismatch (hi not in {'en'})]",
+          "The Art of Racing in the Rain (en, 8.15) [Relevant]",
+          "Chak De! India (hi, 7.2) [Language mismatch (hi not in {'en'})]"
+        ]
+      },
+      {
+        "id": "EN-13",
+        "category": "English",
+        "prompt": "time travel paradox and altered timelines",
+        "p10": 0.6,
+        "latency_ms": 32.46283531188965,
+        "top_titles": [
+          "Once Upon a Time in Mumbaai (hi, 6.7) [Language mismatch (hi not in {'en'})]",
+          "About Time (en, 7.9) [Genre mismatch (movie genres: ['Drama', 'Romance', 'Fantasy'], expected: ['Science Fiction', 'Thriller'])]",
+          "In Time (en, 7.0) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-14",
+        "category": "English",
+        "prompt": "bittersweet divorce and family reconciliation",
+        "p10": 0.4,
+        "latency_ms": 1275.83909034729,
+        "top_titles": [
+          "Hum Saath Saath Hain (hi, 6.1) [Language mismatch (hi not in {'en', 'fr'})]",
+          "Marriage Story (en, 7.73) [Relevant]",
+          "Zara Hatke Zara Bachke (hi, 5.8) [Low rating (5.8 < 6.5)]"
+        ]
+      },
+      {
+        "id": "EN-15",
+        "category": "English",
+        "prompt": "whimsical fantasy adventure with talking animals",
+        "p10": 0.6,
+        "latency_ms": 51.56302452087402,
+        "top_titles": [
+          "Animal (hi, 6.12) [Genre mismatch (movie genres: ['Action', 'Crime', 'Drama'], expected: ['Animation', 'Fantasy', 'Family'])]",
+          "Hoppers (en, 8.13) [Relevant]",
+          "Junglee (hi, 6.7) [Genre mismatch (movie genres: ['Action', 'Adventure'], expected: ['Animation', 'Fantasy', 'Family'])]"
+        ]
+      },
+      {
+        "id": "HI-01",
+        "category": "Hindi",
+        "prompt": "हॉरर कॉमेडी फिल्में",
+        "p10": 0.3,
+        "latency_ms": 301.86009407043457,
+        "top_titles": [
+          "Bhool Bhulaiyaa 2 (hi, 6.06) [Relevant]",
+          "Haunted (hi, 5.8) [Relevant]",
+          "Ghost Stories (hi, 5.16) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-02",
+        "category": "Hindi",
+        "prompt": "दिल को छू लेने वाली प्रेम कहानी",
+        "p10": 0.8,
+        "latency_ms": 2279.1225910186768,
+        "top_titles": [
+          "Kabhi Khushi Kabhie Gham (hi, 7.7) [Relevant]",
+          "Kal Ho Naa Ho (hi, 7.5) [Relevant]",
+          "Khosla Ka Ghosla! (hi, 7.33) [Genre mismatch (movie genres: ['Comedy'], expected: ['Romance', 'Drama'])]"
+        ]
+      },
+      {
+        "id": "HI-03",
+        "category": "Hindi",
+        "prompt": "रोमांचक सस्पेंस मर्डर मिस्ट्री",
+        "p10": 0.4,
+        "latency_ms": 3312.061309814453,
+        "top_titles": [
+          "Haider (hi, 7.25) [Relevant]",
+          "Mrs. (hi, 6.66) [Genre mismatch (movie genres: ['Drama'], expected: ['Mystery', 'Thriller', 'Crime'])]",
+          "Darlings (hi, 6.99) [Genre mismatch (movie genres: ['Comedy'], expected: ['Mystery', 'Thriller', 'Crime'])]"
+        ]
+      },
+      {
+        "id": "HI-04",
+        "category": "Hindi",
+        "prompt": "परिवार के साथ देखने वाली हंसी की फिल्म",
+        "p10": 0.9,
+        "latency_ms": 3313.716173171997,
+        "top_titles": [
+          "Udaan (hi, 7.28) [Relevant]",
+          "Srikanth (hi, 7.5) [Relevant]",
+          "Satyaprem Ki Katha (hi, 6.86) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-05",
+        "category": "Hindi",
+        "prompt": "देशभक्ति और सेना की सच्ची कहानी",
+        "p10": 0.7,
+        "latency_ms": 3287.6243591308594,
+        "top_titles": [
+          "Kabhi Khushi Kabhie Gham (hi, 7.7) [Relevant]",
+          "Sooryavansham (hi, 0.0) [Low rating (0.0 < 6.0)]",
+          "Khosla Ka Ghosla! (hi, 7.33) [Genre mismatch (movie genres: ['Comedy'], expected: ['Action', 'Drama', 'History', 'War'])]"
+        ]
+      },
+      {
+        "id": "HI-06",
+        "category": "Hindi",
+        "prompt": "koi badhiya suspense thriller movie batao",
+        "p10": 0.4,
+        "latency_ms": 2072.730541229248,
+        "top_titles": [
+          "Batla House (hi, 6.8) [Relevant]",
+          "A Death in the Gunj (hi, 7.09) [Relevant]",
+          "Gumraah (hi, 6.7) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-07",
+        "category": "Hindi",
+        "prompt": "dost ke sath dekhne wali mast bollywood comedy",
+        "p10": 0.9,
+        "latency_ms": 3274.613380432129,
+        "top_titles": [
+          "Ankhon Dekhi (hi, 7.07) [Relevant]",
+          "PK (hi, 7.7) [Relevant]",
+          "Kho Gaye Hum Kahan (hi, 6.57) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-08",
+        "category": "Hindi",
+        "prompt": "pyar aur dard wali emotional movie",
+        "p10": 0.6,
+        "latency_ms": 3273.2272148132324,
+        "top_titles": [
+          "Sanam Teri Kasam (hi, 7.9) [Relevant]",
+          "Bachna Ae Haseeno (hi, 6.1) [Relevant]",
+          "Ek Deewane Ki Deewaniyat (hi, 5.8) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-09",
+        "category": "Hindi",
+        "prompt": "bhai action movie chahiye dhoom dhadaka",
+        "p10": 0.5,
+        "latency_ms": 2402.737617492676,
+        "top_titles": [
+          "Akshardham: Operation Vajra Shakti (hi, 9.25) [Relevant]",
+          "Top Gun: Maverick (en, 8.16) [Language mismatch (en not in {'te', 'hi'})]",
+          "Flight (hi, 10.0) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-10",
+        "category": "Hindi",
+        "prompt": "dimag hila dene wali psychological movie",
+        "p10": 0.4,
+        "latency_ms": 3252.034902572632,
+        "top_titles": [
+          "Sanam Teri Kasam (hi, 7.9) [Genre mismatch (movie genres: ['Drama', 'Romance'], expected: ['Thriller', 'Mystery'])]",
+          "Pihu (hi, 7.6) [Relevant]",
+          "Rang De Basanti (hi, 7.11) [Genre mismatch (movie genres: ['Comedy', 'Drama', 'History', 'Romance'], expected: ['Thriller', 'Mystery'])]"
+        ]
+      },
+      {
+        "id": "HI-11",
+        "category": "Hindi",
+        "prompt": "gangster underworld raw crime like Anurag Kashyap",
+        "p10": 0.9,
+        "latency_ms": 1232.3482036590576,
+        "top_titles": [
+          "Gangubai Kathiawadi (hi, 7.46) [Relevant]",
+          "Dhurandhar (hi, 7.34) [Relevant]",
+          "Bhakshak (hi, 7.21) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-12",
+        "category": "Hindi",
+        "prompt": "social issue comedy drama like Rajkumar Hirani",
+        "p10": 0.1,
+        "latency_ms": 35.28118133544922,
+        "top_titles": [
+          "Hichki (hi, 7.58) [Relevant]",
+          "Manoranjan (hi, 5.5) [Low rating (5.5 < 6.5)]",
+          "Untitled Aamir Khan/Zoya Akhtar Project (hi, 0.0) [Low rating (0.0 < 6.5)]"
+        ]
+      },
+      {
+        "id": "HI-13",
+        "category": "Hindi",
+        "prompt": "college romance and friendship nostalgia",
+        "p10": 0.4,
+        "latency_ms": 1275.9077548980713,
+        "top_titles": [
+          "Zindagi Na Milegi Dobara (hi, 7.64) [Relevant]",
+          "Friends: The Reunion (en, 7.81) [Language mismatch (en not in {'hi'})]",
+          "Student of the Year (hi, 5.77) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-14",
+        "category": "Hindi",
+        "prompt": "courtroom battle for justice in India",
+        "p10": 0.4,
+        "latency_ms": 1262.3157501220703,
+        "top_titles": [
+          "Nail Polish (hi, 6.63) [Relevant]",
+          "Witness for the Prosecution (en, 8.21) [Language mismatch (en not in {'ta', 'hi'})]",
+          "Sirf Ek Bandaa Kaafi Hai (hi, 7.42) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-15",
+        "category": "Hindi",
+        "prompt": "sports underdog biopics Bollywood",
+        "p10": 1.0,
+        "latency_ms": 67.20423698425293,
+        "top_titles": [
+          "83 (hi, 7.2) [Relevant]",
+          "Jhund (hi, 6.74) [Relevant]",
+          "Chak De! India (hi, 7.2) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-01",
+        "category": "Regional Indian",
+        "prompt": "திருப்பங்கள் நிறைந்த அதிரடி திரைப்படம்",
+        "p10": 0.9,
+        "latency_ms": 287.0645523071289,
+        "top_titles": [
+          "Maharaja (ta, 7.72) [Relevant]",
+          "Por Thozhil (ta, 7.22) [Relevant]",
+          "U Turn (ta, 6.78) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-02",
+        "category": "Regional Indian",
+        "prompt": "குடும்ப நகைச்சுவை திரைப்படம்",
+        "p10": 0.9,
+        "latency_ms": 1272.2113132476807,
+        "top_titles": [
+          "Kadaikutty Singam (ta, 6.6) [Relevant]",
+          "Tourist Family (ta, 7.85) [Relevant]",
+          "Kolamavu Kokila (ta, 6.6) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-03",
+        "category": "Regional Indian",
+        "prompt": "grounded kollywood crime investigation thriller",
+        "p10": 0.9,
+        "latency_ms": 1263.3357048034668,
+        "top_titles": [
+          "Kuttram 23 (ta, 7.03) [Relevant]",
+          "Stephen (ta, 6.6) [Relevant]",
+          "Theeran Adhigaaram Ondru (ta, 7.75) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-04",
+        "category": "Regional Indian",
+        "prompt": "masterpieces of Mani Ratnam",
+        "p10": 0.1,
+        "latency_ms": 1248.0745315551758,
+        "top_titles": [
+          "Samuk (hi, 0.0) [Low rating (0.0 < 7.0)]",
+          "Choomantar (hi, 0.0) [Low rating (0.0 < 7.0)]",
+          "Rowdy Rathore 2 (hi, 0.0) [Low rating (0.0 < 7.0)]"
+        ]
+      },
+      {
+        "id": "REG-05",
+        "category": "Regional Indian",
+        "prompt": "మంచి ప్రేమ కథ మరియు భావోద్వేగ చిత్రం",
+        "p10": 0.7,
+        "latency_ms": 1230.4446697235107,
+        "top_titles": [
+          "C/o Kancharapalem (te, 7.4) [Relevant]",
+          "Love Story (te, 6.76) [Relevant]",
+          "Malli Raava (te, 8.16) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-06",
+        "category": "Regional Indian",
+        "prompt": "భారీ యాక్షన్ మరియు సస్పెన్స్ సినిమా",
+        "p10": 0.6,
+        "latency_ms": 3283.4718227386475,
+        "top_titles": [
+          "Hi Nanna (te, 7.9) [Genre mismatch (movie genres: ['Drama', 'Family', 'Romance'], expected: ['Action', 'Thriller'])]",
+          "Happy Days (te, 6.53) [Genre mismatch (movie genres: ['Drama'], expected: ['Action', 'Thriller'])]",
+          "Drushyam (te, 7.71) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-07",
+        "category": "Regional Indian",
+        "prompt": "grand visual spectacles by SS Rajamouli",
+        "p10": 0.0,
+        "latency_ms": 1239.0227317810059,
+        "top_titles": [
+          "The Great Grand Superhero: Aliens Ka Aagman (hi, 8.0) [Language mismatch (hi not in {'te'})]",
+          "A Beautiful Mind (en, 7.85) [Language mismatch (en not in {'te'})]",
+          "Mayasabha: The Hall of Illusion (hi, 0.0) [Low rating (0.0 < 7.0)]"
+        ]
+      },
+      {
+        "id": "REG-08",
+        "category": "Regional Indian",
+        "prompt": "മനോഹരമായ കുടുംബ ചിത്രം",
+        "p10": 0.42857142857142855,
+        "latency_ms": 3272.5229263305664,
+        "top_titles": [
+          "Kumbalangi Nights (ml, 8.1) [Relevant]",
+          "Bangalore Days (ml, 7.6) [Relevant]",
+          "Vaazha (ml, 6.8) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-09",
+        "category": "Regional Indian",
+        "prompt": "കുറ്റാന്വേഷണ ത്രില്ലർ",
+        "p10": 0.8,
+        "latency_ms": 1548.4778881072998,
+        "top_titles": [
+          "Forensic (ml, 6.65) [Relevant]",
+          "Mumbai Police (ml, 6.97) [Relevant]",
+          "Lens (ml, 6.7) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-10",
+        "category": "Regional Indian",
+        "prompt": "realistic mollywood subtle drama like Dileesh Pothan",
+        "p10": 0.9,
+        "latency_ms": 1204.8888206481934,
+        "top_titles": [
+          "Varshangalkku Shesham (ml, 6.05) [Low rating (6.05 < 6.5)]",
+          "Uyare (ml, 7.39) [Relevant]",
+          "Jana Gana Mana (ml, 7.3) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-11",
+        "category": "Regional Indian",
+        "prompt": "ಉತ್ತಮ ಕೌಟುಂಬಿಕ ಹಾಸ್ಯ ಚಲನಚಿತ್ರ",
+        "p10": 0.0,
+        "latency_ms": 3297.6763248443604,
+        "top_titles": [
+          "Bajrangi Bhaijaan (hi, 7.8) [Language mismatch (hi not in ['kn'])]",
+          "Gangubai Kathiawadi (hi, 7.46) [Language mismatch (hi not in ['kn'])]",
+          "Badhaai Ho (hi, 7.27) [Language mismatch (hi not in ['kn'])]"
+        ]
+      },
+      {
+        "id": "REG-12",
+        "category": "Regional Indian",
+        "prompt": "epic sandalwood folklore action drama",
+        "p10": 0.8333333333333334,
+        "latency_ms": 55.971384048461914,
+        "top_titles": [
+          "Avane Srimannarayana (kn, 7.4) [Relevant]",
+          "UI (kn, 5.7) [Relevant]",
+          "Popcorn Monkey Tiger (kn, 6.6) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-13",
+        "category": "Regional Indian",
+        "prompt": "ভালোবাসার রোমান্টিক সিনেমা",
+        "p10": 0.8,
+        "latency_ms": 1272.0842361450195,
+        "top_titles": [
+          "Labour of Love (bn, 6.8) [Relevant]",
+          "Chokher Bali (bn, 7.66) [Relevant]",
+          "Parineeta (bn, 6.7) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-14",
+        "category": "Regional Indian",
+        "prompt": "गंभीर भावनिक मराठी चित्रपट",
+        "p10": 0.7,
+        "latency_ms": 1238.6393547058105,
+        "top_titles": [
+          "Ventilator (mr, 8.64) [Genre mismatch (movie genres: [], expected: ['Drama'])]",
+          "Sairat (mr, 7.57) [Relevant]",
+          "It's OK (mr, 9.3) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-15",
+        "category": "Regional Indian",
+        "prompt": "ਦਿਲਚਸਪ ਪੰਜਾਬੀ ਕਾਮੇਡੀ",
+        "p10": 1.0,
+        "latency_ms": 1248.298168182373,
+        "top_titles": [
+          "Chal Mera Putt (pa, 7.0) [Relevant]",
+          "Love Punjab (pa, 8.2) [Relevant]",
+          "Vekh Baraatan Challiyan (pa, 7.3) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-01",
+        "category": "International",
+        "prompt": "긴장감 넘치는 심리 스릴러",
+        "p10": 0.9,
+        "latency_ms": 47.807931900024414,
+        "top_titles": [
+          "Memoir of a Murderer (ko, 7.41) [Relevant]",
+          "Memories of Murder (ko, 8.06) [Relevant]",
+          "The Call (ko, 7.46) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-02",
+        "category": "International",
+        "prompt": "감동적인 로맨스 영화",
+        "p10": 1.0,
+        "latency_ms": 1257.8136920928955,
+        "top_titles": [
+          "Love 911 (ko, 7.41) [Relevant]",
+          "Crazy Romance (ko, 6.7) [Relevant]",
+          "A Year-End Medley (ko, 7.2) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-03",
+        "category": "International",
+        "prompt": "social satire dark comedy like Bong Joon-ho",
+        "p10": 0.0,
+        "latency_ms": 26.64661407470703,
+        "top_titles": [
+          "House Arrest (hi, 6.3) [Low rating (6.3 < 7.0)]",
+          "Jojo Rabbit (en, 7.97) [Language mismatch (en not in {'ko'})]",
+          "Joker (hi, 4.2) [Low rating (4.2 < 7.0)]"
+        ]
+      },
+      {
+        "id": "INT-04",
+        "category": "International",
+        "prompt": "korean revenge noir with visceral action",
+        "p10": 0.8,
+        "latency_ms": 38.33723068237305,
+        "top_titles": [
+          "A Bittersweet Life (ko, 7.43) [Relevant]",
+          "Lady Vengeance (ko, 7.51) [Relevant]",
+          "Bedevilled (ko, 7.21) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-05",
+        "category": "International",
+        "prompt": "心を揺さぶる感動のアニメ映画",
+        "p10": 1.0,
+        "latency_ms": 1253.6325454711914,
+        "top_titles": [
+          "Rurouni Kenshin: The Beginning (ja, 7.68) [Relevant]",
+          "Only Yesterday (ja, 7.4) [Relevant]",
+          "No Game No Life: Zero (ja, 7.84) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-06",
+        "category": "International",
+        "prompt": "whimsical magical studio ghibli anime like Miyazaki",
+        "p10": 0.7,
+        "latency_ms": 820.6832408905029,
+        "top_titles": [
+          "Earwig and the Witch (ja, 5.9) [Low rating (5.9 < 7.0)]",
+          "Spirited Away (ja, 8.54) [Relevant]",
+          "Zen - Grogu and Dust Bunnies (ja, 5.96) [Low rating (5.96 < 7.0)]"
+        ]
+      },
+      {
+        "id": "INT-07",
+        "category": "International",
+        "prompt": "quiet japanese slice of life family drama",
+        "p10": 0.5,
+        "latency_ms": 1258.8012218475342,
+        "top_titles": [
+          "My Neighbors the Yamadas (ja, 7.0) [Genre mismatch (movie genres: ['Animation', 'Comedy', 'Family'], expected: ['Drama'])]",
+          "Good Morning (ja, 7.71) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-08",
+        "category": "International",
+        "prompt": "película de suspenso y misterio en español",
+        "p10": 0.0,
+        "latency_ms": 1222.3601341247559,
+        "top_titles": [
+          "El Siete Machos (es, 8.25) [Genre mismatch (movie genres: ['Comedy', 'Western'], expected: ['Thriller', 'Mystery'])]",
+          "El mesero (es, 8.0) [Genre mismatch (movie genres: ['Comedy'], expected: ['Thriller', 'Mystery'])]",
+          "Enemigos (es, 7.8) [Genre mismatch (movie genres: ['Drama'], expected: ['Thriller', 'Mystery'])]"
+        ]
+      },
+      {
+        "id": "INT-09",
+        "category": "International",
+        "prompt": "spanish dark psychological crime twist",
+        "p10": 0.7142857142857143,
+        "latency_ms": 45.942068099975586,
+        "top_titles": [
+          "The Secret in Their Eyes (es, 7.97) [Relevant]",
+          "Mexican Psycho (es, 7.1) [Relevant]",
+          "She Walks in Darkness (es, 6.69) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-10",
+        "category": "International",
+        "prompt": "film français romantique et poétique",
+        "p10": 0.1,
+        "latency_ms": 1233.8733673095703,
+        "top_titles": [
+          "Gladiator (en, 8.23) [Language mismatch (en not in ['fr'])]",
+          "Babylon (en, 7.34) [Language mismatch (en not in ['fr'])]",
+          "The Passion of the Christ (en, 7.54) [Language mismatch (en not in ['fr'])]"
+        ]
+      },
+      {
+        "id": "INT-11",
+        "category": "International",
+        "prompt": "french elegant coming of age drama",
+        "p10": 0.6,
+        "latency_ms": 44.38066482543945,
+        "top_titles": [
+          "Close (fr, 7.8) [Relevant]",
+          "Mommy (fr, 8.19) [Relevant]",
+          "The Specials (fr, 7.76) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-12",
+        "category": "International",
+        "prompt": "haunting scandinavian noir crime mystery",
+        "p10": 0.9,
+        "latency_ms": 49.25823211669922,
+        "top_titles": [
+          "Glass Onion: A Knives Out Mystery (en, 7.02) [Relevant]",
+          "Se7en (en, 8.38) [Relevant]",
+          "Knives Out (en, 7.84) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-13",
+        "category": "International",
+        "prompt": "gritty martial arts action with ruthless stunts",
+        "p10": 0.0,
+        "latency_ms": 1230.2846908569336,
+        "top_titles": [
+          "An Action Hero (hi, 6.52) [Language mismatch (hi not in {'th', 'cn', 'ko', 'id', 'zh'})]",
+          "Karate Kid: Legends (en, 6.98) [Language mismatch (en not in {'th', 'cn', 'ko', 'id', 'zh'})]",
+          "Kick (hi, 5.7) [Language mismatch (hi not in {'th', 'cn', 'ko', 'id', 'zh'})]"
+        ]
+      },
+      {
+        "id": "INT-14",
+        "category": "International",
+        "prompt": "existential european arthouse cinema",
+        "p10": 0.0,
+        "latency_ms": 1243.3342933654785,
+        "top_titles": [
+          "Klaus (en, 8.22) [Genre mismatch (movie genres: ['Animation', 'Family', 'Comedy'], expected: ['Drama'])]",
+          "The Grand Budapest Hotel (en, 8.0) [Language mismatch (en not in {'de', 'it', 'es', 'fr'})]",
+          "Loving Vincent (en, 7.98) [Language mismatch (en not in {'de', 'it', 'es', 'fr'})]"
+        ]
+      },
+      {
+        "id": "INT-15",
+        "category": "International",
+        "prompt": "dramatic latin american survival journey",
+        "p10": 0.1,
+        "latency_ms": 1278.0282497406006,
+        "top_titles": [
+          "Coco (en, 8.2) [Language mismatch (en not in {'es', 'pt'})]",
+          "Colombiana (en, 6.65) [Language mismatch (en not in {'es', 'pt'})]",
+          "The Strangers: Chapter 2 (en, 6.0) [Genre mismatch (movie genres: ['Horror', 'Thriller'], expected: ['Drama', 'Adventure'])]"
+        ]
+      }
+    ]
+  },
+  "Setting C (Language-Aware, Pref=[hi, ta])": {
+    "overall_p10": 0.644186507936508,
+    "avg_latency_ms": 813.2258574167887,
+    "category_p10": {
+      "English": 0.6466666666666666,
+      "Hindi": 0.6666666666666666,
+      "Regional Indian": 0.6624603174603174,
+      "International": 0.6009523809523809
+    },
+    "lang_distribution": {
+      "ta": 121,
+      "en": 62,
+      "hi": 188,
+      "es": 29,
+      "ko": 27,
+      "cn": 1,
+      "ja": 23,
+      "fr": 22,
+      "te": 18,
+      "ml": 27,
+      "kn": 7,
+      "bn": 5,
+      "mr": 10,
+      "pa": 10,
+      "it": 1,
+      "de": 1,
+      "pl": 1,
+      "da": 1,
+      "pt": 2
+    },
+    "query_details": [
+      {
+        "id": "EN-01",
+        "category": "English",
+        "prompt": "mind-bending sci-fi with philosophical concepts",
+        "p10": 0.6,
+        "latency_ms": 1245.0244426727295,
+        "top_titles": [
+          "2.0 (ta, 5.85) [Low rating (5.85 < 6.5)]",
+          "Doctor Strange in the Multiverse of Madness (en, 7.22) [Genre mismatch (movie genres: ['Fantasy', 'Action', 'Adventure'], expected: ['Science Fiction', 'Mystery', 'Drama'])]",
+          "A Beautiful Mind (en, 7.85) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-02",
+        "category": "English",
+        "prompt": "melancholic rainy night comfort movie",
+        "p10": 0.5,
+        "latency_ms": 22.482633590698242,
+        "top_titles": [
+          "Raincoat (hi, 7.41) [Relevant]",
+          "Good Night (ta, 7.27) [Relevant]",
+          "Bhool Bhulaiyaa 2 (hi, 6.06) [Genre mismatch (movie genres: ['Horror', 'Comedy'], expected: ['Drama', 'Romance'])]"
+        ]
+      },
+      {
+        "id": "EN-03",
+        "category": "English",
+        "prompt": "intense psychological thriller with shocking plot twist",
+        "p10": 0.4,
+        "latency_ms": 24.667978286743164,
+        "top_titles": [
+          "Hostel (hi, 5.1) [Low rating (5.1 < 6.5)]",
+          "Stephen (ta, 6.6) [Relevant]",
+          "Climax (hi, 2.7) [Low rating (2.7 < 6.5)]"
+        ]
+      },
+      {
+        "id": "EN-04",
+        "category": "English",
+        "prompt": "laugh out loud buddy comedy",
+        "p10": 0.5,
+        "latency_ms": 1220.3357219696045,
+        "top_titles": [
+          "Atithi Tum Kab Jaoge? (hi, 6.2) [Relevant]",
+          "Jil Jung Juk (ta, 6.66) [Relevant]",
+          "Chup Chup Ke (hi, 6.31) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-05",
+        "category": "English",
+        "prompt": "gritty realistic crime detective noir",
+        "p10": 0.8,
+        "latency_ms": 1231.008529663086,
+        "top_titles": [
+          "Murder 2 (hi, 5.76) [Low rating (5.76 < 6.5)]",
+          "Stephen (ta, 6.6) [Relevant]",
+          "Revolver Rita (ta, 6.4) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-06",
+        "category": "English",
+        "prompt": "haunting atmospheric horror in isolated house",
+        "p10": 0.6,
+        "latency_ms": 27.663469314575195,
+        "top_titles": [
+          "Haunted (hi, 5.8) [Relevant]",
+          "Yavarum Nalam (ta, 6.4) [Relevant]",
+          "Haunted 3D: Echoes of the Past (hi, 10.0) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-07",
+        "category": "English",
+        "prompt": "epic space exploration and survival against odds",
+        "p10": 0.7,
+        "latency_ms": 1237.1244430541992,
+        "top_titles": [
+          "Star Trek Beyond (en, 6.79) [Relevant]",
+          "Pacific Rim (en, 7.0) [Relevant]",
+          "Avengers: Infinity War (en, 8.24) [Genre mismatch (movie genres: ['Genre', 'Genre', 'Genre'], expected: ['Science Fiction', 'Adventure'])]"
+        ]
+      },
+      {
+        "id": "EN-08",
+        "category": "English",
+        "prompt": "heartwarming coming of age summer romance",
+        "p10": 0.8,
+        "latency_ms": 24.771928787231445,
+        "top_titles": [
+          "Girls Will Be Girls (hi, 7.06) [Relevant]",
+          "Sunny Sanskari Ki Tulsi Kumari (hi, 5.64) [Relevant]",
+          "30 Days of Autumn (hi, 0.0) [Low rating (0.0 < 6.0)]"
+        ]
+      },
+      {
+        "id": "EN-09",
+        "category": "English",
+        "prompt": "high stakes courtroom drama and moral dilemma",
+        "p10": 0.7,
+        "latency_ms": 25.971412658691406,
+        "top_titles": [
+          "Jolly LLB (hi, 7.13) [Relevant]",
+          "Etharkkum Thunindhavan (ta, 5.8) [Low rating (5.8 < 6.5)]",
+          "Nail Polish (hi, 6.63) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-10",
+        "category": "English",
+        "prompt": "relentless action movie with incredible choreography",
+        "p10": 0.7,
+        "latency_ms": 280.61771392822266,
+        "top_titles": [
+          "An Action Hero (hi, 6.52) [Relevant]",
+          "Super Deluxe (ta, 7.7) [Relevant]",
+          "Kick (hi, 5.7) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-11",
+        "category": "English",
+        "prompt": "cynical political satire and journalism investigation",
+        "p10": 0.7,
+        "latency_ms": 1225.05784034729,
+        "top_titles": [
+          "Writing with Fire (hi, 7.3) [Relevant]",
+          "Mandela (ta, 7.2) [Relevant]",
+          "The Sabarmati Report (hi, 5.64) [Low rating (5.64 < 6.5)]"
+        ]
+      },
+      {
+        "id": "EN-12",
+        "category": "English",
+        "prompt": "underdog sports story overcoming all obstacles",
+        "p10": 1.0,
+        "latency_ms": 22.85003662109375,
+        "top_titles": [
+          "83 (hi, 7.2) [Relevant]",
+          "Bison Kaalamaadan (ta, 7.4) [Relevant]",
+          "Chak De! India (hi, 7.2) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-13",
+        "category": "English",
+        "prompt": "time travel paradox and altered timelines",
+        "p10": 0.7,
+        "latency_ms": 52.05059051513672,
+        "top_titles": [
+          "Once Upon a Time in Mumbaai (hi, 6.7) [Relevant]",
+          "24 (ta, 7.2) [Relevant]",
+          "Indru Netru Naalai (ta, 7.68) [Relevant]"
+        ]
+      },
+      {
+        "id": "EN-14",
+        "category": "English",
+        "prompt": "bittersweet divorce and family reconciliation",
+        "p10": 0.4,
+        "latency_ms": 827.3229598999023,
+        "top_titles": [
+          "Hum Saath Saath Hain (hi, 6.1) [Relevant]",
+          "Asal (ta, 4.3) [Low rating (4.3 < 6.5)]",
+          "Zara Hatke Zara Bachke (hi, 5.8) [Low rating (5.8 < 6.5)]"
+        ]
+      },
+      {
+        "id": "EN-15",
+        "category": "English",
+        "prompt": "whimsical fantasy adventure with talking animals",
+        "p10": 0.6,
+        "latency_ms": 29.205799102783203,
+        "top_titles": [
+          "Animal (hi, 6.12) [Genre mismatch (movie genres: ['Action', 'Crime', 'Drama'], expected: ['Animation', 'Fantasy', 'Family'])]",
+          "Junglee (hi, 6.7) [Genre mismatch (movie genres: ['Action', 'Adventure'], expected: ['Animation', 'Fantasy', 'Family'])]",
+          "Ghatothkach - Master of Magic (hi, 10.0) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-01",
+        "category": "Hindi",
+        "prompt": "हॉरर कॉमेडी फिल्में",
+        "p10": 0.3,
+        "latency_ms": 56.46538734436035,
+        "top_titles": [
+          "Bhool Bhulaiyaa 2 (hi, 6.06) [Relevant]",
+          "Haunted (hi, 5.8) [Relevant]",
+          "Ghost Stories (hi, 5.16) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-02",
+        "category": "Hindi",
+        "prompt": "दिल को छू लेने वाली प्रेम कहानी",
+        "p10": 1.0,
+        "latency_ms": 1255.7029724121094,
+        "top_titles": [
+          "Jodhaa Akbar (hi, 7.28) [Relevant]",
+          "Sanam Teri Kasam (hi, 7.9) [Relevant]",
+          "Kuch Kuch Hota Hai (hi, 7.5) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-03",
+        "category": "Hindi",
+        "prompt": "रोमांचक सस्पेंस मर्डर मिस्ट्री",
+        "p10": 0.4,
+        "latency_ms": 3273.2255458831787,
+        "top_titles": [
+          "Haider (hi, 7.25) [Relevant]",
+          "Mrs. (hi, 6.66) [Genre mismatch (movie genres: ['Drama'], expected: ['Mystery', 'Thriller', 'Crime'])]",
+          "Darlings (hi, 6.99) [Genre mismatch (movie genres: ['Comedy'], expected: ['Mystery', 'Thriller', 'Crime'])]"
+        ]
+      },
+      {
+        "id": "HI-04",
+        "category": "Hindi",
+        "prompt": "परिवार के साथ देखने वाली हंसी की फिल्म",
+        "p10": 0.6,
+        "latency_ms": 1256.058692932129,
+        "top_titles": [
+          "Kapoor & Sons (hi, 7.08) [Relevant]",
+          "Kuch Kuch Hota Hai (hi, 7.5) [Relevant]",
+          "Housefull 5 (hi, 5.1) [Low rating (5.1 < 6.0)]"
+        ]
+      },
+      {
+        "id": "HI-05",
+        "category": "Hindi",
+        "prompt": "देशभक्ति और सेना की सच्ची कहानी",
+        "p10": 0.8,
+        "latency_ms": 1577.1470069885254,
+        "top_titles": [
+          "Shershaah (hi, 7.3) [Relevant]",
+          "Border 2 (hi, 7.5) [Relevant]",
+          "Holiday (hi, 6.26) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-06",
+        "category": "Hindi",
+        "prompt": "koi badhiya suspense thriller movie batao",
+        "p10": 0.6,
+        "latency_ms": 35.66145896911621,
+        "top_titles": [
+          "Hostel (hi, 5.1) [Low rating (5.1 < 6.0)]",
+          "Ratsasan (ta, 7.41) [Relevant]",
+          "Untitled Saif Ali Khan - Farhan Akhtar Project (hi, 0.0) [Low rating (0.0 < 6.0)]"
+        ]
+      },
+      {
+        "id": "HI-07",
+        "category": "Hindi",
+        "prompt": "dost ke sath dekhne wali mast bollywood comedy",
+        "p10": 0.7,
+        "latency_ms": 2783.230781555176,
+        "top_titles": [
+          "Wild Wild Punjab (hi, 6.5) [Relevant]",
+          "Kho Gaye Hum Kahan (hi, 6.57) [Relevant]",
+          "House Arrest (hi, 6.3) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-08",
+        "category": "Hindi",
+        "prompt": "pyar aur dard wali emotional movie",
+        "p10": 0.9,
+        "latency_ms": 2432.2433471679688,
+        "top_titles": [
+          "Sanam Teri Kasam (hi, 7.9) [Relevant]",
+          "Paiyaa (ta, 6.1) [Relevant]",
+          "Bachna Ae Haseeno (hi, 6.1) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-09",
+        "category": "Hindi",
+        "prompt": "bhai action movie chahiye dhoom dhadaka",
+        "p10": 0.6,
+        "latency_ms": 34.124135971069336,
+        "top_titles": [
+          "An Action Hero (hi, 6.52) [Relevant]",
+          "Super Deluxe (ta, 7.7) [Relevant]",
+          "Kick (hi, 5.7) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-10",
+        "category": "Hindi",
+        "prompt": "dimag hila dene wali psychological movie",
+        "p10": 0.4,
+        "latency_ms": 2215.8312797546387,
+        "top_titles": [
+          "Sanam Teri Kasam (hi, 7.9) [Genre mismatch (movie genres: ['Drama', 'Romance'], expected: ['Thriller', 'Mystery'])]",
+          "Nerkonda Paarvai (ta, 6.9) [Relevant]",
+          "Pihu (hi, 7.6) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-11",
+        "category": "Hindi",
+        "prompt": "gangster underworld raw crime like Anurag Kashyap",
+        "p10": 0.9,
+        "latency_ms": 1226.5825271606445,
+        "top_titles": [
+          "Gangubai Kathiawadi (hi, 7.46) [Relevant]",
+          "Aaranya Kaandam (ta, 7.51) [Relevant]",
+          "Dhurandhar (hi, 7.34) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-12",
+        "category": "Hindi",
+        "prompt": "social issue comedy drama like Rajkumar Hirani",
+        "p10": 0.5,
+        "latency_ms": 24.685144424438477,
+        "top_titles": [
+          "Hichki (hi, 7.58) [Relevant]",
+          "Mandela (ta, 7.2) [Relevant]",
+          "Manoranjan (hi, 5.5) [Low rating (5.5 < 6.5)]"
+        ]
+      },
+      {
+        "id": "HI-13",
+        "category": "Hindi",
+        "prompt": "college romance and friendship nostalgia",
+        "p10": 0.6,
+        "latency_ms": 1239.2466068267822,
+        "top_titles": [
+          "Zindagi Na Milegi Dobara (hi, 7.64) [Relevant]",
+          "Kushi (ta, 7.07) [Relevant]",
+          "Student of the Year (hi, 5.77) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-14",
+        "category": "Hindi",
+        "prompt": "courtroom battle for justice in India",
+        "p10": 0.7,
+        "latency_ms": 267.9760456085205,
+        "top_titles": [
+          "Nail Polish (hi, 6.63) [Relevant]",
+          "Etharkkum Thunindhavan (ta, 5.8) [Low rating (5.8 < 6.5)]",
+          "Sirf Ek Bandaa Kaafi Hai (hi, 7.42) [Relevant]"
+        ]
+      },
+      {
+        "id": "HI-15",
+        "category": "Hindi",
+        "prompt": "sports underdog biopics Bollywood",
+        "p10": 1.0,
+        "latency_ms": 51.39946937561035,
+        "top_titles": [
+          "83 (hi, 7.2) [Relevant]",
+          "Jhund (hi, 6.74) [Relevant]",
+          "Chak De! India (hi, 7.2) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-01",
+        "category": "Regional Indian",
+        "prompt": "திருப்பங்கள் நிறைந்த அதிரடி திரைப்படம்",
+        "p10": 0.9,
+        "latency_ms": 1229.1908264160156,
+        "top_titles": [
+          "Maharaja (ta, 7.72) [Relevant]",
+          "Por Thozhil (ta, 7.22) [Relevant]",
+          "U Turn (ta, 6.78) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-02",
+        "category": "Regional Indian",
+        "prompt": "குடும்ப நகைச்சுவை திரைப்படம்",
+        "p10": 0.9,
+        "latency_ms": 1248.5888004302979,
+        "top_titles": [
+          "Kadaikutty Singam (ta, 6.6) [Relevant]",
+          "Tourist Family (ta, 7.85) [Relevant]",
+          "Kolamavu Kokila (ta, 6.6) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-03",
+        "category": "Regional Indian",
+        "prompt": "grounded kollywood crime investigation thriller",
+        "p10": 0.0,
+        "latency_ms": 282.78231620788574,
+        "top_titles": [
+          "Cheers (hi, 10.0) [Genre mismatch (movie genres: ['Drama'], expected: ['Crime', 'Thriller', 'Mystery'])]",
+          "Haunted 3D: Echoes of the Past (hi, 10.0) [Language mismatch (hi not in ['ta'])]",
+          "Manque (hi, 10.0) [Language mismatch (hi not in ['ta'])]"
+        ]
+      },
+      {
+        "id": "REG-04",
+        "category": "Regional Indian",
+        "prompt": "masterpieces of Mani Ratnam",
+        "p10": 0.3,
+        "latency_ms": 1238.4953498840332,
+        "top_titles": [
+          "Samuk (hi, 0.0) [Low rating (0.0 < 7.0)]",
+          "Ratsasan (ta, 7.41) [Genre mismatch (movie genres: ['Thriller', 'Crime', 'Mystery'], expected: ['Drama', 'Romance', 'Action'])]",
+          "Choomantar (hi, 0.0) [Low rating (0.0 < 7.0)]"
+        ]
+      },
+      {
+        "id": "REG-05",
+        "category": "Regional Indian",
+        "prompt": "మంచి ప్రేమ కథ మరియు భావోద్వేగ చిత్రం",
+        "p10": 0.7,
+        "latency_ms": 1232.1393489837646,
+        "top_titles": [
+          "C/o Kancharapalem (te, 7.4) [Relevant]",
+          "Love Story (te, 6.76) [Relevant]",
+          "Malli Raava (te, 8.16) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-06",
+        "category": "Regional Indian",
+        "prompt": "భారీ యాక్షన్ మరియు సస్పెన్స్ సినిమా",
+        "p10": 0.375,
+        "latency_ms": 211.11440658569336,
+        "top_titles": [
+          "Salaar: Part 1 - Ceasefire (te, 6.82) [Relevant]",
+          "BRO (te, 6.1) [Genre mismatch (movie genres: ['Comedy', 'Drama', 'Fantasy'], expected: ['Action', 'Thriller'])]",
+          "Bruce Lee: The Fighter (te, 5.7) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-07",
+        "category": "Regional Indian",
+        "prompt": "grand visual spectacles by SS Rajamouli",
+        "p10": 0.3,
+        "latency_ms": 1244.3523406982422,
+        "top_titles": [
+          "The Great Grand Superhero: Aliens Ka Aagman (hi, 8.0) [Relevant]",
+          "Vasool Raja MBBS (ta, 6.82) [Genre mismatch (movie genres: ['Comedy'], expected: ['Action', 'Drama', 'Fantasy'])]",
+          "Mayasabha: The Hall of Illusion (hi, 0.0) [Low rating (0.0 < 7.0)]"
+        ]
+      },
+      {
+        "id": "REG-08",
+        "category": "Regional Indian",
+        "prompt": "മനോഹരമായ കുടുംബ ചിത്രം",
+        "p10": 0.42857142857142855,
+        "latency_ms": 2518.023729324341,
+        "top_titles": [
+          "Kumbalangi Nights (ml, 8.1) [Relevant]",
+          "Bangalore Days (ml, 7.6) [Relevant]",
+          "Vaazha (ml, 6.8) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-09",
+        "category": "Regional Indian",
+        "prompt": "കുറ്റാന്വേഷണ ത്രില്ലർ",
+        "p10": 0.8,
+        "latency_ms": 1246.527910232544,
+        "top_titles": [
+          "Forensic (ml, 6.65) [Relevant]",
+          "Mumbai Police (ml, 6.97) [Relevant]",
+          "Lens (ml, 6.7) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-10",
+        "category": "Regional Indian",
+        "prompt": "realistic mollywood subtle drama like Dileesh Pothan",
+        "p10": 0.9,
+        "latency_ms": 964.7808074951172,
+        "top_titles": [
+          "Varshangalkku Shesham (ml, 6.05) [Low rating (6.05 < 6.5)]",
+          "Uyare (ml, 7.39) [Relevant]",
+          "Jana Gana Mana (ml, 7.3) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-11",
+        "category": "Regional Indian",
+        "prompt": "ಉತ್ತಮ ಕೌಟುಂಬಿಕ ಹಾಸ್ಯ ಚಲನಚಿತ್ರ",
+        "p10": 1.0,
+        "latency_ms": 1251.6875267028809,
+        "top_titles": [
+          "Hostel Hudugaru Bekagiddare (kn, 7.2) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-12",
+        "category": "Regional Indian",
+        "prompt": "epic sandalwood folklore action drama",
+        "p10": 0.8333333333333334,
+        "latency_ms": 37.90855407714844,
+        "top_titles": [
+          "Avane Srimannarayana (kn, 7.4) [Relevant]",
+          "UI (kn, 5.7) [Relevant]",
+          "Popcorn Monkey Tiger (kn, 6.6) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-13",
+        "category": "Regional Indian",
+        "prompt": "ভালোবাসার রোমান্টিক সিনেমা",
+        "p10": 0.8,
+        "latency_ms": 230.29136657714844,
+        "top_titles": [
+          "Labour of Love (bn, 6.8) [Relevant]",
+          "Chokher Bali (bn, 7.66) [Relevant]",
+          "Parineeta (bn, 6.7) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-14",
+        "category": "Regional Indian",
+        "prompt": "गंभीर भावनिक मराठी चित्रपट",
+        "p10": 0.7,
+        "latency_ms": 1228.2063961029053,
+        "top_titles": [
+          "Ventilator (mr, 8.64) [Genre mismatch (movie genres: [], expected: ['Drama'])]",
+          "Sairat (mr, 7.57) [Relevant]",
+          "It's OK (mr, 9.3) [Relevant]"
+        ]
+      },
+      {
+        "id": "REG-15",
+        "category": "Regional Indian",
+        "prompt": "ਦਿਲਚਸਪ ਪੰਜਾਬੀ ਕਾਮੇਡੀ",
+        "p10": 1.0,
+        "latency_ms": 1243.621587753296,
+        "top_titles": [
+          "Chal Mera Putt (pa, 7.0) [Relevant]",
+          "Love Punjab (pa, 8.2) [Relevant]",
+          "Vekh Baraatan Challiyan (pa, 7.3) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-01",
+        "category": "International",
+        "prompt": "긴장감 넘치는 심리 스릴러",
+        "p10": 0.9,
+        "latency_ms": 41.37444496154785,
+        "top_titles": [
+          "Memoir of a Murderer (ko, 7.41) [Relevant]",
+          "Memories of Murder (ko, 8.06) [Relevant]",
+          "The Call (ko, 7.46) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-02",
+        "category": "International",
+        "prompt": "감동적인 로맨스 영화",
+        "p10": 1.0,
+        "latency_ms": 458.24575424194336,
+        "top_titles": [
+          "Love 911 (ko, 7.41) [Relevant]",
+          "Crazy Romance (ko, 6.7) [Relevant]",
+          "A Year-End Medley (ko, 7.2) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-03",
+        "category": "International",
+        "prompt": "social satire dark comedy like Bong Joon-ho",
+        "p10": 0.3,
+        "latency_ms": 44.843435287475586,
+        "top_titles": [
+          "House Arrest (hi, 6.3) [Low rating (6.3 < 7.0)]",
+          "Jil Jung Juk (ta, 6.66) [Relevant]",
+          "Joker (hi, 4.2) [Low rating (4.2 < 7.0)]"
+        ]
+      },
+      {
+        "id": "INT-04",
+        "category": "International",
+        "prompt": "korean revenge noir with visceral action",
+        "p10": 0.8,
+        "latency_ms": 36.81325912475586,
+        "top_titles": [
+          "A Bittersweet Life (ko, 7.43) [Relevant]",
+          "Lady Vengeance (ko, 7.51) [Relevant]",
+          "Bedevilled (ko, 7.21) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-05",
+        "category": "International",
+        "prompt": "心を揺さぶる感動のアニメ映画",
+        "p10": 1.0,
+        "latency_ms": 1258.1074237823486,
+        "top_titles": [
+          "Rurouni Kenshin: The Beginning (ja, 7.68) [Relevant]",
+          "Only Yesterday (ja, 7.4) [Relevant]",
+          "No Game No Life: Zero (ja, 7.84) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-06",
+        "category": "International",
+        "prompt": "whimsical magical studio ghibli anime like Miyazaki",
+        "p10": 0.7,
+        "latency_ms": 292.40965843200684,
+        "top_titles": [
+          "Earwig and the Witch (ja, 5.9) [Low rating (5.9 < 7.0)]",
+          "Spirited Away (ja, 8.54) [Relevant]",
+          "Zen - Grogu and Dust Bunnies (ja, 5.96) [Low rating (5.96 < 7.0)]"
+        ]
+      },
+      {
+        "id": "INT-07",
+        "category": "International",
+        "prompt": "quiet japanese slice of life family drama",
+        "p10": 0.5,
+        "latency_ms": 1256.0670375823975,
+        "top_titles": [
+          "My Neighbors the Yamadas (ja, 7.0) [Genre mismatch (movie genres: ['Animation', 'Comedy', 'Family'], expected: ['Drama'])]",
+          "Good Morning (ja, 7.71) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-08",
+        "category": "International",
+        "prompt": "película de suspenso y misterio en español",
+        "p10": 0.0,
+        "latency_ms": 1255.805492401123,
+        "top_titles": [
+          "El Siete Machos (es, 8.25) [Genre mismatch (movie genres: ['Comedy', 'Western'], expected: ['Thriller', 'Mystery'])]",
+          "El mesero (es, 8.0) [Genre mismatch (movie genres: ['Comedy'], expected: ['Thriller', 'Mystery'])]",
+          "Enemigos (es, 7.8) [Genre mismatch (movie genres: ['Drama'], expected: ['Thriller', 'Mystery'])]"
+        ]
+      },
+      {
+        "id": "INT-09",
+        "category": "International",
+        "prompt": "spanish dark psychological crime twist",
+        "p10": 0.7142857142857143,
+        "latency_ms": 48.83623123168945,
+        "top_titles": [
+          "The Secret in Their Eyes (es, 7.97) [Relevant]",
+          "Mexican Psycho (es, 7.1) [Relevant]",
+          "She Walks in Darkness (es, 6.69) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-10",
+        "category": "International",
+        "prompt": "film français romantique et poétique",
+        "p10": 0.6,
+        "latency_ms": 501.99007987976074,
+        "top_titles": [
+          "Night and Fog (fr, 8.3) [Genre mismatch (movie genres: ['Documentary', 'History'], expected: ['Romance', 'Drama', 'Comedy'])]",
+          "Venus in Fur (fr, 7.19) [Relevant]",
+          "Human (fr, 8.43) [Genre mismatch (movie genres: ['Documentary'], expected: ['Romance', 'Drama', 'Comedy'])]"
+        ]
+      },
+      {
+        "id": "INT-11",
+        "category": "International",
+        "prompt": "french elegant coming of age drama",
+        "p10": 0.6,
+        "latency_ms": 40.67587852478027,
+        "top_titles": [
+          "Close (fr, 7.8) [Relevant]",
+          "Mommy (fr, 8.19) [Relevant]",
+          "The Specials (fr, 7.76) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-12",
+        "category": "International",
+        "prompt": "haunting scandinavian noir crime mystery",
+        "p10": 0.6,
+        "latency_ms": 46.73266410827637,
+        "top_titles": [
+          "Stephen (ta, 6.6) [Relevant]",
+          "Yavarum Nalam (ta, 6.4) [Relevant]",
+          "M (de, 8.06) [Language mismatch (de not in {'hi', 'no', 'ta', 'da', 'en', 'sv'})]"
+        ]
+      },
+      {
+        "id": "INT-13",
+        "category": "International",
+        "prompt": "gritty martial arts action with ruthless stunts",
+        "p10": 0.8,
+        "latency_ms": 1249.9001026153564,
+        "top_titles": [
+          "An Action Hero (hi, 6.52) [Relevant]",
+          "Pattas (ta, 5.8) [Relevant]",
+          "Kick (hi, 5.7) [Relevant]"
+        ]
+      },
+      {
+        "id": "INT-14",
+        "category": "International",
+        "prompt": "existential european arthouse cinema",
+        "p10": 0.1,
+        "latency_ms": 419.6500778198242,
+        "top_titles": [
+          "Klaus (en, 8.22) [Genre mismatch (movie genres: ['Animation', 'Family', 'Comedy'], expected: ['Drama'])]",
+          "The Grand Budapest Hotel (en, 8.0) [Language mismatch (en not in {'it', 'hi', 'es', 'ta', 'de', 'fr'})]",
+          "Loving Vincent (en, 7.98) [Language mismatch (en not in {'it', 'hi', 'es', 'ta', 'de', 'fr'})]"
+        ]
+      },
+      {
+        "id": "INT-15",
+        "category": "International",
+        "prompt": "dramatic latin american survival journey",
+        "p10": 0.4,
+        "latency_ms": 1208.6527347564697,
+        "top_titles": [
+          "Facing El Chapo (es, 8.78) [Genre mismatch (movie genres: ['Genre', 'Genre', 'Genre'], expected: ['Drama', 'Adventure'])]",
+          "The Lost Children (es, 7.5) [Genre mismatch (movie genres: ['Documentary'], expected: ['Drama', 'Adventure'])]",
+          "Embrace of the Serpent (es, 7.67) [Relevant]"
+        ]
+      }
+    ]
+  }
+}

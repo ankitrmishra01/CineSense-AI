@@ -1,0 +1,1338 @@
+{
+  "total": 60,
+  "success_count": 60,
+  "pass_rate": 100.0,
+  "p50_ms": 130.48890000209212,
+  "p95_ms": 377.9740000027232,
+  "p99_ms": 1158.6355000035837,
+  "results": [
+    {
+      "idx": 1,
+      "prompt": "best bollywood comedy movies",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "hi",
+        "hi",
+        "hi",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 1158.6355000035837,
+      "top_title": "House Arrest",
+      "top_orig_title": "House Arrest",
+      "top_cohort_score": 6.298
+    },
+    {
+      "idx": 2,
+      "prompt": "top rated tollywood action films",
+      "pref": [
+        "te",
+        "en"
+      ],
+      "expected": "te",
+      "count": 10,
+      "top_langs": [
+        "te",
+        "te",
+        "te",
+        "te",
+        "te"
+      ],
+      "matched": true,
+      "latency_ms": 155.61270000762306,
+      "top_title": "1: Nenokkadine",
+      "top_orig_title": "1 - నేనొక్కడినే",
+      "top_cohort_score": 6.622
+    },
+    {
+      "idx": 3,
+      "prompt": "grounded kollywood crime thriller",
+      "pref": [
+        "ta",
+        "en"
+      ],
+      "expected": "ta",
+      "count": 10,
+      "top_langs": [
+        "ta",
+        "ta",
+        "ta",
+        "ta",
+        "ta"
+      ],
+      "matched": true,
+      "latency_ms": 324.3666999915149,
+      "top_title": "Ratsasan",
+      "top_orig_title": "ராட்சசன்",
+      "top_cohort_score": 7.308
+    },
+    {
+      "idx": 4,
+      "prompt": "realistic mollywood mystery drama",
+      "pref": [
+        "ml",
+        "en"
+      ],
+      "expected": "ml",
+      "count": 10,
+      "top_langs": [
+        "ml",
+        "ml",
+        "ml",
+        "ml",
+        "ml"
+      ],
+      "matched": true,
+      "latency_ms": 100.11890000896528,
+      "top_title": "Forensic",
+      "top_orig_title": "ഫോറന്‍സിക്",
+      "top_cohort_score": 6.553
+    },
+    {
+      "idx": 5,
+      "prompt": "epic sandalwood mythological cinema",
+      "pref": [
+        "kn",
+        "en"
+      ],
+      "expected": "kn",
+      "count": 6,
+      "top_langs": [
+        "kn",
+        "kn",
+        "kn",
+        "kn",
+        "kn"
+      ],
+      "matched": true,
+      "latency_ms": 97.67679998185486,
+      "top_title": "Kantara",
+      "top_orig_title": "ಕಾಂತಾರ",
+      "top_cohort_score": 7.114
+    },
+    {
+      "idx": 6,
+      "prompt": "classic tollywood bangla literature film",
+      "pref": [
+        "bn",
+        "en"
+      ],
+      "expected": "bn",
+      "count": 10,
+      "top_langs": [
+        "te",
+        "te",
+        "te",
+        "te",
+        "te"
+      ],
+      "matched": true,
+      "latency_ms": 196.2387000094168,
+      "top_title": "Shyam Singha Roy",
+      "top_orig_title": "శ్యామ్ సింగ రాయ్",
+      "top_cohort_score": 6.499
+    },
+    {
+      "idx": 7,
+      "prompt": "award winning marathi cinema",
+      "pref": [
+        "mr",
+        "en"
+      ],
+      "expected": "mr",
+      "count": 2,
+      "top_langs": [
+        "mr",
+        "mr"
+      ],
+      "matched": true,
+      "latency_ms": 151.09450000454672,
+      "top_title": "Khashaba",
+      "top_orig_title": "खाशाबा",
+      "top_cohort_score": 7.07
+    },
+    {
+      "idx": 8,
+      "prompt": "energetic punjabi family entertainer",
+      "pref": [
+        "pa",
+        "en"
+      ],
+      "expected": "pa",
+      "count": 10,
+      "top_langs": [
+        "en",
+        "en",
+        "en",
+        "en",
+        "en"
+      ],
+      "matched": true,
+      "latency_ms": 182.26760000106879,
+      "top_title": "Up",
+      "top_orig_title": "Up",
+      "top_cohort_score": 7.943
+    },
+    {
+      "idx": 9,
+      "prompt": "gripping k-cinema neo noir thriller",
+      "pref": [
+        "ko",
+        "en"
+      ],
+      "expected": "ko",
+      "count": 2,
+      "top_langs": [
+        "ko",
+        "ko"
+      ],
+      "matched": true,
+      "latency_ms": 116.43510000430979,
+      "top_title": "Memoir of a Murderer",
+      "top_orig_title": "살인자의 기억법",
+      "top_cohort_score": 7.311
+    },
+    {
+      "idx": 10,
+      "prompt": "aesthetic anime with deep emotional philosophy",
+      "pref": [
+        "ja",
+        "en"
+      ],
+      "expected": "ja",
+      "count": 10,
+      "top_langs": [
+        "ja",
+        "ja",
+        "ja",
+        "ja",
+        "ja"
+      ],
+      "matched": true,
+      "latency_ms": 107.75739999371581,
+      "top_title": "Made in Abyss: Dawn of the Deep Soul",
+      "top_orig_title": "劇場版メイドインアビス 深き魂の黎明",
+      "top_cohort_score": 7.702
+    },
+    {
+      "idx": 11,
+      "prompt": "हॉरर कॉमेडी फिल्में",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "hi",
+        "hi",
+        "hi",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 151.7052999988664,
+      "top_title": "Bajrangi Bhaijaan",
+      "top_orig_title": "बजरंगी भाईजान",
+      "top_cohort_score": 7.772
+    },
+    {
+      "idx": 12,
+      "prompt": "दिल को छू लेने वाली प्रेम कहानी",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "hi",
+        "hi",
+        "hi",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 213.536600000225,
+      "top_title": "Kabhi Khushi Kabhie Gham",
+      "top_orig_title": "कभी ख़ुशी कभी ग़म",
+      "top_cohort_score": 7.676
+    },
+    {
+      "idx": 13,
+      "prompt": "रोमांचक सस्पेंस मर्डर मिस्ट्री",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "hi",
+        "hi",
+        "hi",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 377.9740000027232,
+      "top_title": "Haider",
+      "top_orig_title": "हैदर",
+      "top_cohort_score": 7.212
+    },
+    {
+      "idx": 14,
+      "prompt": "திருப்பங்கள் நிறைந்த அதிரடி திரைப்படம்",
+      "pref": [
+        "ta",
+        "en"
+      ],
+      "expected": "ta",
+      "count": 10,
+      "top_langs": [
+        "ta",
+        "ta",
+        "ta",
+        "ta",
+        "ta"
+      ],
+      "matched": true,
+      "latency_ms": 204.3435999948997,
+      "top_title": "DC",
+      "top_orig_title": "டிசி",
+      "top_cohort_score": 7.081
+    },
+    {
+      "idx": 15,
+      "prompt": "குடும்ப நகைச்சுவை திரைப்படம்",
+      "pref": [
+        "ta",
+        "en"
+      ],
+      "expected": "ta",
+      "count": 10,
+      "top_langs": [
+        "ta",
+        "ta",
+        "ta",
+        "ta",
+        "ta"
+      ],
+      "matched": true,
+      "latency_ms": 221.67209998588078,
+      "top_title": "Love Today",
+      "top_orig_title": "லவ் டுடே",
+      "top_cohort_score": 6.771
+    },
+    {
+      "idx": 16,
+      "prompt": "మంచి ప్రేమ కథ మరియు భావోద్వేగ చిత్రం",
+      "pref": [
+        "te",
+        "en"
+      ],
+      "expected": "te",
+      "count": 10,
+      "top_langs": [
+        "te",
+        "te",
+        "te",
+        "te",
+        "te"
+      ],
+      "matched": true,
+      "latency_ms": 132.3878999974113,
+      "top_title": "Happy Days",
+      "top_orig_title": "హ్యాపీ డేస్",
+      "top_cohort_score": 6.38
+    },
+    {
+      "idx": 17,
+      "prompt": "భారీ యాక్షన్ మరియు సస్పెన్స్ సినిమా",
+      "pref": [
+        "te",
+        "en"
+      ],
+      "expected": "te",
+      "count": 10,
+      "top_langs": [
+        "te",
+        "te",
+        "te",
+        "te",
+        "te"
+      ],
+      "matched": true,
+      "latency_ms": 130.48890000209212,
+      "top_title": "Hi Nanna",
+      "top_orig_title": "హాయ్ నాన్న",
+      "top_cohort_score": 7.596
+    },
+    {
+      "idx": 18,
+      "prompt": "മനോഹരമായ കുടുംബ ചിത്രം",
+      "pref": [
+        "ml",
+        "en"
+      ],
+      "expected": "ml",
+      "count": 7,
+      "top_langs": [
+        "ml",
+        "ml",
+        "ml",
+        "ml",
+        "ml"
+      ],
+      "matched": true,
+      "latency_ms": 138.2609999855049,
+      "top_title": "Kumbalangi Nights",
+      "top_orig_title": "കുമ്പളങ്ങി നൈറ്റ്‌സ്",
+      "top_cohort_score": 7.928
+    },
+    {
+      "idx": 19,
+      "prompt": "കുറ്റാന്വേഷണ ത്രില്ലർ",
+      "pref": [
+        "ml",
+        "en"
+      ],
+      "expected": "ml",
+      "count": 10,
+      "top_langs": [
+        "ml",
+        "ml",
+        "ml",
+        "ml",
+        "ml"
+      ],
+      "matched": true,
+      "latency_ms": 142.6958000229206,
+      "top_title": "Kumbalangi Nights",
+      "top_orig_title": "കുമ്പളങ്ങി നൈറ്റ്‌സ്",
+      "top_cohort_score": 7.928
+    },
+    {
+      "idx": 20,
+      "prompt": "ಉತ್ತಮ ಕೌಟುಂಬಿಕ ಹಾಸ್ಯ ಚಲನಚಿತ್ರ",
+      "pref": [
+        "kn",
+        "en"
+      ],
+      "expected": "kn",
+      "count": 10,
+      "top_langs": [
+        "en",
+        "zh",
+        "zh",
+        "ja",
+        "zh"
+      ],
+      "matched": true,
+      "latency_ms": 204.8789999971632,
+      "top_title": "Gone Girl",
+      "top_orig_title": "Gone Girl",
+      "top_cohort_score": 7.873
+    },
+    {
+      "idx": 21,
+      "prompt": "ভালোবাসার রোমান্টিক সিনেমা",
+      "pref": [
+        "bn",
+        "en"
+      ],
+      "expected": "bn",
+      "count": 10,
+      "top_langs": [
+        "bn",
+        "bn",
+        "bn",
+        "bn",
+        "bn"
+      ],
+      "matched": true,
+      "latency_ms": 134.37070001964457,
+      "top_title": "Chotushkone",
+      "top_orig_title": "চতুষ্কোণ",
+      "top_cohort_score": 7.229
+    },
+    {
+      "idx": 22,
+      "prompt": "गंभीर भावनिक मराठी चित्रपट",
+      "pref": [
+        "mr",
+        "en"
+      ],
+      "expected": "mr",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "hi",
+        "hi",
+        "hi",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 127.67909999820404,
+      "top_title": "Good Newwz",
+      "top_orig_title": "गुड न्यूज़",
+      "top_cohort_score": 6.481
+    },
+    {
+      "idx": 23,
+      "prompt": "ਦਿਲਚਸਪ ਪੰਜਾਬੀ ਕਾਮੇਡੀ",
+      "pref": [
+        "pa",
+        "en"
+      ],
+      "expected": "pa",
+      "count": 10,
+      "top_langs": [
+        "zh",
+        "ja",
+        "ja",
+        "zh",
+        "zh"
+      ],
+      "matched": true,
+      "latency_ms": 224.349500000244,
+      "top_title": "Left-Handed Girl",
+      "top_orig_title": "左撇子女孩",
+      "top_cohort_score": 7.211
+    },
+    {
+      "idx": 24,
+      "prompt": "긴장감 넘치는 심리 스릴러",
+      "pref": [
+        "ko",
+        "en"
+      ],
+      "expected": "ko",
+      "count": 10,
+      "top_langs": [
+        "ko",
+        "ko",
+        "ko",
+        "ko",
+        "ko"
+      ],
+      "matched": true,
+      "latency_ms": 150.64500001608394,
+      "top_title": "Train to Busan",
+      "top_orig_title": "부산행",
+      "top_cohort_score": 7.741
+    },
+    {
+      "idx": 25,
+      "prompt": "감동적인 로맨스 영화",
+      "pref": [
+        "ko",
+        "en"
+      ],
+      "expected": "ko",
+      "count": 10,
+      "top_langs": [
+        "ko",
+        "ko",
+        "ko",
+        "ko",
+        "ko"
+      ],
+      "matched": true,
+      "latency_ms": 158.46659999806434,
+      "top_title": "The Beauty Inside",
+      "top_orig_title": "뷰티 인사이드",
+      "top_cohort_score": 7.465
+    },
+    {
+      "idx": 26,
+      "prompt": "心を揺さぶる感動のアニメ映画",
+      "pref": [
+        "ja",
+        "en"
+      ],
+      "expected": "ja",
+      "count": 10,
+      "top_langs": [
+        "ja",
+        "ja",
+        "ja",
+        "ja",
+        "ja"
+      ],
+      "matched": true,
+      "latency_ms": 137.99240000662394,
+      "top_title": "Yojimbo",
+      "top_orig_title": "用心棒",
+      "top_cohort_score": 8.005
+    },
+    {
+      "idx": 27,
+      "prompt": "koi badhiya suspense movie batao",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "hi",
+        "hi",
+        "hi",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 121.91879999591038,
+      "top_title": "Batla House",
+      "top_orig_title": "Batla House",
+      "top_cohort_score": 6.731
+    },
+    {
+      "idx": 28,
+      "prompt": "dost ke sath dekhne wali mast comedy",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "hi",
+        "hi",
+        "hi",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 224.8836999933701,
+      "top_title": "Ankhon Dekhi",
+      "top_orig_title": "आंखों देखी",
+      "top_cohort_score": 6.973
+    },
+    {
+      "idx": 29,
+      "prompt": "pyar aur dard wali emotional movie",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "hi",
+        "hi",
+        "hi",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 121.48739999975078,
+      "top_title": "Sanam Teri Kasam",
+      "top_orig_title": "सनम तेरी कसम",
+      "top_cohort_score": 7.791
+    },
+    {
+      "idx": 30,
+      "prompt": "bhai action movie chahiye dhoom dhadaka",
+      "pref": [
+        "hi",
+        "te"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "te",
+        "hi",
+        "te",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 184.3735000002198,
+      "top_title": "Dhoom Dhaam",
+      "top_orig_title": "धूम धाम",
+      "top_cohort_score": 6.958
+    },
+    {
+      "idx": 31,
+      "prompt": "dimag hila dene wali thriller",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "hi",
+        "hi",
+        "hi",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 181.7016999993939,
+      "top_title": "Badla",
+      "top_orig_title": "बदला",
+      "top_cohort_score": 7.197
+    },
+    {
+      "idx": 32,
+      "prompt": "lighthearted family ke sath timepass",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "en",
+        "hi",
+        "en",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 157.9626000020653,
+      "top_title": "Kabhi Khushi Kabhie Gham",
+      "top_orig_title": "कभी ख़ुशी कभी ग़म",
+      "top_cohort_score": 7.676
+    },
+    {
+      "idx": 33,
+      "prompt": "heartwarming family drama about village life",
+      "pref": [
+        "hi",
+        "ta"
+      ],
+      "expected": "regional",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "ta",
+        "hi",
+        "ta",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 107.0424999925308,
+      "top_title": "COAT",
+      "top_orig_title": "COAT",
+      "top_cohort_score": 6.295
+    },
+    {
+      "idx": 34,
+      "prompt": "existential loneliness in a bustling night city",
+      "pref": [
+        "en",
+        "hi",
+        "ko"
+      ],
+      "expected": "any",
+      "count": 10,
+      "top_langs": [
+        "en",
+        "hi",
+        "ko",
+        "en",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 89.8260000103619,
+      "top_title": "One Night Only",
+      "top_orig_title": "One Night Only",
+      "top_cohort_score": 6.913
+    },
+    {
+      "idx": 35,
+      "prompt": "intense courtroom battle for justice",
+      "pref": [
+        "hi",
+        "ta",
+        "ml"
+      ],
+      "expected": "regional",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "ta",
+        "ml",
+        "hi",
+        "ta"
+      ],
+      "matched": true,
+      "latency_ms": 97.21259999787435,
+      "top_title": "Sirf Ek Bandaa Kaafi Hai",
+      "top_orig_title": "सिर्फ एक बंदा काफ़ी है",
+      "top_cohort_score": 7.182
+    },
+    {
+      "idx": 36,
+      "prompt": "quirky coming of age road trip",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "regional",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "en",
+        "hi",
+        "en",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 82.05310002085753,
+      "top_title": "Zindagi Na Milegi Dobara",
+      "top_orig_title": "ज़िन्दगी ना मिलेगी दोबारा",
+      "top_cohort_score": 7.607
+    },
+    {
+      "idx": 37,
+      "prompt": "dark claustrophobic survival against odds",
+      "pref": [
+        "ko",
+        "en",
+        "ml"
+      ],
+      "expected": "any",
+      "count": 10,
+      "top_langs": [
+        "ko",
+        "en",
+        "ko",
+        "en",
+        "ko"
+      ],
+      "matched": true,
+      "latency_ms": 97.23089999170043,
+      "top_title": "Dark Nuns",
+      "top_orig_title": "검은 수녀들",
+      "top_cohort_score": 6.512
+    },
+    {
+      "idx": 38,
+      "prompt": "nostalgic childhood memories in summer",
+      "pref": [
+        "ja",
+        "hi",
+        "bn"
+      ],
+      "expected": "any",
+      "count": 10,
+      "top_langs": [
+        "ja",
+        "hi",
+        "ja",
+        "hi",
+        "ja"
+      ],
+      "matched": true,
+      "latency_ms": 89.22130000428297,
+      "top_title": "The Tunnel to Summer, the Exit of Goodbyes",
+      "top_orig_title": "夏へのトンネル、さよならの出口",
+      "top_cohort_score": 7.603
+    },
+    {
+      "idx": 39,
+      "prompt": "epic historical rebellion against empire",
+      "pref": [
+        "te",
+        "hi",
+        "en"
+      ],
+      "expected": "regional",
+      "count": 10,
+      "top_langs": [
+        "te",
+        "hi",
+        "en",
+        "te",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 102.04230001545511,
+      "top_title": "RRR",
+      "top_orig_title": "రౌద్రం రణం రుధిరం",
+      "top_cohort_score": 7.705
+    },
+    {
+      "idx": 40,
+      "prompt": "philosophical sci fi pondering human destiny",
+      "pref": [
+        "en",
+        "ja"
+      ],
+      "expected": "any",
+      "count": 10,
+      "top_langs": [
+        "en",
+        "ja",
+        "en",
+        "ja",
+        "en"
+      ],
+      "matched": true,
+      "latency_ms": 92.62290000333451,
+      "top_title": "Dawn of the Planet of the Apes",
+      "top_orig_title": "Dawn of the Planet of the Apes",
+      "top_cohort_score": 7.333
+    },
+    {
+      "idx": 41,
+      "prompt": "movies by Satyajit Ray",
+      "pref": [
+        "bn",
+        "hi",
+        "en"
+      ],
+      "expected": "bn",
+      "count": 10,
+      "top_langs": [
+        "bn",
+        "hi",
+        "bn",
+        "hi",
+        "bn"
+      ],
+      "matched": true,
+      "latency_ms": 335.8558999898378,
+      "top_title": "Sukumar Ray",
+      "top_orig_title": "সুকুমার রায়",
+      "top_cohort_score": 6.284
+    },
+    {
+      "idx": 42,
+      "prompt": "masterpieces of Mani Ratnam",
+      "pref": [
+        "ta",
+        "hi"
+      ],
+      "expected": "ta",
+      "count": 10,
+      "top_langs": [
+        "ta",
+        "hi",
+        "ta",
+        "hi",
+        "ta"
+      ],
+      "matched": true,
+      "latency_ms": 578.85510000051,
+      "top_title": "Ratsasan",
+      "top_orig_title": "ராட்சசன்",
+      "top_cohort_score": 7.308
+    },
+    {
+      "idx": 43,
+      "prompt": "raw indie cinema like Anurag Kashyap",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "hi",
+        "hi",
+        "hi",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 157.38699998473749,
+      "top_title": "Dhurandhar",
+      "top_orig_title": "धुरंधर",
+      "top_cohort_score": 7.31
+    },
+    {
+      "idx": 44,
+      "prompt": "social comedies like Rajkumar Hirani",
+      "pref": [
+        "hi",
+        "en"
+      ],
+      "expected": "hi",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "hi",
+        "hi",
+        "hi",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 109.19339998508804,
+      "top_title": "Hichki",
+      "top_orig_title": "हिचकी",
+      "top_cohort_score": 7.501
+    },
+    {
+      "idx": 45,
+      "prompt": "grand visual spectacles by SS Rajamouli",
+      "pref": [
+        "te",
+        "hi"
+      ],
+      "expected": "te",
+      "count": 10,
+      "top_langs": [
+        "te",
+        "hi",
+        "te",
+        "hi",
+        "te"
+      ],
+      "matched": true,
+      "latency_ms": 100.95580000779592,
+      "top_title": "Raja the Great",
+      "top_orig_title": "రాజా ది గ్రేట్",
+      "top_cohort_score": 5.896
+    },
+    {
+      "idx": 46,
+      "prompt": "dark interconnected universe by Lokesh Kanagaraj",
+      "pref": [
+        "ta",
+        "te"
+      ],
+      "expected": "ta",
+      "count": 10,
+      "top_langs": [
+        "ta",
+        "te",
+        "ta",
+        "te",
+        "ta"
+      ],
+      "matched": true,
+      "latency_ms": 149.07939999829978,
+      "top_title": "Indru Netru Naalai",
+      "top_orig_title": "இன்று நேற்று நாளை",
+      "top_cohort_score": 7.205
+    },
+    {
+      "idx": 47,
+      "prompt": "subtle naturalistic films of Dileesh Pothan",
+      "pref": [
+        "ml",
+        "en"
+      ],
+      "expected": "ml",
+      "count": 10,
+      "top_langs": [
+        "ml",
+        "ml",
+        "ml",
+        "ml",
+        "ml"
+      ],
+      "matched": true,
+      "latency_ms": 100.50040000351146,
+      "top_title": "Sarvam Maya",
+      "top_orig_title": "സർവം മായ",
+      "top_cohort_score": 7.407
+    },
+    {
+      "idx": 48,
+      "prompt": "social satire like Bong Joon-ho",
+      "pref": [
+        "ko",
+        "en"
+      ],
+      "expected": "ko",
+      "count": 10,
+      "top_langs": [
+        "ko",
+        "en",
+        "ko",
+        "en",
+        "ko"
+      ],
+      "matched": true,
+      "latency_ms": 97.29069998138584,
+      "top_title": "On the Line",
+      "top_orig_title": "보이스",
+      "top_cohort_score": 7.116
+    },
+    {
+      "idx": 49,
+      "prompt": "whimsical worlds of Hayao Miyazaki",
+      "pref": [
+        "ja",
+        "en"
+      ],
+      "expected": "ja",
+      "count": 10,
+      "top_langs": [
+        "ja",
+        "en",
+        "ja",
+        "en",
+        "ja"
+      ],
+      "matched": true,
+      "latency_ms": 99.38419997342862,
+      "top_title": "Spirited Away",
+      "top_orig_title": "千と千尋の神隠し",
+      "top_cohort_score": 8.526
+    },
+    {
+      "idx": 50,
+      "prompt": "time twisting puzzles of Christopher Nolan",
+      "pref": [
+        "en"
+      ],
+      "expected": "en",
+      "count": 10,
+      "top_langs": [
+        "en",
+        "en",
+        "en",
+        "en",
+        "en"
+      ],
+      "matched": true,
+      "latency_ms": 112.53990000113845,
+      "top_title": "About Time",
+      "top_orig_title": "About Time",
+      "top_cohort_score": 7.864
+    },
+    {
+      "idx": 51,
+      "prompt": "romantic musical with unforgettable soundtrack",
+      "pref": [
+        "hi",
+        "ta"
+      ],
+      "expected": "regional",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "ta",
+        "hi",
+        "ta",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 90.72770000784658,
+      "top_title": "Aashiqui 2",
+      "top_orig_title": "आशिकी २",
+      "top_cohort_score": 6.774
+    },
+    {
+      "idx": 52,
+      "prompt": "gripping police procedural crime investigation",
+      "pref": [
+        "ml",
+        "ta",
+        "hi"
+      ],
+      "expected": "regional",
+      "count": 10,
+      "top_langs": [
+        "ml",
+        "ta",
+        "hi",
+        "ml",
+        "ta"
+      ],
+      "matched": true,
+      "latency_ms": 99.03199999826029,
+      "top_title": "Officer on Duty",
+      "top_orig_title": "ഓഫീസര്‍ ഓണ്‍ ഡ്യൂട്ടി",
+      "top_cohort_score": 6.847
+    },
+    {
+      "idx": 53,
+      "prompt": "laugh out loud buddy comedy",
+      "pref": [
+        "hi",
+        "te",
+        "en"
+      ],
+      "expected": "any",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "en",
+        "hi",
+        "en",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 103.47070000716485,
+      "top_title": "Atithi Tum Kab Jaoge?",
+      "top_orig_title": "अतिथि तुम कब जाओगे?",
+      "top_cohort_score": 6.214
+    },
+    {
+      "idx": 54,
+      "prompt": "spooky atmospheric folklore horror",
+      "pref": [
+        "kn",
+        "hi",
+        "ml"
+      ],
+      "expected": "regional",
+      "count": 10,
+      "top_langs": [
+        "kn",
+        "hi",
+        "ml",
+        "hi",
+        "ml"
+      ],
+      "matched": true,
+      "latency_ms": 88.76189999864437,
+      "top_title": "Su from So",
+      "top_orig_title": "ಸು ಫ್ರಮ್ ಸೊ",
+      "top_cohort_score": 7.166
+    },
+    {
+      "idx": 55,
+      "prompt": "tender unrequited love story",
+      "pref": [
+        "ko",
+        "hi",
+        "en"
+      ],
+      "expected": "any",
+      "count": 10,
+      "top_langs": [
+        "ko",
+        "hi",
+        "en",
+        "ko",
+        "hi"
+      ],
+      "matched": true,
+      "latency_ms": 118.82259999401867,
+      "top_title": "Even If This Love Disappears Tonight",
+      "top_orig_title": "오늘 밤, 세계에서 이 사랑이 사라진다 해도",
+      "top_cohort_score": 8.048
+    },
+    {
+      "idx": 56,
+      "prompt": "underworld gang wars and loyalty",
+      "pref": [
+        "hi",
+        "ta",
+        "te"
+      ],
+      "expected": "regional",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "ta",
+        "te",
+        "hi",
+        "ta"
+      ],
+      "matched": true,
+      "latency_ms": 105.06810000515543,
+      "top_title": "Gangs of Wasseypur - Part 2",
+      "top_orig_title": "गैंग्स ऑफ़ वास्सेपुर पार्ट - २",
+      "top_cohort_score": 7.66
+    },
+    {
+      "idx": 57,
+      "prompt": "sports underdog overcoming all barriers",
+      "pref": [
+        "hi",
+        "te",
+        "en"
+      ],
+      "expected": "any",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "te",
+        "en",
+        "hi",
+        "te"
+      ],
+      "matched": true,
+      "latency_ms": 302.35220000031404,
+      "top_title": "83",
+      "top_orig_title": "83",
+      "top_cohort_score": 7.083
+    },
+    {
+      "idx": 58,
+      "prompt": "intense psychological thriller with moral dilemmas",
+      "pref": [
+        "ko",
+        "ml",
+        "en"
+      ],
+      "expected": "any",
+      "count": 10,
+      "top_langs": [
+        "ko",
+        "en",
+        "ko",
+        "en",
+        "ko"
+      ],
+      "matched": true,
+      "latency_ms": 129.3234000040684,
+      "top_title": "Memoir of a Murderer",
+      "top_orig_title": "살인자의 기억법",
+      "top_cohort_score": 7.311
+    },
+    {
+      "idx": 59,
+      "prompt": "magical realism and lyrical storytelling",
+      "pref": [
+        "es",
+        "bn",
+        "ja"
+      ],
+      "expected": "any",
+      "count": 10,
+      "top_langs": [
+        "ja",
+        "en",
+        "en",
+        "en",
+        "en"
+      ],
+      "matched": true,
+      "latency_ms": 112.51720000291243,
+      "top_title": "Earwig and the Witch",
+      "top_orig_title": "アーヤと魔女",
+      "top_cohort_score": 6.6
+    },
+    {
+      "idx": 60,
+      "prompt": "cozy monsoon rain movie to watch with chai",
+      "pref": [
+        "hi",
+        "ml",
+        "en"
+      ],
+      "expected": "regional",
+      "count": 10,
+      "top_langs": [
+        "hi",
+        "ml",
+        "en",
+        "hi",
+        "ml"
+      ],
+      "matched": true,
+      "latency_ms": 90.95750001142733,
+      "top_title": "Monsoon Wedding",
+      "top_orig_title": "Monsoon Wedding",
+      "top_cohort_score": 6.777
+    }
+  ]
+}

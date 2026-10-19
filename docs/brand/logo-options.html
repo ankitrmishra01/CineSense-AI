@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineSense AI — Brand Identity & Logo Options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #111215;
+      --card-dark: #1c1d22;
+      --border-dark: #2c2e36;
+      --text-dark-primary: #f7f4ed;
+      --text-dark-secondary: #a9a49c;
+
+      --bg-light: #faf8f5;
+      --card-light: #ffffff;
+      --border-light: #e2dbcf;
+      --text-light-primary: #181614;
+      --text-light-secondary: #47433e;
+
+      --accent-ember: #e07228;
+      --accent-ember-dark: #b84c0c;
+      --accent-gold: #d4af37;
+      --accent-teal: #199fa8;
+      --accent-burgundy: #d63353;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      margin: 0;
+      padding: 40px 24px;
+      background: #0a0a0c;
+      color: #f7f4ed;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #a9a49c;
+      font-size: 16px;
+      margin-bottom: 40px;
+      max-width: 650px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 32px;
+      margin-bottom: 50px;
+    }
+
+    .option-card {
+      background: #15161b;
+      border: 1px solid #282a32;
+      border-radius: 12px;
+      padding: 28px;
+      position: relative;
+    }
+
+    .option-card.recommended {
+      border: 2px solid var(--accent-ember);
+      box-shadow: 0 0 24px rgba(224, 114, 40, 0.18);
+    }
+
+    .rec-badge {
+      position: absolute;
+      top: -12px;
+      right: 24px;
+      background: var(--accent-ember);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 12px;
+      border-radius: 9999px;
+    }
+
+    .option-title {
+      font-size: 26px;
+      margin: 0 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .option-concept {
+      color: #a9a49c;
+      font-size: 14px;
+      margin-bottom: 24px;
+      min-height: 42px;
+    }
+
+    /* Comparison Display Boxes */
+    .view-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .box {
+      flex: 1;
+      padding: 24px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .box-dark {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+      color: var(--text-dark-primary);
+    }
+
+    .box-light {
+      background: var(--bg-light);
+      border: 1px solid var(--border-light);
+      color: var(--text-light-primary);
+    }
+
+    .sizes-strip {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .size-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .size-label {
+      font-size: 10px;
+      color: #7e7972;
+      font-family: monospace;
+    }
+
+    /* Wordmark Lockup */
+    .wordmark-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 14px;
+    }
+
+    .wordmark-text {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .ai-pill {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      border: 1px solid currentColor;
+      opacity: 0.85;
+    }
+
+    .rationale-list {
+      margin-top: 20px;
+      padding-left: 20px;
+      font-size: 13px;
+      color: #c5bfb5;
+    }
+
+    .rationale-list li {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CineSense AI — Brand Identity Redesign</h1>
+    <p class="subtitle">
+      Three original vector logos engineered as clean geometric SVGs without external stock images.
+      Each option is evaluated across 16px favicon, 32px navbar, and large formats on both dark and light surfaces.
+    </p>
+
+    <div class="grid">
+      <!-- OPTION 1: APERTURE PULSE (RECOMMENDED) -->
+      <div class="option-card recommended">
+        <div class="rec-badge">Recommended Default</div>
+        <h3 class="option-title">Option 1: Aperture Pulse</h3>
+        <p class="option-concept">
+          <strong>Concept:</strong> A 6-blade camera aperture enclosing an emotive waveform pulse at its focal point.
+          Seamlessly unites cinematic optics (the lens) with emotional resonance (the heartbeat / mood feeling).
+        </p>
+
+        <!-- Dark & Light Side-by-Side Previews -->
+        <div class="view-row">
+          <div class="box box-dark">
+            <span style="font-size: 11px; text-transform: uppercase; color: #7e7972; letter-spacing: 0.05em;">Dark (Accent Tone)</span>
+            <svg width="64" height="64" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="21" stroke="#e07228" stroke-width="2.5" />
+              <path d="M24 3 L24 16 M42 13.5 L31 20 M42 34.5 L31 28 M24 45 L24 32 M6 34.5 L17 28 M6 13.5 L17 20" stroke="#e07228" stroke-width="1.8" stroke-linecap="round" opacity="0.45" />
+              <circle cx="24" cy="24" r="8.5" stroke="#f7f4ed" stroke-width="2" />
+              <path d="M16 24 H19 L21.5 19 L26.5 29 L29 24 H32" stroke="#e07228" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="box box-light">
+            <span style="font-size: 11px; text-transform: uppercase; color: #8e8880; letter-spacing: 0.05em;">Light (Terracotta)</span>
+            <svg width="64" height="64" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="21" stroke="#b84c0c" stroke-width="2.5" />
+              <path d="M24 3 L24 16 M42 13.5 L31 20 M42 34.5 L31 28 M24 45 L24 32 M6 34.5 L17 28 M6 13.5 L17 20" stroke="#b84c0c" stroke-width="1.8" stroke-linecap="round" opacity="0.45" />
+              <circle cx="24" cy="24" r="8.5" stroke="#181614" stroke-width="2" />
+              <path d="M16 24 H19 L21.5 19 L26.5 29 L29 24 H32" stroke="#b84c0c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Scale Verification Strip -->
+        <div class="sizes-strip">
+          <div class="size-col">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="7" stroke="#e07228" stroke-width="1.5" />
+              <circle cx="8" cy="8" r="3.2" stroke="#f7f4ed" stroke-width="1.2" />
+              <path d="M5 8 H6.5 L7.5 6 L8.5 10 L9.5 8 H11" stroke="#e07228" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="size-label">16px</span>
+          </div>
+          <div class="size-col">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10.5" stroke="#e07228" stroke-width="1.8" />
+              <circle cx="12" cy="12" r="4.5" stroke="#f7f4ed" stroke-width="1.4" />
+              <path d="M8 12 H9.5 L11 9 L13 15 L14.5 12 H16" stroke="#e07228" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="size-label">24px</span>
+          </div>
+          <div class="size-col">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="14" stroke="#e07228" stroke-width="2" />
+              <circle cx="16" cy="16" r="6" stroke="#f7f4ed" stroke-width="1.6" />
+              <path d="M11 16 H13 L14.5 12 L17.5 20 L19 16 H21" stroke="#e07228" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="size-label">32px</span>
+          </div>
+          <div class="size-col">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="21" stroke="#e07228" stroke-width="2.5" />
+              <circle cx="24" cy="24" r="8.5" stroke="#f7f4ed" stroke-width="2" />
+              <path d="M16 24 H19 L21.5 19 L26.5 29 L29 24 H32" stroke="#e07228" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="size-label">48px</span>
+          </div>
+        </div>
+
+        <!-- Full Wordmark Lockup -->
+        <div class="wordmark-lockup box-dark">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="14" stroke="#e07228" stroke-width="2" />
+            <circle cx="16" cy="16" r="6" stroke="#f7f4ed" stroke-width="1.6" />
+            <path d="M11 16 H13 L14.5 12 L17.5 20 L19 16 H21" stroke="#e07228" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span class="wordmark-text">CineSense</span>
+          <span class="ai-pill" style="border-color: #e07228; color: #e07228;">AI</span>
+        </div>
+
+        <ul class="rationale-list">
+          <li><strong>Extreme Favicon Clarity:</strong> Perfect circular silhouette and distinct inner pulse remain crisp at 16x16 px without blurring into a blob.</li>
+          <li><strong>Symbolic Meaning:</strong> Directly expresses both sides of the product: camera aperture for cinema, heartbeat wave for emotion/sensing.</li>
+          <li><strong>Color Flexibility:</strong> Looks superb in monochrome (`currentColor`) and in brand accent tones.</li>
+        </ul>
+      </div>
+
+      <!-- OPTION 2: REEL PRISM (STYLIZED C) -->
+      <div class="option-card">
+        <h3 class="option-title">Option 2: Reel Prism</h3>
+        <p class="option-concept">
+          <strong>Concept:</strong> A dynamic geometric 'C' constructed from continuous 35mm film ribbon curving into a centered play prism / triangle.
+        </p>
+
+        <div class="view-row">
+          <div class="box box-dark">
+            <span style="font-size: 11px; text-transform: uppercase; color: #7e7972; letter-spacing: 0.05em;">Dark (Teal)</span>
+            <svg width="64" height="64" viewBox="0 0 48 48" fill="none">
+              <path d="M37 13 C33 7 24 6 16 11 C8 16 6 26 10 34 C14 41 24 43 33 40 C37 38 40 35 41 31" stroke="#199fa8" stroke-width="3" stroke-linecap="round" />
+              <rect x="22" y="7" width="2.5" height="3.5" rx="0.8" fill="#199fa8" opacity="0.6" />
+              <rect x="13" y="14" width="2.5" height="3.5" rx="0.8" transform="rotate(-35 13 14)" fill="#199fa8" opacity="0.6" />
+              <rect x="9" y="24" width="2.5" height="3.5" rx="0.8" transform="rotate(-85 9 24)" fill="#199fa8" opacity="0.6" />
+              <polygon points="21,17 33,24 21,31" fill="#f7f4ed" />
+            </svg>
+          </div>
+          <div class="box box-light">
+            <span style="font-size: 11px; text-transform: uppercase; color: #8e8880; letter-spacing: 0.05em;">Light (Petrol)</span>
+            <svg width="64" height="64" viewBox="0 0 48 48" fill="none">
+              <path d="M37 13 C33 7 24 6 16 11 C8 16 6 26 10 34 C14 41 24 43 33 40 C37 38 40 35 41 31" stroke="#0f6c74" stroke-width="3" stroke-linecap="round" />
+              <rect x="22" y="7" width="2.5" height="3.5" rx="0.8" fill="#0f6c74" opacity="0.6" />
+              <rect x="13" y="14" width="2.5" height="3.5" rx="0.8" transform="rotate(-35 13 14)" fill="#0f6c74" opacity="0.6" />
+              <rect x="9" y="24" width="2.5" height="3.5" rx="0.8" transform="rotate(-85 9 24)" fill="#0f6c74" opacity="0.6" />
+              <polygon points="21,17 33,24 21,31" fill="#181614" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="sizes-strip">
+          <div class="size-col">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M19 6 C17 3 12 3 8 5 C4 8 3 13 5 17 C7 21 12 22 17 20" stroke="#199fa8" stroke-width="2.5" stroke-linecap="round" />
+              <polygon points="10,9 16,12 10,15" fill="#f7f4ed" />
+            </svg>
+            <span class="size-label">16px</span>
+          </div>
+          <div class="size-col">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M25 8 C22 4 16 4 11 7 C6 11 5 17 7 23 C10 28 17 29 23 27" stroke="#199fa8" stroke-width="2.5" stroke-linecap="round" />
+              <polygon points="14,11 22,16 14,21" fill="#f7f4ed" />
+            </svg>
+            <span class="size-label">32px</span>
+          </div>
+        </div>
+
+        <div class="wordmark-lockup box-dark">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <path d="M25 8 C22 4 16 4 11 7 C6 11 5 17 7 23 C10 28 17 29 23 27" stroke="#199fa8" stroke-width="2.5" stroke-linecap="round" />
+            <polygon points="14,11 22,16 14,21" fill="#f7f4ed" />
+          </svg>
+          <span class="wordmark-text">CineSense</span>
+          <span class="ai-pill" style="border-color: #199fa8; color: #199fa8;">AI</span>
+        </div>
+
+        <ul class="rationale-list">
+          <li><strong>Strong Letterform:</strong> Bold initial 'C' makes it instantly identifiable as an app icon.</li>
+          <li><strong>Action-Oriented:</strong> Play triangle invites exploration and discovery.</li>
+        </ul>
+      </div>
+
+      <!-- OPTION 3: CINEMA BEAM (MONOGRAM) -->
+      <div class="option-card">
+        <h3 class="option-title">Option 3: Cinema Beam</h3>
+        <p class="option-concept">
+          <strong>Concept:</strong> A bespoke typographical monogram fusing 'C' and an elongated 'S', illuminated by an upward 45° projector light cone.
+        </p>
+
+        <div class="view-row">
+          <div class="box box-dark">
+            <span style="font-size: 11px; text-transform: uppercase; color: #7e7972; letter-spacing: 0.05em;">Dark (Burgundy)</span>
+            <svg width="64" height="64" viewBox="0 0 48 48" fill="none">
+              <path d="M12 24 L38 9 L38 39 Z" fill="#d63353" opacity="0.18" />
+              <path d="M34 16 C30 11 20 11 15 16 C10 21 12 28 20 29 C28 30 30 36 25 40 C20 44 12 42 9 37" stroke="#d63353" stroke-width="3" stroke-linecap="round" />
+              <circle cx="38" cy="24" r="3.5" fill="#e6c875" />
+            </svg>
+          </div>
+          <div class="box box-light">
+            <span style="font-size: 11px; text-transform: uppercase; color: #8e8880; letter-spacing: 0.05em;">Light (Crimson)</span>
+            <svg width="64" height="64" viewBox="0 0 48 48" fill="none">
+              <path d="M12 24 L38 9 L38 39 Z" fill="#9e142e" opacity="0.12" />
+              <path d="M34 16 C30 11 20 11 15 16 C10 21 12 28 20 29 C28 30 30 36 25 40 C20 44 12 42 9 37" stroke="#9e142e" stroke-width="3" stroke-linecap="round" />
+              <circle cx="38" cy="24" r="3.5" fill="#87651a" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="sizes-strip">
+          <div class="size-col">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M17 8 C15 5 10 5 8 8 C5 10 6 14 10 15 C14 15 15 18 13 20 C10 22 6 21 5 18" stroke="#d63353" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+            <span class="size-label">16px</span>
+          </div>
+          <div class="size-col">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M23 11 C20 7 13 7 10 11 C7 14 8 19 13 20 C19 20 20 24 17 27 C13 29 8 28 6 24" stroke="#d63353" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+            <span class="size-label">32px</span>
+          </div>
+        </div>
+
+        <div class="wordmark-lockup box-dark">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <path d="M23 11 C20 7 13 7 10 11 C7 14 8 19 13 20 C19 20 20 24 17 27 C13 29 8 28 6 24" stroke="#d63353" stroke-width="2.5" stroke-linecap="round" />
+          </svg>
+          <span class="wordmark-text">CineSense</span>
+          <span class="ai-pill" style="border-color: #d63353; color: #d63353;">AI</span>
+        </div>
+
+        <ul class="rationale-list">
+          <li><strong>Editorial Heritage:</strong> Typographic fluid monogram feels cultured and literary.</li>
+          <li><strong>Cinema Beam:</strong> Subtle beam angle creates cinematic theater atmosphere.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

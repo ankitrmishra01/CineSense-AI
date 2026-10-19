@@ -45,13 +45,13 @@ export const WatchlistPage: React.FC = () => {
               color: 'var(--color-text-primary)',
             }}
           >
-            Ticket Archive Locked
+            Sign in to view your Watchlist
           </h2>
           <p style={{ color: 'var(--color-text-secondary)', marginBottom: '24px', fontSize: '15px' }}>
-            Please sign in to access your personal cinema ticket collection.
+            Save movies you want to watch and access them anytime.
           </p>
           <button className="btn-cinema" onClick={() => navigate('/auth')}>
-            Sign In to Archive
+            Sign In
           </button>
         </div>
       </PageWrapper>
@@ -82,7 +82,7 @@ export const WatchlistPage: React.FC = () => {
             <rect x="3" y="5" width="18" height="14" rx="2" />
             <path d="M7 15h0.01M17 15h0.01M7 9h10" />
           </svg>
-          <span>Personal Ticket Collection</span>
+          <span>Watchlist</span>
         </div>
 
         <h1
@@ -94,10 +94,10 @@ export const WatchlistPage: React.FC = () => {
             color: 'var(--color-text-primary)',
           }}
         >
-          Curated Watchlist
+          Your Watchlist
         </h1>
         <p style={{ color: 'var(--color-text-secondary)', marginBottom: '32px', fontSize: '14px' }}>
-          {items.length} {items.length === 1 ? 'admission ticket' : 'admission tickets'} in your archival collection
+          {items.length} {items.length === 1 ? 'saved movie' : 'saved movies'}
         </p>
       </motion.div>
 
@@ -141,13 +141,13 @@ export const WatchlistPage: React.FC = () => {
               color: 'var(--color-text-primary)',
             }}
           >
-            Your ticket collection is empty
+            Your watchlist is empty
           </h3>
           <p style={{ color: 'var(--color-text-secondary)', marginBottom: '24px', fontSize: '14px' }}>
-            Browse recommendations and collect admission tickets for films you want to see.
+            Explore recommendations and save movies you want to watch.
           </p>
           <button className="btn-cinema" onClick={() => navigate('/')}>
-            Discover Films
+            Explore Movies
           </button>
         </motion.div>
       ) : (
@@ -285,9 +285,9 @@ export const WatchlistPage: React.FC = () => {
                     <Link
                       to={`/movie/${movie.id}`}
                       className="btn-cinema"
-                      style={{ padding: '6px 14px', fontSize: '12px', textDecoration: 'none' }}
+                      style={{ padding: '6px 14px', fontSize: '12px', textDecoration: 'none', textAlign: 'center' }}
                     >
-                      View Reel
+                      View Details
                     </Link>
                     <button
                       onClick={() => removeFromWatchlist(item.id)}
@@ -309,9 +309,9 @@ export const WatchlistPage: React.FC = () => {
                         e.currentTarget.style.borderColor = 'var(--color-border)';
                         e.currentTarget.style.color = 'var(--color-text-muted)';
                       }}
-                      title="Void ticket"
+                      title="Remove from watchlist"
                     >
-                      Void Ticket
+                      Remove
                     </button>
                   </div>
                 </motion.div>

@@ -28,6 +28,12 @@ class Movie(Base):
     watch_providers: Mapped[Optional[dict]] = mapped_column(JSONBType)  # {"US": {...}}
     belongs_to_collection: Mapped[Optional[dict]] = mapped_column(JSONBType) # {"id": 123, "name": "..."}
     cast_crew: Mapped[Optional[dict]] = mapped_column(JSONBType) # {"cast": [...], "crew": [...]}
+    original_language: Mapped[Optional[str]] = mapped_column(String(10), index=True)
+    origin_country: Mapped[Optional[dict]] = mapped_column(JSONBType)
+    spoken_languages: Mapped[Optional[dict]] = mapped_column(JSONBType)
+    original_title: Mapped[Optional[str]] = mapped_column(String(500))
+    popularity: Mapped[Optional[float]] = mapped_column(Numeric(10, 3), index=True)
+    cohort_quality_score: Mapped[Optional[float]] = mapped_column(Numeric(5, 3), index=True)
     embedding_id: Mapped[Optional[int]] = mapped_column(Integer)    # FAISS index position
     fetched_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

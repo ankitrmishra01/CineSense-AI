@@ -38,7 +38,7 @@ export const WhyThisMovie: React.FC<WhyThisMovieProps> = ({
     }
   };
 
-  const displayText = richExplanation || explanation || 'Anchored in atmospheric themes matching your query.';
+  const displayText = richExplanation || explanation || 'Matches themes and tone from your query.';
 
   return (
     <div>
@@ -73,10 +73,10 @@ export const WhyThisMovie: React.FC<WhyThisMovieProps> = ({
         >
           ▶
         </span>
-        <span>Curator's Note</span>
+        <span>Why this fits</span>
         {loadingRich && (
           <span style={{ fontSize: '11px', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
-            (enriching...)
+            (loading...)
           </span>
         )}
       </button>

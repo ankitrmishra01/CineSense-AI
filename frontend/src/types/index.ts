@@ -5,6 +5,8 @@ export interface User {
   email: string;
   username: string;
   created_at: string;
+  preferred_languages?: string[];
+  preferred_audio_mode?: string;
 }
 
 export interface TokenRefreshResponse {
@@ -29,6 +31,7 @@ export interface CastMember {
   id: number;
   name: string;
   character?: string;
+  profile_path?: string | null;
   order?: number;
 }
 
@@ -76,9 +79,16 @@ export interface Movie {
   vote_count: number | null;
   release_date: string | null;
   trailer_key: string | null;
-  watch_providers: Record<string, WatchProvidersRegion> | null;
+  trailer_name?: string | null;
+  watch_providers: Record<string, any> | null;
   cast_crew?: CastCrewData | null;
   belongs_to_collection?: CollectionData | null;
+  original_language?: string | null;
+  original_title?: string | null;
+  popularity?: number | null;
+  cohort_quality_score?: number | null;
+  origin_country?: string[] | null;
+  spoken_languages?: string[] | null;
 }
 
 export interface RecommendFilters {
@@ -86,6 +96,8 @@ export interface RecommendFilters {
   min_rating?: number;
   max_runtime?: number;
   min_year?: number;
+  original_language?: string;
+  preferred_languages?: string[];
 }
 
 export interface RecommendRequest {
@@ -95,6 +107,8 @@ export interface RecommendRequest {
   page?: number;
   limit?: number;
   seed?: number;
+  preferred_languages?: string[];
+  preferred_audio_mode?: string;
 }
 
 export interface RecommendationItem {
