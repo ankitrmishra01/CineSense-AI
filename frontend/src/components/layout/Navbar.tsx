@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 import { CommandPalette } from './CommandPalette';
 import { LanguagePickerModal } from '../preferences/LanguagePickerModal';
@@ -14,6 +14,8 @@ export const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [pickerOpen, setPickerOpen] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
   const { preferredLanguages } = usePreferencesStore();
   const [theme, setTheme] = useState(
     () => localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
@@ -27,6 +29,18 @@ export const Navbar: React.FC = () => {
     window.addEventListener('themechange', handleThemeChange);
     return () => window.removeEventListener('themechange', handleThemeChange);
   }, [theme]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false);
+      }
+    };
+    if (profileOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [profileOpen]);
 
   const togglePalette = useCommandPaletteStore((s) => s.toggle);
 
@@ -204,31 +218,211 @@ export const Navbar: React.FC = () => {
             </button>
 
             {isAuthenticated ? (
-              <>
-                <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: '4px', maxWidth: '80px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
+              <div ref={profileRef} style={{ position: 'relative' }}>
+                <button
+                  id="nav-profile-btn"
+                  onClick={() => setProfileOpen((prev) => !prev)}
+                  className="btn-outline"
+                  aria-expanded={profileOpen}
+                  aria-haspopup="menu"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '5px 10px',
+                    fontSize: '12px',
+                    borderRadius: 'var(--radius-pill)',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                  }}
+                  title="My Account"
+                >
+                  <div
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--color-accent-subtle)',
+                      border: '1px solid var(--color-accent-border)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'var(--color-accent-primary)',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <span
+                    className="nav-username-text"
+                    style={{
+                      maxWidth: '90px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {user?.username}
+                  </span>
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{
+                      transform: profileOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.2s ease',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <polyline points="6 9 12 15 18 9" />
                   </svg>
-                  <span className="nav-username-text" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.username}</span>
-                </span>
-                <button
-                  id="nav-change-password-btn"
-                  className="btn-outline"
-                  onClick={() => setPasswordModalOpen(true)}
-                  style={{ padding: '6px 10px', fontSize: '12px', flexShrink: 0, position: 'relative', zIndex: 2 }}
-                  title="Change Password"
-                >
-                  Password
                 </button>
-                <button
-                  className="btn-outline"
-                  onClick={handleLogout}
-                  style={{ padding: '6px 10px', fontSize: '12px', flexShrink: 0, position: 'relative', zIndex: 2 }}
-                >
-                  Sign out
-                </button>
-              </>
+
+                {/* Profile Dropdown Menu */}
+                <AnimatePresence>
+                  {profileOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                      transition={{ duration: 0.15 }}
+                      role="menu"
+                      style={{
+                        position: 'absolute',
+                        top: 'calc(100% + 8px)',
+                        right: 0,
+                        minWidth: '200px',
+                        backgroundColor: 'var(--color-bg-card)',
+                        backdropFilter: 'blur(20px)',
+                        border: '1px solid var(--color-border)',
+                        borderRadius: 'var(--radius-md)',
+                        boxShadow: '0 12px 30px rgba(0, 0, 0, 0.4)',
+                        padding: '6px',
+                        zIndex: 120,
+                      }}
+                    >
+                      {/* User Header */}
+                      <div style={{ padding: '8px 10px', borderBottom: '1px solid var(--color-border)', marginBottom: '4px' }}>
+                        <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--color-text-primary)' }}>
+                          {user?.username}
+                        </div>
+                        {user?.email && (
+                          <div style={{ fontSize: '11px', color: 'var(--color-text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {user.email}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Change Password Item */}
+                      <button
+                        id="nav-change-password-btn"
+                        role="menuitem"
+                        onClick={() => {
+                          setProfileOpen(false);
+                          setPasswordModalOpen(true);
+                        }}
+                        style={{
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '8px 10px',
+                          fontSize: '12px',
+                          color: 'var(--color-text-primary)',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          borderRadius: 'var(--radius-sm)',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          transition: 'background-color 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-bg-card-hover)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        <span>Change Password</span>
+                      </button>
+
+                      {/* Watchlist Quick Link */}
+                      <button
+                        role="menuitem"
+                        onClick={() => {
+                          setProfileOpen(false);
+                          navigate('/watchlist');
+                        }}
+                        style={{
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '8px 10px',
+                          fontSize: '12px',
+                          color: 'var(--color-text-primary)',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          borderRadius: 'var(--radius-sm)',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          transition: 'background-color 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-bg-card-hover)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                        </svg>
+                        <span>My Watchlist</span>
+                      </button>
+
+                      <div style={{ height: '1px', backgroundColor: 'var(--color-border)', margin: '4px 0' }} />
+
+                      {/* Sign Out Item */}
+                      <button
+                        id="nav-signout-btn"
+                        role="menuitem"
+                        onClick={() => {
+                          setProfileOpen(false);
+                          handleLogout();
+                        }}
+                        style={{
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '8px 10px',
+                          fontSize: '12px',
+                          color: 'var(--color-ruby)',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          borderRadius: 'var(--radius-sm)',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          transition: 'background-color 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-bg-card-hover)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                          <polyline points="16 17 21 12 16 7" />
+                          <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        <span>Sign out</span>
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ) : location.pathname !== '/auth' ? (
               <button
                 id="nav-signin-btn"
