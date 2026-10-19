@@ -135,11 +135,84 @@ export const TrailerEmbed: React.FC<TrailerEmbedProps> = ({
             <span>Watch Full Movie on YouTube Channels ↗</span>
           </a>
         </div>
-        {originalLanguage && ['hi', 'ta', 'te', 'ml', 'bn', 'kn', 'mr'].includes(originalLanguage) && (
-          <p style={{ marginTop: '14px', marginBottom: 0, fontSize: '11px', color: 'var(--color-text-subtle)' }}>
-            Tip: Many classic and regional titles are officially streamed on channels like Goldmines, Shemaroo, Ultra, and Rajshri.
-          </p>
-        )}
+        <div style={{ marginTop: '20px', borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
+          <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 600, display: 'block', marginBottom: '10px' }}>
+            Check Official YouTube Channels for Full Movie:
+          </span>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
+            {['hi', 'pa', 'mr', 'gu', 'bn'].includes(originalLanguage || '') && (
+              <>
+                <a
+                  href={`https://www.youtube.com/@GoldminesTelefilms/search?query=${encodedQuery}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline"
+                  style={{ fontSize: '12px', padding: '5px 12px', borderRadius: 'var(--radius-pill)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                >
+                  📺 Goldmines ↗
+                </a>
+                <a
+                  href={`https://www.youtube.com/@shemaroo/search?query=${encodedQuery}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline"
+                  style={{ fontSize: '12px', padding: '5px 12px', borderRadius: 'var(--radius-pill)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                >
+                  📺 Shemaroo ↗
+                </a>
+                <a
+                  href={`https://www.youtube.com/@ultramovieparlour/search?query=${encodedQuery}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline"
+                  style={{ fontSize: '12px', padding: '5px 12px', borderRadius: 'var(--radius-pill)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                >
+                  📺 Ultra ↗
+                </a>
+                <a
+                  href={`https://www.youtube.com/@rajshri/search?query=${encodedQuery}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline"
+                  style={{ fontSize: '12px', padding: '5px 12px', borderRadius: 'var(--radius-pill)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                >
+                  📺 Rajshri ↗
+                </a>
+              </>
+            )}
+            {['ta', 'te', 'ml', 'kn'].includes(originalLanguage || '') && (
+              <>
+                <a
+                  href={`https://www.youtube.com/@adityamovies/search?query=${encodedQuery}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline"
+                  style={{ fontSize: '12px', padding: '5px 12px', borderRadius: 'var(--radius-pill)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                >
+                  📺 Aditya Movies ↗
+                </a>
+                <a
+                  href={`https://www.youtube.com/@SunTV/search?query=${encodedQuery}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline"
+                  style={{ fontSize: '12px', padding: '5px 12px', borderRadius: 'var(--radius-pill)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                >
+                  📺 Sun NXT ↗
+                </a>
+              </>
+            )}
+            <a
+              href={`https://www.youtube.com/results?search_query=${encodedQuery}+full+movie+official`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline"
+              style={{ fontSize: '12px', padding: '5px 12px', borderRadius: 'var(--radius-pill)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+            >
+              🎬 YouTube Movies & TV ↗
+            </a>
+          </div>
+        </div>
       </div>
     );
   }
@@ -359,6 +432,36 @@ export const TrailerEmbed: React.FC<TrailerEmbedProps> = ({
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
+            </div>
+
+            {/* Quick Link to YouTube Channels */}
+            <div
+              style={{
+                padding: '12px 20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '8px',
+                borderTop: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-surface)',
+                fontSize: '12px',
+              }}
+            >
+              <span style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}>
+                Looking to watch the full movie?
+              </span>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <a
+                  href={`https://www.youtube.com/results?search_query=${encodedQuery}+official+full+movie`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline"
+                  style={{ fontSize: '11px', padding: '4px 10px', textDecoration: 'none', borderRadius: 'var(--radius-pill)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                >
+                  <span>Search on YouTube Channels ↗</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
