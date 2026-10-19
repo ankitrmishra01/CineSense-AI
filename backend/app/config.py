@@ -9,9 +9,9 @@ _DEFAULT_FASTEMBED_CACHE = str((_BACKEND_DIR / ".cache" / "fastembed").resolve()
 
 
 class Settings(BaseSettings):
-    # Database
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:password@localhost:5432/cinesense"
-    SYNC_DATABASE_URL: Optional[str] = None
+    # Database (defaults to local SQLite; overridden by DATABASE_URL env var in production)
+    DATABASE_URL: str = "sqlite+aiosqlite:///cinesense_local.db"
+    SYNC_DATABASE_URL: Optional[str] = "sqlite:///cinesense_local.db"
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
