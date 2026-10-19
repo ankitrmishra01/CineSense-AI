@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/layout/Navbar';
+import { DynamicDock } from './components/layout/DynamicDock';
 import { Spinner } from './components/ui/Spinner';
 
 import { HomePage } from './pages/HomePage';
@@ -43,6 +44,7 @@ const App: React.FC = () => (
     <main>
       <AnimatedRoutes />
     </main>
+    <DynamicDock />
   </BrowserRouter>
 );
 

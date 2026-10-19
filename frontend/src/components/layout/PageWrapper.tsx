@@ -21,6 +21,7 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({ children, style }) => 
     transition={{ duration: 0.35, ease: 'easeOut' }}
     className="app-page-wrapper"
     style={{
+      paddingBottom: '96px',
       ...style,
     }}
   >

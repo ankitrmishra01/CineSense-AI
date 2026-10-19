@@ -28,7 +28,7 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('themechange', handleThemeChange);
   }, [theme]);
 
-  // Global Ctrl+K / Cmd+K listener
+  // Global Ctrl+K / Cmd+K listener & Custom Event listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
@@ -36,11 +36,16 @@ export const Navbar: React.FC = () => {
         setPaletteOpen((prev) => !prev);
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+    const handleCustomOpen = () => setPaletteOpen(true);
 
-  const isActive = (path: string) => location.pathname === path;
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('open-command-palette', handleCustomOpen);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('open-command-palette', handleCustomOpen);
+    };
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -132,117 +137,7 @@ export const Navbar: React.FC = () => {
             </div>
           </Link>
 
-          {/* Center: Nav links with Clean SVG Icons & Command Search */}
-          <div className="nav-center-links" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 1, minWidth: 0 }}>
-            {/* Discover Link */}
-            <Link
-              to="/"
-              style={{
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '6px 12px',
-                borderRadius: 'var(--radius-sm)',
-                fontSize: '13px',
-                fontWeight: isActive('/') ? 600 : 500,
-                color: isActive('/') ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
-                backgroundColor: isActive('/') ? 'var(--color-accent-subtle)' : 'transparent',
-                borderBottom: isActive('/') ? '2px solid var(--color-accent-primary)' : '2px solid transparent',
-                transition: 'all 0.2s',
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
-              </svg>
-              <span className="nav-link-text">Discover</span>
-            </Link>
-
-            {/* Search Link */}
-            <Link
-              to="/search"
-              style={{
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '6px 12px',
-                borderRadius: 'var(--radius-sm)',
-                fontSize: '13px',
-                fontWeight: isActive('/search') ? 600 : 500,
-                color: isActive('/search') ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
-                backgroundColor: isActive('/search') ? 'var(--color-accent-subtle)' : 'transparent',
-                borderBottom: isActive('/search') ? '2px solid var(--color-accent-primary)' : '2px solid transparent',
-                transition: 'all 0.2s',
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-              <span className="nav-link-text">Search</span>
-            </Link>
-
-            {/* Watchlist Link (Authenticated only) */}
-            {isAuthenticated && (
-              <Link
-                to="/watchlist"
-                style={{
-                  textDecoration: 'none',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '6px 12px',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '13px',
-                  fontWeight: isActive('/watchlist') ? 600 : 500,
-                  color: isActive('/watchlist') ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
-                  backgroundColor: isActive('/watchlist') ? 'var(--color-accent-subtle)' : 'transparent',
-                  borderBottom: isActive('/watchlist') ? '2px solid var(--color-accent-primary)' : '2px solid transparent',
-                  transition: 'all 0.2s',
-                }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                </svg>
-                <span className="nav-link-text">Watchlist</span>
-              </Link>
-            )}
-
-            {/* Quick Command Palette Button */}
-            <button
-              onClick={() => setPaletteOpen(true)}
-              className="nav-quick-jump"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 12px',
-                backgroundColor: 'var(--color-bg-secondary)',
-                border: '1px solid var(--color-border)',
-                borderRadius: 'var(--radius-pill)',
-                color: 'var(--color-text-muted)',
-                fontSize: '12px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-              title="Quick Search (Ctrl+K / ⌘K)"
-            >
-              <span>Quick jump...</span>
-              <kbd
-                style={{
-                  fontSize: '10px',
-                  backgroundColor: 'var(--color-bg-card)',
-                  padding: '1px 5px',
-                  borderRadius: '3px',
-                  border: '1px solid var(--color-border)',
-                }}
-              >
-                {typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/i.test(navigator.userAgent) ? '⌘K' : 'Ctrl K'}
-              </kbd>
-            </button>
-          </div>
+          {/* Top Navbar Center is kept minimal and clean, matching Cresta style */}
 
           {/* Auth Section, Language & Theme */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
